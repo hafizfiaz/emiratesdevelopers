@@ -1,7 +1,7 @@
 #-*- coding: utf-8 -*-
 {
    'name': 'FGR Payment Request',
-    'description': """FGR Payment Request Module Detail""",
+    'description': """FGR Payment Request Module Details""",
     'version':'1.0.2',
     'category': 'Accounting',
     'author': 'Tahir Noor',
