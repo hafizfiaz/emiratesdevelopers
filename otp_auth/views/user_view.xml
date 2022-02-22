@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (c) 2016-Present Webkul Software Pvt. Ltd. (<https://webkul.com/>) -->
+<!-- See LICENSE file for full copyright and licensing details. -->
+<odoo>
+    <data>
+        <record id="wk_otp_user_check" model="ir.ui.view">
+            <field name="name">user.opt.check</field>
+            <field name="model">res.users</field>
+            <field name="inherit_id" ref="base.view_users_form"/>
+            <field name="arch" type="xml">
+                <field name="odoobot_state" position="before">
+                    <field name="otp"/>
+                </field>
+
+            </field>
+        </record>
+    </data>
+</odoo>

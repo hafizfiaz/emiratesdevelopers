@@ -1,0 +1,441 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="paperformat_website_schedule_new" model="report.paperformat">
+            <field name="name">Website Reservation Report</field>
+            <field name="default" eval="True"/>
+            <field name="format">custom</field>
+            <field name="page_height">350</field>
+            <field name="page_width">0</field>
+            <field name="orientation">Portrait</field>
+            <field name="margin_top">60</field>
+            <field name="margin_bottom">16</field>
+            <!--<field name="margin_left">7</field>-->
+            <!--<field name="margin_right">7</field>-->
+            <field name="header_line" eval="False"/>
+            <field name="header_spacing">53</field>
+            <!--<field name="dpi">90</field>-->
+        </record>
+
+        <report id="report_website_schedule_new"
+                string="Website Report"
+                model="payment.schedule"
+                report_type="qweb-pdf"
+                paperformat="property_website.paperformat_website_schedule_new"
+                file="property_website.report_website_template_new"
+                name="property_website.report_website_template_new"/>
+
+
+        <template id="report_website_template_new">
+            <t t-call="web.html_container">
+
+                <t t-foreach="docs" t-as="account_asset_one_lease">
+                    <t t-call="property_website.reservation_external_layout">
+
+                        <div class="page">
+                            <style>
+
+                                .table-bordered {
+                                border: 1px solid black;
+                                }
+
+                                .table-bordered th,
+                                .table-bordered tr,
+                                .table-bordered td {
+                                border: 1px solid black;
+                                margin:5px;
+                                padding:5px;
+
+
+                                }
+
+                                .table-bordered thead th,
+                                .table-bordered thead tr,
+                                .table-bordered thead td {
+                                border-bottom-width: 2px;
+                                border: 1px solid black;
+                                }
+                            </style>
+
+                            <div class="row">
+                                <div class="col-6 text-left"><strong>Project Details:</strong></div>
+                                <div class="col-6 text-right"><strong>:تفاصيل المشروع</strong></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-6 text-left"><strong>Name: </strong><span t-esc="docs.parent_id.name"/></div>
+                                <div class="col-6 text-right"><strong> المشروع اسم</strong><strong> : </strong>
+                                    <span t-esc="arabic_text(docs.parent_id.arabic_project)"/>
+
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-6 text-left"><strong><t t-if="docs.parent_id.name != 'Samana Park Views'">Plot number:</t><t t-if="docs.parent_id.name == 'Samana Park Views'">Address:</t> </strong><span t-esc="docs.parent_id.plot_no"/></div>
+                                <div class="col-6 text-right"><strong> عدد مؤامرة: </strong>
+                                <span t-esc="docs.parent_id.arabic_plot_no"/>
+                                </div>
+                            </div>
+                            <t t-if="docs.parent_id.name != 'Samana Park Views'">
+                            <div class="row">
+                                <div class="col-6 text-left"><strong>Address: </strong><span t-esc="docs.street"/>, <span t-esc="docs.city"/>, <span t-esc="docs.country_id.name"/></div>
+                                <div class="col-6 text-right"><strong> عنوان:</strong>مدينة دبي للاستوديوهات ، دبي ، الإمارات العربية المتحدةالإمارات<strong> </strong>
+                                    <!--<span t-if="docs.street" t-esc="arabic_text(docs.street)"/>, <span t-if="docs.city" t-esc="arabic_text(docs.city)"/>, <span t-if="docs.country_id" t-esc="arabic_text(docs.country_id.name)"/>-->
+
+                                </div>
+                            </div>
+                            </t>
+                            <div class="row">
+                                <div class="col-6 text-left"><strong>Expected Completion Date: </strong><span t-esc="docs.parent_id.completion_date"/></div>
+
+                                <div class="col-6 text-right"><span t-esc="docs.parent_id.completion_date"/><strong>  :تاريخ الإنتهاء المتوقع</strong>
+<!--                                    <span t-if="docs.parent_id.handover_date" t-esc="arabic_text(docs.parent_id.handover_date)"/>-->
+
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-6 text-left"><strong>Google Map Location: </strong>
+                                    <t t-if="docs.parent_id.name != 'Samana Park Views'">
+                                    <a style="color: blue;">https://goo.gl/maps/WJZotHP3XRJo93rNA</a>
+                                    </t>
+                                    <t t-if="docs.parent_id.name == 'Samana Park Views'">
+                                    <a style="color: blue;">https://goo.gl/maps/rgEYkX2XJx6RvdZX8</a>
+                                    </t>
+                                </div>
+                                <div class="col-6 text-right"><strong> : جوجل خريطة علالموقع</strong>
+                                    <t t-if="docs.parent_id.name != 'Samana Park Views'">
+                                    <a style="color: blue;">https://goo.gl/maps/WJZotHP3XRJo93rNA</a>
+                                    </t>
+                                    <t t-if="docs.parent_id.name == 'Samana Park Views'">
+                                    <a style="color: blue;">https://goo.gl/maps/rgEYkX2XJx6RvdZX8</a>
+                                    </t>
+                                </div>
+                            </div>
+                            <br/>
+                            <div class="col-12">
+                                <div style="border-bottom: 2px solid #DAA520;"/>
+                            </div>
+                            <br/>
+                            <div class="row">
+                                <div class="col-6 text-left"><strong>Unit Details: </strong></div>
+                                <div class="col-6 text-right"><strong> :نية السالوحدة تفاصيل</strong></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-6 text-left"><strong>Number: </strong><span t-esc="docs.name"/></div>
+                                <div class="col-6 text-right"><strong>  الوحدة رقم</strong>
+                                    <strong> : </strong><span t-esc="docs.name"/><!--<span t-if="docs.name" t-esc="arabic_text(docs.name)"/>--></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-6 text-left"><strong>Type: </strong><span t-esc="docs.unit_type_id.name"/></div>
+                                <div class="col-6 text-right"><span t-esc="docs.unit_type_id.name"/><strong>  :النوع </strong><!--<span t-if="docs.unit_type_id" t-esc="arabic_text(docs.unit_type_id.name)"/>--></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-6 text-left"><strong>Net Area: </strong><span t-esc="docs.gfa_feet"/> SQF</div>
+                                <div class="col-6 text-right"><strong>  الصافية المساحة</strong>
+                                    <strong> : </strong><span t-esc="docs.gfa_feet"/><!--<span t-if="docs.gfa_feet" t-esc="arabic_text(docs.gfa_feet)"/>-->:</div>
+                            </div>
+                            <div class="row">
+                                <div class="col-6 text-left"><strong>Price: </strong> AED &amp;nbsp;
+                                    <span t-esc="'{:,.0f}'.format(total_payment)"/></div>
+                                <div class="col-6 text-right">AED <span t-esc="'{:,.0f}'.format(total_payment)"/><strong>:  السعر</strong>
+                                    <strong> </strong> <!--<span t-if="docs.value" t-esc="arabic_text(docs.value)"/>--></div>
+                            </div>
+                            <br/>
+                            <div class="col-12">
+                                <div style="border-bottom: 2px solid #DAA520;"/>
+                            </div>
+                            <br/>
+                            <div class="row">
+                                <div class="col-5 text-left" style="font-size:14px;"><strong>Payment Plan for Expected Deal Date :</strong> </div>
+                                <div class="col-3"><div class="text-center" style="padding:10px 0px 10px 0;font-size:14px; background-color:#DAA520;color:white;"><strong><span t-esc="datetime.datetime.now().strftime('%d-%B-%Y')"/></strong></div></div>
+                                <div class="col-4 text-right" style="font-size:14px;">
+                                    <strong>
+                                    : المتوقع الشراء لتاريخ الدفع خطة
+                                    </strong>
+                                </div>
+                            </div>
+                            <br/>
+                            <t t-set="total" t-value="0"/>
+                            <t t-set="total" t-value="total+account_asset_one_lease.value"/>
+
+                            <table class="table table-bordered text-center" style="font-size:14px;width:100%;">
+
+                            <thead>
+                                <tr>
+                                    <th>
+                                        <div>لال المبلغ</div>
+                                        <div>Total Amount</div>
+                                    </th>
+                                    <th>
+                                        <div>الدفعة مبلغ</div>
+                                        <div>Payment Amount</div>
+                                    </th>
+                                    <th>
+                                        <div>الدفعات عدد</div>
+                                        <div>Number of Payments</div>
+                                    </th>
+                                    <th>
+                                        <div>النسبة</div>
+                                        <div>Percentage</div>
+                                    </th>
+                                    <th>
+                                        <div>الدفعات نوع</div>
+                                        <div>Payments Type</div>
+                                    </th>
+                                    <!--<th>Expected Rental Income</th>-->
+                                    <!--<th>Status</th>-->
+                                </tr>
+                            </thead>
+                            <t t-set="percent" t-value="0"/>
+                            <t t-set="a" t-value="0"/>
+                            <t t-set="b" t-value="1"/>
+                            <t t-set="total_amount" t-value="0"/>
+                                <t t-set="months" t-value="0"/>
+
+                            <!--<t t-set="add_date" t-value="''"/>-->
+<!--                            <t t-foreach="payment.payment_criteria_ids" t-as="pay">-->
+                            <tr>
+                                <td>
+                                    <span t-esc="'{:,.1f}'.format(list_a[0]['amount_without_vat'])"/>
+                                </td>
+                                <td>
+                                    <span t-esc="'{:,.1f}'.format(list_a[0]['amount_without_vat'])"/>
+
+                                </td>
+                                <td>
+                                    1
+                                </td>
+                                <td>
+
+                                    <span t-esc="list_a[0]['value']"/>%
+                                </td>
+                                <td>
+                                    <strong>
+                                    <div>الول الدفعة</div>
+                                    <div>Down Payment</div>
+                                    </strong>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+<!--                                    <span t-esc="(total*4)/100"/>-->
+
+                                    <span t-esc="'{:,.1f}'.format((total*4)/100)"/>
+                                </td>
+                                <td>
+<!--                                    <span t-esc="(total*4)/100"/>-->
+                                    <span t-esc="'{:,.1f}'.format((total*4)/100)"/>
+                                </td>
+                                <td>
+                                    1
+                                </td>
+                                <td>
+                                    4%
+                                </td>
+                                <td>
+                                    <strong>
+                                    <div>الراض دائرة ف التسجيل رسوم</div>
+                                    <div>DLD Registration Fees</div>
+                                    </strong>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+<!--                                    <span t-esc="docs.parent_id.admin_fee"/>-->
+
+                                    <span t-esc="'{:,.1f}'.format(docs.parent_id.admin_fee)"/>
+                                </td>
+                                <td>
+<!--                                    <span t-esc="docs.parent_id.admin_fee"/>-->
+                                    <span t-esc="'{:,.1f}'.format(docs.parent_id.admin_fee)"/>
+                                </td>
+                                <td>
+                                    1
+                                </td>
+                                <td>
+                                    -
+                                </td>
+                                <td>
+                                    <strong>
+                                    <div>إدارية رسوم</div>
+                                    <div>Administration Fees</div>
+                                    </strong>
+                                </td>
+                            </tr>
+                            <tr>
+
+                                    <t t-set="months" t-value="months+calculate_months(docs.parent_id.handover_date)"/>
+                                <td>
+                                    <span t-esc="'{:,.1f}'.format((docs.value*(calculate_months(docs.parent_id.handover_date)))/100)"/>
+                                </td>
+                                <td>
+                                    <span t-esc="'{:,.1f}'.format((docs.value*(calculate_months(docs.parent_id.handover_date)))/100)"/>
+                                </td>
+                                <td>
+                                    <span t-esc="calculate_months(docs.parent_id.handover_date)"/>
+                                </td>
+                                <td>
+                                    <span t-esc="calculate_months(docs.parent_id.handover_date)"/>%
+                                </td>
+                                <td>
+                                    <strong>
+                                    <div>الإنشاء فترة مدفوعات</div>
+                                    <div>Pre-completion payments</div>
+                                    </strong>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <strong>-</strong>
+<!--                                    <t t-set="months" t-value="months+5"/>-->
+<!--                                    <span t-esc="'{:,.1f}'.format((docs.value*5)/100)"/>-->
+                                </td>
+                                <td>
+
+                                    <strong>-</strong>
+<!--                                    <span t-esc="'{:,.1f}'.format((docs.value*5)/100)"/>-->
+                                </td>
+                                <td>
+
+                                    <strong>-</strong>
+                                </td>
+                                <td>
+
+                                    <strong>-</strong>
+                                </td>
+                                <td>
+                                    <strong>
+                                    <div>2022 ف آب شهر عل دفعة</div>
+                                    <div>Handover</div>
+                                    </strong>
+                                </td>
+                            </tr>
+                            <tr>
+                                    <t t-set="months" t-value="100-months-list_a[0]['value']"/>
+                                <td>
+                                    <span t-esc="'{:,.1f}'.format((docs.value*months)/100)"/>
+                                </td>
+                                <td>
+                                    <span t-esc="'{:,.1f}'.format((docs.value*months)/100)"/>
+                                </td>
+                                <td>
+                                    <span t-esc="months"/>
+                                </td>
+                                <td>
+                                    <span t-esc="months"/>%
+                                </td>
+                                <td>
+                                    <strong>
+                                    <div>الإنشاء بعد دفعات</div>
+                                    <div>Post-Handover payments</div>
+                                    </strong>
+                                </td>
+                            </tr>
+
+<!--                            </t>-->
+                           <!-- <tr style="font-size:21px;">
+                                <td colspan="5" style="background-color:#DAA520;color:white;" class="text-right">
+                                    Total Apartment Price
+                                </td>
+                                <td>
+                                    <span t-esc="total_amount"/>
+                                </td>
+                                <td></td>
+                                &lt;!&ndash;<td></td>&ndash;&gt;
+                                &lt;!&ndash;<td></td>&ndash;&gt;
+                            </tr>
+                            <tr style="font-size:21px;">
+                                <td colspan="5" style="background-color:#DAA520;color:white;" class="text-right">
+                                    Expected Rental Income Return (9.25% Per Annum After Handover
+                                </td>
+                                <td></td>
+                                <td></td>
+                                &lt;!&ndash;<td></td>&ndash;&gt;
+                                &lt;!&ndash;<td></td>&ndash;&gt;
+                            </tr>
+                            <tr style="font-size:21px;">
+                                <td colspan="5" style="background-color:#DAA520;color:white;" class="text-right">
+                                    Net Investment
+                                </td>
+                                <td></td>
+                                <td></td>
+                                &lt;!&ndash;<td></td>&ndash;&gt;
+                                &lt;!&ndash;<td></td>&ndash;&gt;
+                            </tr>-->
+                        </table>
+<!--
+                            <table>
+                                <tr>
+                                    <td class="text-left"><strong>Project Details:</strong></td>
+                                    <td class="text-right">تفاصيل المشروع:</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Name:</strong></td>
+                                    <td><strong>اسم:</strong></td>
+                                </tr>
+                            </table>
+-->
+                        </div>
+
+                    <div style="page-break-before: always;">
+
+                        <div class="row">
+                            <div class="col-5"/>
+                            <div class="col-2">
+                                <div class="text-center" style="padding:10px 0px 10px 0;font-size:16px; background-color:#DAA520;color:white;">Unit Plan</div>
+                            </div>
+
+                            <div class="col-5"/>
+                        </div>
+                        <br/>
+                        <br/>
+                        <img t-if="docs.unit_layout_image" t-att-src="image_data_uri(docs.unit_layout_image)" height="550px" width="850px" alt="Logo"/>
+                        <br/>
+                        <br/>
+                        <div class="row">
+                            <div class="col-5"/>
+                            <div class="col-2">
+                                <div class="text-center" style="padding:10px 0px 10px 0;font-size:16px; background-color:#DAA520;color:white;">Sales Contact</div>
+                            </div>
+
+                            <div class="col-5"/>
+                        </div>
+                        <br/>
+                        <div class="row">
+                            <div class="col-4" style="padding-left:50px;">
+                                    <i style="color:orange;" class="fa-lg fa fa-user" aria-label="Leads" title="Leads" role="img"/>
+                                    <span t-esc="contact_name"/>
+                            </div>
+
+                            <div class="col-4">
+                                    <i style="color:orange;" class="fa-lg fa fa-phone" aria-label="Leads" title="Leads" role="img"/>
+                                    <span t-esc="contact_mobile"/>
+                            </div>
+
+                            <div class="col-4">
+                                <i style="color:orange;" class="fa-lg fa fa-envelope-o" aria-label="Leads" title="Leads" role="img"/>
+                                <span t-esc="contact_email"/>
+                            </div>
+                        </div>
+                        <br/>
+                        <div class="row">
+                            <div class="col-6 text-left">
+                                <div> <strong>Notes:</strong></div>
+                                <div>* This Offer is valid for one day only from the print date.</div>
+                                <div>* The price and payment plan are subject to change without prior notice.</div>
+                                <div>* This layout is for indicative purpose and the final layout is subject to DLD Approval, Consultant and Authority Approvals</div>
+                            </div>
+                            <div class="col-6 text-right">
+                                <div><strong>:ملحظات</strong></div>
+                                <div>هذا العرض صالح ليوم واحد من تاريخ الطباعة *</div>
+                                <div>يخضع السعر وخطة الدفع للتغيير بإشعار مسبق *</div>
+                            </div>
+                        </div>
+                    </div>
+                    </t>
+                </t>
+            </t>
+        </template>
+    </data>
+</odoo>
+
+

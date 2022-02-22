@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+        <record id="all_payment_bank_id" model="ir.ui.view">
+            <field name="name">sale.order.form</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="spa_customizations.view_spa_form"/>
+            <field name="arch" type="xml">
+                   <xpath expr="//page[@name='spa_schedules_eng']" position="after">
+                           <page string="All Payment Bank">
+                                   <field name="all_payment_bank_id" invisible="1"/>
+                           </page>
+                   </xpath>
+            </field>
+        </record>
+
+</odoo>

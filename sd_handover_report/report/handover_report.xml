@@ -1,0 +1,314 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="paperformat_handover_report" model="report.paperformat">
+        <field name="name">Handover Report</field>
+        <field name="default" eval="True"/>
+        <field name="format">custom</field>
+        <field name="page_height">350</field>
+        <field name="page_width">0</field>
+        <field name="orientation">Portrait</field>
+        <field name="margin_top">30</field>
+        <field name="margin_bottom">15</field>
+        <field name="header_line" eval="False"/>
+        <field name="header_spacing">30</field>
+    </record>
+    <record id="report_handover" model="ir.actions.report">
+        <field name="paperformat_id" ref="sd_handover_report.paperformat_handover_report"/>
+    </record>
+    <template id="sale_order_handover">
+        <t t-if="not o" t-set="o" t-value="doc"/>
+
+        <t t-if="not company">
+            <t t-if="company_id">
+                <t t-set="company" t-value="company_id"/>
+            </t>
+            <t t-elif="o and 'company_id' in o">
+                <t t-set="company" t-value="o.company_id.sudo()"/>
+            </t>
+            <t t-else="else">
+                <t t-set="company" t-value="res_company"/>
+            </t>
+        </t>
+
+        <t t-call="sd_handover_report.external_layout_header_sale_handover"/>
+        <t t-call="sd_handover_report.external_layout_footer_sale_handover"/>
+        <t t-if="company.external_report_layout_id" t-call="{{company.external_report_layout_id.key}}">
+            <t t-raw="0"/>
+        </t>
+        <t t-else="else" t-call="web.external_layout_standard">
+            <t t-raw="0"/>
+        </t>
+
+    </template>
+
+    <template id="external_layout_header_sale_handover">
+        <div class="header">
+            <div style='width:100%;'>
+                <br></br>
+                <div class="row">
+                    <div class="col-7">
+                        <span style='font-size: 24px; color:#286A9D;'>
+                            <b>SAMANA INTERNATIONAL</b>
+                        </span>
+                    </div>
+                    <div class="col-5" style='font-size: 12px;'>
+                        <p>4th Floor , Building 7-Bay Square Business Bay,
+                            <br/>
+                            Dubai - United Arab Emirates
+                        </p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-7">
+                        <span style='font-size: 16px;'>REAL ESTATE DEVELOPMENT</span>
+                    </div>
+                    <div class="col-5" style='font-size: 12px;'>
+                        <p>Email:
+                            <span t-field="company.email"/>
+                            Website:
+                            <span t-field="company.website"/>
+                            Phone:
+                            <span t-field="company.phone"/>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-12" style='font-size: 16px;'>
+                        <strong>Date:</strong>
+                        <span t-esc="time.strftime('%d-%b-%Y')"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </template>
+
+    <template id="external_layout_footer_sale_handover">
+        <div class="footer">
+            <div class="row text-left" style="border-top: 1px solid black;">
+                <div class="col-12">
+                    <span class="page"/>
+                    <span>|</span>
+                    <span>SAMANA INTERNATIONAL</span>
+                </div>
+            </div>
+        </div>
+    </template>
+    <template id="handover_report">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="sd_handover_report.sale_order_handover">
+                    <t t-set="o" t-value="o.with_context({'lang': lang})"/>
+                    <div class="page" style="font-size: 12px;">
+                        <style>
+
+                            <!--    <template id="handover_report">-->
+                            <!--        <t t-call="web.html_container">-->
+                            <!--            <t t-foreach="docs" t-as="o">-->
+                            <!--                <t t-call="sd_handover_report.sale_order_handover">-->
+                            <!--                    <style>-->
+                            .page {
+                            direction: ltr;
+                            width: 98%;
+                            height: 865px;
+                            margin: auto;
+                            position: relative;
+                            overflow: visible;
+                            border: 9px solid transparent;
+                            background-clip: content-box;
+                            border-image: url(images/shadow.png) 9 9 repeat;
+                            background-color: white;
+                            }
+                            .table {
+                            width: 100%;
+                            margin-bottom: 1rem;
+                            background-color: transparent;
+                            }
+
+                            .table th,
+                            .table td {
+                            padding: 0.75rem;
+                            vertical-align: top;
+                            border-top: 1px solid black;
+                            }
+
+                            .table thead th {
+                            vertical-align: bottom;
+                            border-bottom: 2px solid black;
+                            }
+
+                            .table tbody + tbody {
+                            border-top: 2px solid black;
+                            }
+
+                            .table-bordered {
+                            border: 1px solid black;
+                            }
+
+                            .table-bordered th,
+                            .table-bordered td {
+                            border: 1px solid black;
+                            }
+
+                            .table-bordered thead th,
+                            .table-bordered thead td {
+                            border-bottom-width: 2px;
+                            }
+                            <br/>
+
+                        </style>
+                        <div class='page' style="line-height:13px;font-size:13px;">
+                            <div class="row text-center">
+                                <div class="col-8">
+                                    <h4 class="text-right">
+                                        <strong>HANDOVER CHARGES STATEMENT</strong>
+                                    </h4>
+                                </div>
+                                <div class="col-4 text-right">
+                                    <img t-if="o.name"
+                                         t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s' %('Code128',o.name,220,30)"/>
+                                </div>
+                            </div>
+                            <br/>
+                            <table class="table" style="padding:none;margin:none;">
+                                <tr style="padding:none;margin:none; line-height: 12pt;">
+                                    <td style="border:none" width="20%">
+                                        <strong>Customer Name:</strong>
+                                    </td>
+                                    <td style="border:none" width="30%">
+                                        <span t-esc="o.partner_id.name"/>
+                                    </td>
+                                    <td style="border:none" width="20%">
+                                        <strong>Project:</strong>
+                                    </td>
+                                    <td style="border:none" width="30%">
+                                        <span t-esc="o.asset_project_id.name"/>
+                                    </td>
+                                </tr>
+                                <tr style="padding:none;margin:none">
+                                    <td style="border:none">
+                                        <strong>Mobile:</strong>
+                                    </td>
+                                    <td style="border:none">
+                                        <span t-esc="o.partner_id.mobile"/>
+                                    </td>
+                                    <td style="border:none">
+                                        <strong>Property:</strong>
+                                    </td>
+                                    <td style="border:none">
+                                        <span t-esc="o.property_id.name"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="border:none">
+                                        <strong>Email:</strong>
+                                    </td>
+                                    <td style="border:none">
+                                        <span t-esc="o.partner_id.email"/>
+                                    </td>
+                                    <td style="border:none">
+                                        <strong>Booking No:</strong>
+                                    </td>
+                                    <td style="border:none">
+                                        <span t-esc="o.name"/>
+                                    </td>
+                                </tr>
+                                <tr height="20px">
+                                    <td style="border:none">
+                                        <strong>Statement Date:</strong>
+                                    </td>
+                                    <td style="border:none">
+                                        <span t-esc="time.strftime('%d/%m/%Y')"/>
+                                    </td>
+                                    <td style="border:none">
+                                        <strong>SPA:</strong>
+                                    </td>
+                                    <td style="border:none">
+                                        <span t-esc="o.name"/>
+                                    </td>
+                                </tr>
+                            </table>
+                            <br/>
+                            <div class="row"
+                                 style="background-color: #1f497d; color: #ffffff; line-height:2; margin: auto; width: 100%">
+                                <div class="col-9" style="font-size:20px">
+                                    <strong>HANDOVER CHARGES</strong>
+                                </div>
+                                <div class="col-3">
+                                    <span>(All amounts in AED)</span>
+                                </div>
+                            </div>
+                            <br/>
+                            <br/>
+                            <table class="table table-bordered">
+                                <tbody>
+                                    <tr style="background-color: #8CB4E3;">
+                                        <th class="text-center">
+                                            <span>Description</span>
+                                        </th>
+                                        <th class="text-center">
+                                            <span>Amount</span>
+                                        </th>
+                                        <th class="text-center">
+                                            <span>Received</span>
+                                        </th>
+                                        <th class="text-center">
+                                            <span>Balance</span>
+                                        </th>
+                                    </tr>
+
+                                    <t t-set="total" t-value="0"/>
+                                    <t t-set="total1" t-value="0"/>
+                                    <t t-set="total2" t-value="0"/>
+                                    <tr t-foreach="o.get_charges_details(o)" t-as="ln">
+
+                                        <td style="text-align: center">
+                                            <span t-if="ln['name']" t-esc="ln['name']"/>
+                                            <span t-if="not ln['name']">-</span>
+                                        </td>
+                                        <td style="text-align: center">
+                                            <span t-if="ln['amount']" t-esc="ln['amount']"
+                                                  t-options='{"widget": "float", "precision": 2}'/>
+                                            <t t-if="ln['amount']" t-set="total" t-value="total + ln['amount']"/>
+                                            <span t-if="not ln['amount']">-</span>
+                                        </td>
+                                        <td style="text-align: center">
+                                            <span t-if="ln['received']" t-esc="ln['received']"
+                                                  t-options='{"widget": "float", "precision": 2}'/>
+                                            <t t-if="ln['received']" t-set="total1" t-value="total1 + ln['received']"/>
+                                            <span t-if="not ln['received']">-</span>
+                                        </td>
+                                        <td style="text-align: center">
+                                            <span t-if="ln['balance']" t-esc="ln['balance']"
+                                                  t-options='{"widget": "float", "precision": 2}'/>
+                                            <t t-if="ln['balance']" t-set="total2" t-value="total2 + ln['balance']"/>
+                                            <span t-if="not ln['balance']">-</span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th style="text-align: center">
+                                            <span>Total</span>
+                                        </th>
+                                        <th style="text-align: center">
+                                            <span t-if="total" t-esc="total"
+                                                  t-options='{"widget": "float", "precision": 2}'/>
+                                        </th>
+                                        <th style="text-align: center">
+                                            <span t-if="total1" t-esc="total1"
+                                                  t-options='{"widget": "float", "precision": 2}'/>
+                                        </th>
+                                        <th style="text-align: center; color:#FE3D19">
+                                            <span t-esc="total2"
+                                                  t-options='{"widget": "float", "precision": 2}'/>
+                                        </th>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>

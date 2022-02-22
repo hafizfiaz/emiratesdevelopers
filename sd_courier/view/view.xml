@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+
+
+        <!--        <record id="courier_review_email" model="mail.template">-->
+        <!--            <field name="name">Courier Review E-Mail</field>-->
+        <!--            <field name="email_from">${object.company_id and object.company_id.email or ''}</field>-->
+        <!--            <field name="subject">Courier Review</field>-->
+        <!--            <field name="email_to">${''} </field>-->
+        <!--            <field name="lang">${user.partner_id.lang}</field>-->
+        <!--            <field name="model_id" ref="sd_courier.model_courier_courier"/>-->
+        <!--            <field name="auto_delete" eval="False"/>-->
+        <!--            &lt;!&ndash;<field name="attachment_ids" eval="[(6, 0, [ref(${object.success_mail.lang})])]"/>&ndash;&gt;-->
+        <!--            <field name="body_html">-->
+        <!--                <![CDATA[-->
+        <!--              <p>Dear Concerned,<br/><br/>-->
+        <!--There is courier request under Accounts review. Pls check your dashboard or courier section in ERP.-->
+        <!--<br/><br/>-->
+        <!--Thanks,<br/>-->
+        <!--Administrator-->
+        <!--              </p>-->
+        <!--            ]]>-->
+        <!--            </field>-->
+        <!--        </record>-->
+
+
+        <!-- Courier-->
+        <record id="courier_courier_search_view" model="ir.ui.view">
+            <field name="name">courier.courier.select</field>
+            <field name="model">courier.courier</field>
+            <field name="arch" type="xml">
+                <search string="Courier">
+                    <field name="name" string="Courier Detail"
+                           filter_domain="[('name','ilike',self)]"/>
+                    <field name="spa_id" filter_domain="[('spa_id','ilike',self)]" string="SPA"/>
+                    <field name="asset_project_id" filter_domain="[('asset_project_id','ilike',self)]"
+                           string="Project"/>
+                    <field name="property_id" filter_domain="[('property_id','ilike',self)]" string="Property"/>
+                    <field name="partner_id" filter_domain="[('partner_id','child_of',self)]" string="Customer Name"/>
+                </search>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="courier_courier_tree_view">
+            <field name="name">courier.courier.tree</field>
+            <field name="model">courier.courier</field>
+            <field name="arch" type="xml">
+                <tree string="Courier">
+                    <field name="name"/>
+                    <field name="create_date"/>
+                    <field name="partner_id"/>
+                    <field name="spa_id"/>
+                    <field name="property_id"/>
+                    <field name="asset_project_id"/>
+                    <field name="sender_name_and_address"/>
+                    <field name="receiver_name"/>
+                    <field name="state" widget="badge"
+                           decoration-danger="state in ('under_review','under_verification')"
+                           decoration-info="state == 'draft'"
+                           decoration-warning="state in ('cancel', 'rejected')"
+                           decoration-success="state == 'dispatched'"/>
+                </tree>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="courier_courier_form_view">
+            <field name="name">courier.courier.form</field>
+            <field name="model">courier.courier</field>
+            <field name="arch" type="xml">
+                <form string="Courier">
+
+                    <header>
+                        <button name="action_draft" string="Set To Draft" type="object" class="oe_highlight"
+                                states="cancel"/>
+                        <button name="action_submit_review" string="Submit for Review" type="object"
+                                class="oe_highlight" states="draft"/>
+                        <button name="action_review" string="Review" type="object" class="oe_highlight"
+                                states="under_review"/>
+                        <button name="action_verify" string="Verify" type="object" class="oe_highlight"
+                                states="under_verification"/>
+                        <button name="action_dispatch" string="Dispatch" type="object" class="oe_highlight"
+                                states="under_dispatch"/>
+                        <button name="action_reject" string="Reject" type="object"
+                                states="under_review,under_verification"/>
+                        <button name="action_cancel" string="Cancel" type="object" states="under_dispatch,dispatched"/>
+                        <button name="action_cancel" string="Cancel" type="object" states="draft,rejected"/>
+                        <field name="state" widget="statusbar"
+                               statusbar_visible="draft,under_review,under_verification,under_dispatch,dispatched,rejected,cancel"/>
+                    </header>
+                    <sheet>
+                        <!--<h1 attrs="{'invisible': [('name','=',False)]}"><field name="name"/></h1>-->
+                        <group>
+                            <group>
+                                <field name="name" string="Courier Detail"/>
+                                <field name="create_date"/>
+                                <field name="create_uid"/>
+                                <separator string="Customer &amp; SPA Detail"/>
+                                <field name="partner_id"/>
+                                <field name="mobile"/>
+                                <field name="email"/>
+                                <field name="spa_id"/>
+                                <field name="asset_project_id"/>
+                                <field name="property_id" domain="[('parent_id','=', asset_project_id)]"/>
+                            </group>
+                            <group string="Courier Detail">
+                                <field name="courier_company_id"/>
+                                <!--<field name="courier_company_name"/>-->
+                                <field name="sender_name_and_address"/>
+                                <field name="receiver_name"/>
+                                <field name="receiver_contact"/>
+                                <field name="receiver_address"/>
+                                <field name="country_id"/>
+                            </group>
+                        </group>
+                        <!--<notebook>-->
+                        <!--<page string="Multi PDC Payment">-->
+                        <!--</page>-->
+
+                        <!--</notebook>-->
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+
+                </form>
+            </field>
+        </record>
+
+        <record id="action_courier_courier" model="ir.actions.act_window">
+            <field name="name">Courier</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">courier.courier</field>
+            <field name="view_mode">tree,form</field>
+            <field name="context"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Click to register a new Courier.
+                </p>
+            </field>
+        </record>
+
+
+        <menuitem action="action_courier_courier" sequence="6"
+                  id="menu_action_courier_courier_crm" parent="crm.crm_menu_root" name="Courier"/>
+        <menuitem action="action_courier_courier" sequence="2"
+                  id="menu_action_courier_courier_accounting" parent="account_accountant.menu_accounting" name="Courier"/>
+
+    </data>
+</odoo>

@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="view_account_payment_reoi_form" model="ir.ui.view">
+        <field name="name">account.payment.reoi.form</field>
+        <field name="model">account.payment</field>
+        <field name="arch" type="xml">
+            <form string="Register Payment">
+                <sheet>
+                    <group>
+                        <field name="payment_type" invisible="1"/>
+                        <field name="partner_type" invisible="1"/>
+                        <!--<field name="invoice_ids" invisible="1"/>-->
+                        <field name="partner_id" invisible="1"/>
+                        <field name="state" invisible="1"/>
+                        <group>
+                            <label for="amount"/>
+                            <div name="amount_div" class="o_row">
+                                <field name="amount"/>
+                                <field name="currency_id" options="{'no_create': True, 'no_open': True}"
+                                       groups="base.group_multi_currency"/>
+                            </div>
+                            <!--                            <field name="journal_id" widget="selection"/>-->
+                            <!--                            <field name="approval_from_ids" widget="many2many_tags"/>-->
+                            <field name="hide_payment_method" invisible="1"/>
+                            <!--                            <field name="payment_method_id" widget="radio" invisible="1"/>-->
+                            <!--                            <field name="partner_bank_account_id" invisible="1"/>-->
+                            <field name="show_partner_bank_account" invisible="1"/>
+                            <field name="payment_method_code" invisible="1"/>
+                        </group>
+                        <!--                        <group>-->
+                        <!--                            <field name="payment_date"/>-->
+                        <!--                            <field name="communication"/>-->
+                        <!--                        </group>-->
+                    </group>
+                </sheet>
+                <footer>
+                    <!--                    <button name="submit_for_approval" string="Submit For Approval" type="object" class="oe_highlight"/>-->
+                    <button string='Validate' name="action_reoi_pay" type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+<!--     <record id="view_refund_eoi" model="ir.ui.view">-->
+<!--        <field name="name">refund.eoi.search</field>-->
+<!--        <field name="model">refund.eoi</field>-->
+<!--        <field name="arch" type="xml">-->
+<!--            <search string="Refund EOI">-->
+<!--                 <field name="name" string="Name"-->
+<!--                           filter_domain="[('name','ilike',self)]"/>-->
+<!--                    <field name="spa" filter_domain="[('spa','ilike',self)]" string="SPA"/>-->
+<!--                    <field name="project" filter_domain="[('project','ilike',self)]"-->
+<!--                           string="Project"/>-->
+<!--                    <field name="property" filter_domain="[('property','ilike',self)]" string="Property"/>-->
+<!--                    <field name="partner_id" filter_domain="[('partner_id','child_of',self)]" string="Customer Name"/>-->
+<!--            </search>-->
+<!--        </field>-->
+<!--    </record>-->
+
+    <!--    <record model="ir.ui.view" id="refund_eoi_form">-->
+    <!--        <field name="name">account.payment.refund.eoi</field>-->
+    <!--        <field name="model">account.payment</field>-->
+    <!--        <field name="inherit_id" ref="account_pdc.view_account_payment_form_pdc"/>-->
+    <!--        <field name="arch" type="xml">-->
+    <!--            <field name="partner_id" position="after">-->
+    <!--                <field name="eoi" invisible="1"/>-->
+    <!--            </field>-->
+    <!--            <button name="create_settlement" position="after">-->
+    <!--                <field name="reoi_receipt_id" invisible="1"/>-->
+    <!--                <button name="create_eoi" string="Refund EOI" type="object"-->
+    <!--                        attrs="{'invisible':['|','|',('state','not in',['posted']),('eoi','=',False),('reoi_receipt_id','!=',False)]}" groups="sd_refund_eoi.group_sale_salesman_eoi"/>-->
+
+    <!--            </button>-->
+    <!--        </field>-->
+    <!--    </record>-->
+
+    <record model="ir.ui.view" id="button_inherit_refund_eoi_payment">
+        <field name="name">account.payment.form.eoi</field>
+        <field name="model">account.payment</field>
+        <field name="inherit_id" ref="account.view_account_payment_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@class='oe_button_box']" position="inside">
+                <button class="oe_stat_button" name="get_related_refund"
+                        type="object"
+                        attrs="{'invisible':[('payment_type', '!=', 'inbound')]}"
+                        icon="fa-bars">
+                    <field string="Refund EOI" name="refund_count" widget="statinfo"/>
+                </button>
+
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_refund_eoi_search" model="ir.ui.view">
+        <field name="name">refund.eoi.search</field>
+        <field name="model">refund.eoi</field>
+        <field name="arch" type="xml">
+            <search string="Refund EOI">
+                <!--                <field name="status_log_ids" string="Status To" filter_domain="[('status_log_ids.status_to','ilike',self)]"/>-->
+            </search>
+        </field>
+    </record>
+
+    <!--    <record id="view_collection_type_refund" model="ir.ui.view">-->
+    <!--        <field name="name">collection.type.form.recon</field>-->
+    <!--        <field name="model">collection.type</field>-->
+    <!--        <field name="inherit_id" ref="receipt_collection_type.view_collection_type_form"/>-->
+    <!--        <field name="arch" type="xml">-->
+    <!--            <field name="active" position="after">-->
+    <!--                <field name="eoi"/>-->
+    <!--            </field>-->
+    <!--        </field>-->
+    <!--    </record>-->
+
+
+    <record id="refund_eoi_tree" model="ir.ui.view">
+        <field name="name">refund.eoi.tree</field>
+        <field name="model">refund.eoi</field>
+        <field name="arch" type="xml">
+            <tree string="Refund EOI">
+                <!--               <field name="create_date" readonly="1"/>-->
+                <field name="partner_id"/>
+                <field name="mobile"/>
+                <field name="total"/>
+                <field name="refund_amnt"/>
+                <field name="remarks"/>
+                <field name="refund_note"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="refund_eoi_clearance" model="ir.ui.view">
+        <field name="name">Refund EOI Request</field>
+        <field name="model">refund.eoi</field>
+        <field name="arch" type="xml">
+
+            <form string="Refund EOI">
+
+                <header>
+                    <button name="action_draft" string="Back to Draft" type="object" class="oe_highlight"
+                            states="cancel,accounts_return"/>
+                    <button name="submit_to_manager" string="Submit To Manger" type="object" class="oe_highlight"
+                            states="draft"/>
+                    <button name="review" string="Review" type="object" class="oe_highlight"
+                            states="under_sales,paid,accounts_return"/>
+                    <button name="action_reject" string="Reject" type="object" class="oe_highlight"
+                            states="under_sales"/>
+                    <!--                    <button name="action_paid" string="Create Payment" type="object" class="oe_highlight"-->
+                    <!--                            states="under_accounts"/>-->
+                    <button name="account_return" string="Return Back" type="object" class="oe_highlight"
+                            states="under_accounts"/>
+                    <button name="action_cancel" string="Cancel" type="object"
+                            states="draft,account_return,approved,reject"/>
+                    <field name='state' widget='statusbar'/>
+                </header>
+                <sheet>
+                    <h3>Refund EOI</h3>
+                    <div class="oe_title">
+                        <h3>
+                            <field name="name" nolabel="1"/>
+                        </h3>
+                    </div>
+                    <group>
+                        <group>
+                            <!--                            <field name="subject"/>-->
+                            <!--                            <field name="clearance_type" domain="[('handover','=',True)]"/>-->
+                            <field name="create_uid" readonly="1"/>
+                            <field name="create_date" readonly="1"/>
+                            <field name="partner_id"/>
+                            <field name="mobile"/>
+                            <field name="total"/>
+                            <field name="refund_amnt"/>
+                            <field name="remarks"/>
+                            <field name="refund_note"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Receipts">
+                            <field name="receipt_lines"
+                                   domain="[('state', '=', 'posted'),('collection_type_id.name', '=', 'Expression of Interest Collection')]"
+                                   widget="many2many"/>
+                        </page>
+                        <page string="Payments" name="payments">
+                            <field name="payment_ids" readonly="1"/>
+                        </page>
+                        <!--                        <page string="Work Flow Status" name="work_flow_status">-->
+                        <!--                            <field name="status_log_ids" readonly="1"/>-->
+                        <!--                        </page>-->
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+    <record id="action_refund" model="ir.actions.act_window">
+        <field name="name">Refund EOI</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">refund.eoi</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Refund EOI Request!
+            </p>
+        </field>
+    </record>
+    <menuitem id="refund_eoi_crm" name="Refund EOI" parent="crm.crm_menu_sales" sequence="4"
+              action="action_refund"/>
+    <menuitem id="refund_eoi" name="Refund EOI"
+              parent="account.menu_finance_receivables"
+              sequence="6"
+              action="action_refund"/>
+
+</odoo>

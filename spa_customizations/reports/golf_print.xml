@@ -1,0 +1,1675 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="report_golf_form" model="ir.actions.report">
+            <field name="paperformat_id" ref="spa_customizations.paperformat_sale_report"/>
+        </record>
+
+
+        <template id="report_golf_form_template">
+            <t t-call="web.html_container">
+                <t t-set="a" t-value="0"/>
+                <t t-foreach="docs" t-as="o">
+
+                    <t t-call="spa_customizations.saleorder_external_layout11">
+                        <div class="page">
+                            <br/>
+                            <br/>
+                            <br/>
+                            <br/>
+                            <br/>
+                            <br/>
+                            <div class="row">
+                                <div class="col-2">
+                                </div>
+                                <div class="col-8 text-center" align="center">
+                                    <img t-if="docs.asset_project_id.image"
+                                         t-att-src="image_data_uri(docs.asset_project_id.image)" width="800px"/>
+                                </div>
+                                <div class="col-2">
+                                </div>
+                            </div>
+                            <div class="row text-center">
+                                <div class="col-12">
+                                    <h2 class="text-center">
+                                        <strong>SALE AND PURCHASE AGREEMENT</strong>
+                                    </h2>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+
+
+                </t>
+                <t t-foreach="docs" t-as="o">
+                    <t t-call="spa_customizations.saleorder_external_layout">
+                        <div class="page" style="font-size:15px;">
+                            <style t-if="o.asset_project_id.name == 'Samana Park Views'">
+
+                                .table-bordered {
+                                border: 1px solid black;
+                                margin: 6px;
+                                }
+
+                                .table-bordered th,
+                                .table-bordered tr,
+                                .table-bordered td {
+                                border: 1px solid black;
+                                line-height:18px;
+                                font-size:13px;
+                                padding: 0.1rem;
+
+                                }
+
+                                .table-bordered thead th,
+                                .table-bordered thead tr,
+                                .table-bordered thead td {
+                                border-bottom-width: 1px;
+                                padding: 0.1rem;
+                                }
+
+                                .table {
+                                width: 100%;
+                                background-color: transparent;
+                                }
+
+                                .table th,
+                                .table td {
+                                padding: 0.1rem;
+                                vertical-align: top;
+                                line-height:18px;
+                                font-size:13px;
+                                border-top: 1px solid balck;
+                                }
+
+                                .table thead th {
+                                padding: 0.1rem;
+                                vertical-align: bottom;
+                                border-bottom: 1px solid black;
+                                }
+
+                                .table tbody + tbody {
+                                border-top: 1px solid black;
+                                }
+
+                            </style>
+                            <style t-if="not o.asset_project_id.name == 'Samana Park Views'">
+
+                                .table-bordered {
+                                border: 1px solid black;
+                                margin: 6px;
+                                }
+
+                                .table-bordered th,
+                                .table-bordered tr,
+                                .table-bordered td {
+                                border: 1px solid black;
+                                line-height:18px;
+                                font-size:15px;
+                                padding: 0.4rem;
+
+                                }
+
+                                .table-bordered thead th,
+                                .table-bordered thead tr,
+                                .table-bordered thead td {
+                                border-bottom-width: 1px;
+                                padding: 0.4rem;
+                                }
+
+                                .table {
+                                width: 100%;
+                                background-color: transparent;
+                                }
+
+                                .table th,
+                                .table td {
+                                padding: 0.4rem;
+                                vertical-align: top;
+                                line-height:18px;
+                                font-size:15px;
+                                border-top: 1px solid balck;
+                                }
+
+                                .table thead th {
+                                padding: 0.4rem;
+                                vertical-align: bottom;
+                                border-bottom: 1px solid black;
+                                }
+
+                                .table tbody + tbody {
+                                border-top: 1px solid black;
+                                }
+
+                            </style>
+                            <h4 class="text-center">
+                                <strong>SALE AND PURCHASE AGREEMENT</strong>
+                            </h4>
+
+                            <div class="row">
+                                <div class="col-3">
+                                    <strong>PARTICULARS</strong>
+                                </div>
+                                <div class="col-9">
+                                </div>
+                            </div>
+                            <table class="table table-bordered">
+                                <tbody>
+                                    <tr>
+                                        <th width="30%">
+                                            <span>1- Seller:</span>
+                                        </th>
+                                        <th width="70%">
+                                            <span>Details</span>
+                                        </th>
+                                    </tr>
+                                    <tr>
+                                        <td width="30%">
+                                            <span>Name:</span>
+                                            <span>(اسم)</span>
+                                        </td>
+                                        <td width="70%">
+                                            <span>Samana International Real Estate Development</span>
+                                            <span>(سامانا انترناشيونال للتطوير العقاري)</span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td width="30%">
+                                            <span>Address:</span>
+                                            <span>(العنوان)</span>
+                                        </td>
+                                        <td width="70%">
+                                            <span>4th Floor, Building 7, Bay Square, Business Bay, Dubai – United Arab
+                                                Emirates
+                                            </span>
+                                            <br/>
+                                            <span>(الطابق الرابع ، مبنى 7 ميدان الخليج ، الخليج التجاري ، إمارة دبي
+                                                ،الإمارات العربية المتحدة)
+                                            </span>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+
+                            <table t-if="o.get_jp_len(o.joint_partner_id) &lt;= 1" class="table table-bordered"
+                                   style="padding:none;margin:none;">
+                                <tbody>
+                                    <tr>
+                                        <th width="30%">
+                                            <span>2- Purchaser:</span>
+                                        </th>
+                                        <th>
+                                            <span>Purchaser Details</span>
+                                        </th>
+                                        <th t-if="o.joint_partner_id">
+                                            <span>Joint Purchaser Details</span>
+                                        </th>
+                                    </tr>
+                                    <tr>
+                                        <td width="30%">
+                                            <span>Name (اسم):</span>
+                                        </td>
+                                        <td>
+                                            <t t-if="o.partner_id">
+                                                <span t-esc="o.partner_id.name"/>
+                                            </t>
+                                            <t t-if="not o.partner_id">
+                                                <span t-esc="o.contact_name"/>
+                                            </t>
+                                        </td>
+                                        <td t-if="o.joint_partner_id">
+                                            <t t-foreach="o.joint_partner_id" t-as="j">
+                                                <span t-esc="j.name"/>
+                                                <br/>
+                                            </t>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td width="30%">
+                                            <span>Nationality (الجنسية):</span>
+                                        </td>
+                                        <td>
+                                            <t t-if="o.partner_id">
+                                                <span t-esc="o.partner_id.nationality_id.name"/>
+                                            </t>
+                                        </td>
+                                        <td t-if="o.joint_partner_id">
+                                            <span t-esc="o.get_jp_nationality(o.joint_partner_id)"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td width="30%">
+                                            <span>Passport Number (رقم جواز السفر):</span>
+                                        </td>
+                                        <td>
+                                            <t t-if="o.partner_id">
+                                                <span t-esc="o.partner_id.passport_no"/>
+                                            </t>
+                                        </td>
+                                        <td t-if="o.joint_partner_id">
+                                            <span t-esc="o.get_jp_ppno(o.joint_partner_id)"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td width="30%">
+                                            <span>EID Number (رقم الهوية الامارات):</span>
+                                        </td>
+                                        <td>
+                                            <t t-if="o.partner_id">
+                                                <span t-esc="o.partner_id.eid_no"/>
+                                            </t>
+                                        </td>
+                                        <td t-if="o.joint_partner_id">
+                                            <span t-esc="o.get_jp_eid_no(o.joint_partner_id)"/>
+                                            <!-- <span t-esc="o.joint_partner_id[0].eid_no"/> -->
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td width="30%">
+                                            <span>Address (العنوان):</span>
+                                        </td>
+                                        <td>
+                                            <t t-if="o.partner_id">
+                                                <span t-esc="o.partner_id.street"/>
+                                                <br/>
+                                                <span t-esc="o.partner_id.street2"/>
+                                                <br/>
+                                                <span t-esc="o.partner_id.city"/> <span> </span><span t-esc="o.partner_id.zip"/>
+                                            </t>
+                                            <t t-if="not o.partner_id">
+                                                <span t-esc="o.street"/>
+                                                <br/>
+                                                <span t-esc="o.street2"/>
+                                                <br/>
+                                                <span t-esc="o.city"/> <span> </span><span t-esc="o.zip"/>
+                                            </t>
+                                        </td>
+                                        <td t-if="o.joint_partner_id">
+
+                                            <span t-esc="o.get_jp_city(o.joint_partner_id)"/>
+                                            <!--<span t-esc="o.joint_partner_id[0].street"/>
+                                            <br/>
+                                            <span t-esc="o.joint_partner_id[0].street2"/>
+                                            <br/>
+                                            <span t-esc="o.joint_partner_id[0].city"/> -->
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td width="30%">
+                                            <span>Country (الدولة):</span>
+                                        </td>
+                                        <td>
+                                            <t t-if="o.partner_id">
+                                                <span t-esc="o.partner_id.country_id.name"/>
+                                            </t>
+                                            <t t-if="not o.partner_id">
+                                                <span t-esc="o.country_id.name"/>
+                                            </t>
+                                        </td>
+                                        <td t-if="o.joint_partner_id">
+                                            <span t-esc="o.get_jp_country(o.joint_partner_id)"/>
+                                            <!--  <span t-esc="o.joint_partner_id[0].country_id.name"/> -->
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td width="30%">
+                                            <span>Email Address:</span>
+                                        </td>
+                                        <td>
+                                            <t t-if="o.partner_id">
+                                                <span t-esc="o.partner_id.email"/>
+                                            </t>
+                                            <t t-if="not o.partner_id">
+                                                <span t-esc="o.email_from"/>
+                                            </t>
+                                        </td>
+                                        <td t-if="o.joint_partner_id">
+                                            <span t-esc="o.get_jp_email(o.joint_partner_id)"/>
+                                            <!--  <span t-esc="o.joint_partner_id[0].email"/> -->
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td width="30%">
+                                            <span>Contact Number:</span>
+                                        </td>
+                                        <td>
+                                            <t t-if="o.partner_id">
+                                                <span t-esc="o.partner_id.mobile"/>
+                                                <br/>
+                                                <span t-esc="o.partner_id.phone"/>
+                                            </t>
+                                            <t t-if="not o.partner_id">
+                                                <span t-esc="o.mobile"/>
+                                                <br/>
+                                                <span t-esc="o.phone"/>
+                                            </t>
+                                        </td>
+                                        <td t-if="o.joint_partner_id">
+                                            <span t-esc="o.get_jp_mobile(o.joint_partner_id)"/>
+                                            <!-- <span t-esc="o.joint_partner_id[0].mobile"/><br/>
+                                             <span t-esc="o.joint_partner_id[0].phone"/> -->
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <table t-if="o.joint_partner_id and o.get_jp_len(o.joint_partner_id) &gt; 1"
+                                   class="table table-bordered" style="padding:none;margin:none;">
+                                <tbody>
+                                    <tr>
+                                        <th width="30%">
+                                            <span>2- Purchaser:</span>
+                                        </th>
+                                        <th>
+                                            <span>Purchaser Details</span>
+                                        </th>
+                                    </tr>
+                                    <tr>
+                                        <td width="30%">
+                                            <span>Name (اسم):</span>
+                                        </td>
+                                        <td>
+                                            <t t-if="o.partner_id">
+                                                <span t-esc="o.partner_id.name"/>
+                                            </t>
+                                            <t t-if="not o.partner_id">
+                                                <span t-esc="o.contact_name"/>
+                                            </t>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td width="30%">
+                                            <span>Nationality (الجنسية):</span>
+                                        </td>
+                                        <td>
+                                            <t t-if="o.partner_id">
+                                                <span t-esc="o.partner_id.nationality_id.name"/>
+                                            </t>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td width="30%">
+                                            <span>Passport Number (رقم جواز السفر):</span>
+                                        </td>
+                                        <td>
+                                            <t t-if="o.partner_id">
+                                                <span t-esc="o.partner_id.passport_no"/>
+
+                                            </t>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td width="30%">
+                                            <span>EID Number (رقم الهوية الامارات):</span>
+                                        </td>
+                                        <td>
+                                            <t t-if="o.partner_id">
+                                                <span t-esc="o.partner_id.eid_no"/>
+                                            </t>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td width="30%">
+                                            <span>Address (العنوان):</span>
+                                        </td>
+                                        <td>
+                                            <t t-if="o.partner_id">
+                                                <span t-esc="o.partner_id.street"/>
+                                                <br/>
+                                                <span t-esc="o.partner_id.street2"/>
+                                                <br/>
+                                                <span t-esc="o.partner_id.city"/> <span> </span><span t-esc="o.partner_id.zip"/>
+                                            </t>
+                                            <t t-if="not o.partner_id">
+                                                <span t-esc="o.street"/>
+                                                <br/>
+                                                <span t-esc="o.street2"/>
+                                                <br/>
+                                                <span t-esc="o.city"/> <span> </span><span t-esc="o.zip"/>
+                                            </t>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td width="30%">
+                                            <span>Country (الدولة):</span>
+                                        </td>
+                                        <td>
+                                            <t t-if="o.partner_id">
+                                                <span t-esc="o.partner_id.country_id.name"/>
+                                            </t>
+                                            <t t-if="not o.partner_id">
+                                                <span t-esc="o.country_id.name"/>
+                                            </t>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td width="30%">
+                                            <span>Email Address:</span>
+                                        </td>
+                                        <td>
+                                            <t t-if="o.partner_id">
+                                                <span t-esc="o.partner_id.email"/>
+                                            </t>
+                                            <t t-if="not o.partner_id">
+                                                <span t-esc="o.email_from"/>
+                                            </t>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td width="30%">
+                                            <span>Contact Number:</span>
+                                        </td>
+                                        <td>
+                                            <t t-if="o.partner_id">
+                                                <span t-esc="o.partner_id.mobile"/>
+                                                <br/>
+                                                <span t-esc="o.partner_id.phone"/>
+                                            </t>
+                                            <t t-if="not o.partner_id">
+                                                <span t-esc="o.mobile"/>
+                                                <br/>
+                                                <span t-esc="o.phone"/>
+                                            </t>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <t t-set="sr" t-value="0"/>
+                            <t t-if="o.joint_partner_id and o.get_jp_len(o.joint_partner_id) > 1"
+                               t-foreach="o.joint_partner_id" t-as="jjp">
+                                <table class="table table-bordered" style="padding:none;margin:none;">
+                                    <tbody>
+                                        <t t-set="sr" t-value="sr+1"/>
+                                        <tr>
+                                            <th width="30%">
+                                                <span><span t-esc="sr"/>- Joint Purchaser:
+                                                </span>
+                                            </th>
+                                            <th t-if="o.joint_partner_id">
+                                                <span>Joint Purchaser Details</span>
+                                            </th>
+                                        </tr>
+                                        <tr>
+                                            <td width="30%">
+                                                <span>Name (اسم):</span>
+                                            </td>
+                                            <td t-if="o.joint_partner_id">
+                                                <span t-esc="jjp.name"/>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td width="30%">
+                                                <span>Nationality (الجنسية):</span>
+                                            </td>
+                                            <td t-if="o.joint_partner_id">
+                                                <!--<span t-esc="o.get_jp_nationality(o.joint_partner_id)"/>-->
+                                                <span t-esc="jjp.nationality_id.name"/>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td width="30%">
+                                                <span>Passport Number (رقم جواز السفر):</span>
+                                            </td>
+                                            <td t-if="o.joint_partner_id">
+                                                <!--<span t-esc="o.get_jp_ppno(o.joint_partner_id)"/>-->
+                                                <span t-esc="jjp.passport_no"/>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td width="30%">
+                                                <span>EID Number (رقم الهوية الامارات):</span>
+                                            </td>
+                                            <td t-if="o.joint_partner_id">
+                                                <!--<span t-esc="o.get_jp_eid_no(o.joint_partner_id)"/>-->
+                                                <span t-esc="jjp.eid_no"/>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td width="30%">
+                                                <span>Address (العنوان):</span>
+                                            </td>
+                                            <td t-if="o.joint_partner_id">
+
+                                                <!--<span t-esc="o.get_jp_city(o.joint_partner_id)"/>-->
+                                                <span t-esc="jjp.street"/>
+                                                <br/>
+                                                <span t-esc="jjp.street2"/>
+                                                <br/>
+                                                <span t-esc="jjp.city"/>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td width="30%">
+                                                <span>Country (الدولة):</span>
+                                            </td>
+                                            <td t-if="o.joint_partner_id">
+                                                <!--<span t-esc="o.get_jp_country(o.joint_partner_id)"/>-->
+                                                <span t-esc="jjp.country_id.name"/>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td width="30%">
+                                                <span>Email Address:</span>
+                                            </td>
+                                            <td t-if="o.joint_partner_id">
+                                                <span t-esc="jjp.email"/>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td width="30%">
+                                                <span>Contact Number:</span>
+                                            </td>
+                                            <td t-if="o.joint_partner_id">
+                                                <span t-esc="jjp.mobile"/>
+                                                <br/>
+                                                <span t-esc="jjp.phone"/>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </t>
+
+                            <table class="table table-bordered">
+                                <tbody>
+                                    <tr>
+                                        <th width="30%">
+                                            <span>3- Purchase Details:</span>
+                                        </th>
+                                        <th width="70%">
+                                            <span/>
+                                        </th>
+                                    </tr>
+                                    <tr>
+                                        <td width="30%">
+                                            <span>Unit Number (رقم الوحدة):</span>
+                                        </td>
+                                        <td width="70%">
+                                            <span t-esc="o.property_id.name"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td width="30%">
+                                            <span>Project Name (اسم المشروع):</span>
+                                        </td>
+                                        <td width="70%">
+                                            <span t-esc="o.asset_project_id.name"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td width="30%">
+                                            <span>Building/Project (المبنى):</span>
+                                        </td>
+                                        <td width="70%" t-if="not o.asset_project_id.name == 'Samana Park Views'">
+                                            <span>Plot no. 131, Municipality Number 675-7642, Al Hebiah Second, Emirate
+                                                of Dubai, UAE
+                                            </span>
+                                        </td>
+                                        <td width="70%" t-if="o.asset_project_id.name == 'Samana Park Views'">
+                                            <span>Plot no. 67, Municipality Number 673-1114, Al Barsha South Third,
+                                                Emirate of Dubai, UAE
+                                            </span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td width="30%">
+                                            <span>Area (sq. ft.):</span>
+                                        </td>
+                                        <td width="70%">
+                                            <span t-esc="o.property_id.gfa_feet"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td width="30%">
+                                            <span>Unit Type:</span>
+                                        </td>
+                                        <td width="70%">
+                                            <span t-esc="o.property_id.unit_type_id.name"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td width="30%">
+                                            <span>Parking:</span>
+                                        </td>
+                                        <td width="70%">
+                                            <span t-if="o.property_id.parking" t-esc="o.property_id.parking"/>
+                                            <span t-if="not o.property_id.parking">No Parking</span>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <table class="table table-bordered">
+                                <tbody>
+                                    <tr>
+                                        <th width="30%">
+                                            <span>4- Purchase Price:</span>
+                                        </th>
+                                        <th width="70%">
+                                            <span/>
+                                        </th>
+                                    </tr>
+                                    <tr>
+                                        <td width="30%">
+                                            <span>Total Purchase Price</span>
+                                            <span>(السعر الكلي للشراء)</span>
+                                        </td>
+                                        <td width="70%">
+                                            <span>AED</span>
+                                            <span t-esc="'{:,.2f}'.format(o.property_inc_vat_amount)"/>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <table class="table table-bordered">
+                                <tbody>
+                                    <tr>
+                                        <th width="30%">
+                                            <span>5- Anticipated Completion Date:</span>
+                                            <span>(تاريخ الانتهاء المتوقع)</span>
+                                        </th>
+                                        <td width="70%">
+                                            <span t-field="o.asset_project_id.completion_date"
+                                                  t-options="{&quot;format&quot;: &quot;dd/MM/yyyy&quot;}"/>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <table class="table table-bordered">
+                                <tbody>
+                                    <tr>
+                                        <th width="30%">
+                                            <span>6- Estimated Service Charges:</span>
+                                            <span>(رسوم الخدمة المقدرة)</span>
+                                        </th>
+                                        <td width="70%">
+                                            <span t-esc="o.asset_project_id.estimated_charge"/>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <br/>
+                            <!--<br/>-->
+
+                            <div class="row">
+                                <div class="col-12 text-center">
+                                    <b>
+                                        <span>AGREEMENT</span>
+                                    </b>
+                                </div>
+                            </div>
+                            <br/>
+                            <span t-if="o.asset_project_id.name == 'Samana Park Views'" style="font-size:12px;">
+                                The Seller has agreed to sell and the purchaser has agreed to purchase the Property as
+                                set out in this agreement.
+                                <br/>
+                                IN WITNEES HEREOF, the parties have executed this Agreement, with full knowledge of its
+                                content and significance and intend to be legally bound by the terms hereof the day of
+                                signature and execution.
+                            </span>
+                            <span t-if="not o.asset_project_id.name == 'Samana Park Views'" style="font-size:15px;">
+                                The Seller has agreed to sell and the purchaser has agreed to purchase the Property as
+                                set out in this agreement.
+                                <br/>
+                                IN WITNEES HEREOF, the parties have executed this Agreement, with full knowledge of its
+                                content and significance and intend to be legally bound by the terms hereof the day of
+                                signature and execution.
+                            </span>
+                            <br/>
+
+                            <br/>
+
+                            <div class="row">
+                                <div class="text-center" style="font-size:16px;width:25%;">
+                                    <b>
+                                        <span class="text-center">Seller’s Signature</span>
+                                        <br/>
+                                        <span class="text-center">توقيع البائع</span>
+                                    </b>
+                                </div>
+                                <div style="width:12%;">
+                                    <span/>
+                                </div>
+                                <div class="text-center" style="font-size:16px;width:25%;">
+                                    <b>
+                                        <span class="text-center">Purchaser’s Signature</span>
+                                        <br/>
+                                        <span class="text-center">توقيع المشترى</span>
+                                    </b>
+                                </div>
+                                <div style="width:13%;">
+                                    <span/>
+                                </div>
+                                <div t-if="o.joint_partner_id" class="text-center" style="font-size:16px;width:25%;">
+                                    <b>
+                                        <span class="text-center">Joint Purchaser’s Signature</span>
+                                        <br/>
+                                        <span class="text-center">المشترى المشترك</span>
+                                    </b>
+                                </div>
+
+                            </div>
+                            <br/>
+                            <br/>
+
+                            <div class="row">
+                                <div style="width:25%; border-bottom: 1px solid;">
+                                </div>
+                                <div style="width:12%;">
+                                    <span/>
+                                </div>
+                                <div style="width:25%; border-bottom: 1px solid;">
+                                </div>
+                                <div style="width:13%;">
+                                    <span/>
+                                </div>
+                                <div t-if="o.joint_partner_id" style="width:25%; border-bottom: 1px solid;">
+
+                                </div>
+                            </div>
+
+
+                            <div style="page-break-before: always;"/>
+
+                            <span t-raw="o.gethtmlval(o.sale_term_id.english_version_text)"/>
+
+                            <br/>
+                            <br/>
+
+                            <table class="table table-bordered" style="border: 1px solid;">
+                                <tbody>
+                                    <tr>
+                                        <td colspan="2" width="50%">
+                                            <strong>PURCHASER:</strong>
+                                            <br/>
+                                            <br/>
+                                            <strong>Name:</strong>
+                                            <span t-esc="o.partner_id.name"/>
+                                            <br/>
+                                            <strong>Signature:</strong>
+                                            <br/>
+                                            <br/>
+                                            <br/>
+                                            <br/>
+                                            <strong>SELLER: SAMANA INTERNATIONAL REAL ESTATE DEVELOPMENT</strong>
+                                            <br/>
+                                            <br/>
+                                            <strong>On behalf of the seller</strong>
+                                            <br/>
+                                            <strong>Name:</strong>
+                                            <br/>
+                                            <br/>
+                                            <br/>
+                                            <strong>Signature:</strong>
+                                            <br/>
+                                        </td>
+                                        <td t-if="o.joint_partner_id" colspan="2" width="50%">
+                                            <strong>JOINT PURCHASER:</strong>
+                                            <br/>
+                                            <br/>
+                                            <strong>Name:</strong>
+                                            <t t-foreach="o.joint_partner_id" t-as="j">
+                                                <span t-esc="j.name"/>
+                                                <br/>
+                                            </t>
+                                            <br/>
+                                            <br/>
+                                            <br/>
+                                            <br/>
+                                            <strong>Signature:</strong>
+                                            <br/>
+                                            <br/>
+                                            <br/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2" width="50%">
+                                            <strong>Witness :</strong>
+                                            <br/>
+                                            <br/>
+                                            <strong>Name :</strong>
+                                            <br/>
+                                            <br/>
+                                            <strong>Signature :</strong>
+                                            <br/>
+                                            <br/>
+                                        </td>
+                                        <td t-if="o.joint_partner_id" colspan="2" width="50%">
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <div style="page-break-before: always;">
+                                <br/>
+                                <div class="row">
+                                    <div class="col-12 text-center">
+                                        <b>
+                                            <span>Schedule A</span>
+                                        </b>
+                                    </div>
+                                </div>
+                                <br/>
+                                <br/>
+
+                                <div class="row">
+                                    <div class="col-6">
+                                        <strong>SCHEDULE OF PAYMENT &amp; UNITS PRICE</strong>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-3">
+                                        <strong>Unit Number</strong>
+                                    </div>
+                                    <div class="col-7">:
+                                        <span t-esc="o.property_id.name"/>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-3">
+                                        <strong>Name of Purchaser</strong>
+                                    </div>
+                                    <div class="col-7">:
+                                        <span t-esc="o.partner_id.name"/>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-3">
+                                        <strong>Total Sale Price (AED)</strong>
+                                    </div>
+                                    <div class="col-7">:
+                                        <span t-esc="o.price"
+                                              t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}"/>
+                                    </div>
+                                </div>
+                                <br/>
+
+                                <br/>
+                                <table t-if="o.payment_plan_ids and not o.spa_wo_amendment" class="table table-bordered"
+                                       style="border: 1px solid;">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-center">Description</th>
+                                            <th class="text-center">Percentage</th>
+                                            <th class="text-center">Payment Date</th>
+                                            <th class="text-center">Amount (AED)</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <t t-set="pp_sum" t-value="0"/>
+                                        <tr t-foreach="o.payment_plan_ids" t-as="pp">
+                                            <td class="text-center">
+                                                <span t-esc="pp.name"/>
+                                            </td>
+                                            <td class="text-center">
+                                                <span t-esc="'{:,.0f}'.format(pp.percentage)"/>
+                                                <span>%</span>
+                                            </td>
+                                            <td class="text-center">
+                                                <span t-field="pp.payment_date_disc"/>
+                                            </td>
+                                            <td class="text-center">
+                                                <span t-esc="'{:,.0f}'.format(pp.amount)"/>
+                                                <t t-set="pp_sum" t-value="pp_sum + pp.amount"/>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-center">
+                                                <strong>Total</strong>
+                                            </td>
+                                            <td class="text-center">
+                                                <span></span>
+                                            </td>
+                                            <td class="text-center">
+                                                <span></span>
+                                            </td>
+                                            <td class="text-center">
+                                                <span t-esc="'{:,.0f}'.format(pp_sum)"/>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <br t-if="not o.spa_wo_amendment"/>
+                                <br t-if="not o.spa_wo_amendment"/>
+                                <div class="row" t-if="not o.payment_plan_ids and not o.spa_wo_amendment">
+                                    <div class="col-12">
+                                        <span t-raw="o.gethtmlval(o.schedule_a_eng)"/>
+                                    </div>
+                                </div>
+                                <br t-if="not o.spa_wo_amendment"/>
+                                <br t-if="not o.spa_wo_amendment"/>
+                                <br t-if="not o.spa_wo_amendment"/>
+                                <br t-if="not o.spa_wo_amendment"/>
+                                <br t-if="not o.spa_wo_amendment"/>
+
+
+                                <div class="row" t-if="not o.spa_wo_amendment">
+                                    <div class="text-center" style="width:25%; border-top: 1px solid;">
+                                        <b>
+                                            <span class="text-center">SELLER</span>
+                                        </b>
+                                    </div>
+                                    <div style="width:12%;">
+                                        <span/>
+                                    </div>
+                                    <div class="text-center" style="width:25%; border-top: 1px solid;">
+                                        <b>
+                                            <span class="text-center">SOLE/FIRST PURCHASER</span>
+                                        </b>
+                                    </div>
+                                    <div style="width:13%;">
+                                        <span/>
+                                    </div>
+                                    <div t-if="o.joint_partner_id" class="text-center"
+                                         style="width:25%; border-top: 1px solid;">
+                                        <b>
+                                            <span class="text-center">JOINT PURCHASER</span>
+                                        </b>
+                                    </div>
+
+                                    <div t-if=" not o.joint_partner_id" class="text-center">
+                                    </div>
+                                </div>
+
+                                <div class="row" t-if="not o.spa_wo_amendment">
+                                    <div class="text-center" style="width:25%;">
+                                        <span t-esc="o.company_id.name"/>
+                                    </div>
+                                    <div style="width:12%;">
+                                        <span/>
+                                    </div>
+                                    <div class="text-center" style="width:25%;">
+                                        <span t-esc="o.partner_id.name"/>
+                                    </div>
+                                    <div style="width:13%;">
+                                        <span/>
+                                    </div>
+                                    <div class="text-center" style="width:25%;">
+                                        <t t-foreach="o.joint_partner_id" t-as="j">
+                                            <span t-esc="j.name"/>
+                                            <br/>
+                                        </t>
+                                    </div>
+                                </div>
+
+                                <br/>
+
+                            </div>
+
+                            <div style="page-break-before: always;" t-if="not o.spa_wo_amendment">
+                                <div class="row">
+                                    <div class="col-12 text-center">
+                                        <b>
+                                            <span>Amendment to Schedule A</span>
+                                        </b>
+                                    </div>
+                                </div>
+
+                                <span>
+                                    The Seller hereby confirms that seller and purchaser have agreed on payment terms as
+                                    per the below payment plan and
+                                    therefore amendment to Schedule A will supersede the payment terms mentioned in
+                                    Schedule A.
+                                </span>
+
+                            </div>
+
+
+                            <br/>
+                            <table class="table table-bordered" style="border: 1px solid;">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center">Installment Serial Number</th>
+                                        <th class="text-center">(%)</th>
+                                        <th class="text-center">Payment Date</th>
+                                        <th class="text-center">Amount (AED)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-foreach="o.sale_payment_schedule_ids.sorted(key=lambda x: x.start_date, reverse=False)"
+                                        t-as="spa">
+                                        <t t-if="spa.state != 'cancel'">
+                                            <tr>
+                                                <td class="text-center">
+                                                    <span t-esc="spa.sequence"/>
+                                                </td>
+                                                <td class="text-center">
+                                                    <span t-esc="'{:,.2f}'.format(spa.value)"/>
+                                                    <span t-if="spa.value">%</span>
+                                                </td>
+                                                <td class="text-center">
+                                                    <span/>
+                                                    <span t-field="spa.start_date"
+                                                          t-options="{&quot;format&quot;: &quot;dd-MM-yyyy&quot;}"/>
+                                                </td>
+                                                <td class="text-center">
+                                                    <span t-esc="spa.amount"/>
+                                                </td>
+                                            </tr>
+                                        </t>
+                                    </t>
+                                </tbody>
+                            </table>
+                            <br/>
+                            <br/>
+
+                            <div class="row">
+                                <div class="text-center" style="width:25%; border-top: 1px solid;">
+                                    <b>
+                                        <span class="text-center">SELLER</span>
+                                    </b>
+                                </div>
+                                <div style="width:12%;">
+                                    <span/>
+                                </div>
+                                <div class="text-center" style="width:25%; border-top: 1px solid;">
+                                    <b>
+                                        <span class="text-center">SOLE/FIRST PURCHASER</span>
+                                    </b>
+                                </div>
+                                <div style="width:13%;">
+                                    <span/>
+                                </div>
+                                <div t-if="o.joint_partner_id" class="text-center"
+                                     style="width:25%; border-top: 1px solid;">
+                                    <b>
+                                        <span class="text-center">JOINT PURCHASER</span>
+                                    </b>
+                                </div>
+
+                                <div t-if=" not o.joint_partner_id" class="text-center">
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="text-center" style="width:25%;">
+                                    <span t-esc="o.company_id.name"/>
+                                </div>
+                                <div style="width:12%;">
+                                    <span/>
+                                </div>
+                                <div class="text-center" style="width:25%;">
+                                    <span t-esc="o.partner_id.name"/>
+                                </div>
+                                <div style="width:13%;">
+                                    <span/>
+                                </div>
+                                <div class="text-center" style="width:25%;">
+                                    <t t-foreach="o.joint_partner_id" t-as="j">
+                                        <span t-esc="j.name"/>
+                                        <br/>
+                                    </t>
+                                </div>
+                            </div>
+
+                            <div style="page-break-before: always;">
+
+                                <br/>
+                                <div class="row">
+                                    <div class="col-12 text-left">
+                                        <span t-raw="o.gethtmlval(o.schedule_b_eng)"/>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="text-center" style="width:25%; border-top: 1px solid;">
+                                        <b>
+                                            <span class="text-center">SELLER</span>
+                                        </b>
+                                    </div>
+                                    <div style="width:12%;">
+                                        <span/>
+                                    </div>
+                                    <div class="text-center" style="width:25%; border-top: 1px solid;">
+                                        <b>
+                                            <span class="text-center">SOLE/FIRST PURCHASER</span>
+                                        </b>
+                                    </div>
+                                    <div style="width:13%;">
+                                        <span/>
+                                    </div>
+                                    <div t-if="o.joint_partner_id" class="text-center"
+                                         style="width:25%; border-top: 1px solid;">
+                                        <b>
+                                            <span class="text-center">JOINT PURCHASER</span>
+                                        </b>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="text-center" style="width:25%;">
+                                        <span t-esc="o.company_id.name"/>
+                                    </div>
+                                    <div style="width:12%;">
+                                        <span/>
+                                    </div>
+                                    <div class="text-center" style="width:25%;">
+                                        <span t-esc="o.partner_id.name"/>
+                                    </div>
+                                    <div style="width:13%;">
+                                        <span/>
+                                        <!--<b><span t-esc="o.number"/></b>-->
+                                    </div>
+                                    <div class="text-center" style="width:25%;">
+                                        <t t-foreach="o.joint_partner_id" t-as="j">
+                                            <span t-esc="j.name"/>
+                                            <br/>
+                                        </t>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div style="page-break-before: always;">
+                                <div class="row">
+                                    <div class="col-12 text-center">
+                                        <b>
+                                            <span>SCHEDULE C</span>
+                                        </b>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-12 text-center">
+                                        <b>
+                                            <span>Unit Plan &amp; Site Plan</span>
+                                        </b>
+                                    </div>
+                                </div>
+                                <br/>
+                                <div class="col-8 text-center" align="center">
+                                    <img t-if="docs.property_id.unit_layout_image"
+                                         t-att-src="image_data_uri(docs.property_id.unit_layout_image)" width="800px"/>
+                                </div>
+                                <br/>
+                                <div class="row">
+                                    <div class="col-12 text-center">
+                                        <!--<span t-raw="o.schedule_c"/>-->
+                                        <span t-raw="o.gethtmlval(o.schedule_c_eng)"/>
+                                    </div>
+                                </div>
+                                <!--<br/>-->
+                                <br/>
+
+                                <div class="row">
+                                    <div class="text-center" style="width:25%; border-top: 1px solid;">
+                                        <b>
+                                            <span class="text-center">SELLER</span>
+                                        </b>
+                                    </div>
+                                    <div style="width:12%;">
+                                        <span/>
+                                    </div>
+                                    <div class="text-center" style="width:25%; border-top: 1px solid;">
+                                        <b>
+                                            <span class="text-center">SOLE/FIRST PURCHASER</span>
+                                        </b>
+                                    </div>
+                                    <div style="width:13%;">
+                                        <span/>
+                                        <!--<b><span t-esc="o.number"/></b>-->
+                                    </div>
+                                    <div t-if="o.joint_partner_id" class="text-center"
+                                         style="width:25%; border-top: 1px solid;">
+                                        <b>
+                                            <span class="text-center">JOINT PURCHASER</span>
+                                        </b>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="text-center" style="width:25%;">
+                                        <span t-esc="o.company_id.name"/>
+                                    </div>
+                                    <div style="width:12%;">
+                                        <span/>
+                                    </div>
+                                    <div class="text-center" style="width:25%;">
+                                        <span t-esc="o.partner_id.name"/>
+                                    </div>
+                                    <div style="width:13%;">
+                                        <span/>
+                                    </div>
+                                    <div class="text-center" style="width:25%;">
+                                        <t t-foreach="o.joint_partner_id" t-as="j">
+                                            <span t-esc="j.name"/>
+                                            <br/>
+                                        </t>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div style="page-break-before: always;">
+
+                                <br/>
+                                <div class="row" t-if="not o.asset_project_id.name == 'Samana Park Views'">
+                                    <div class="col-12 text-center">
+                                        <span t-raw="o.gethtmlval(o.schedule_d_eng)"/>
+                                    </div>
+                                </div>
+                                <br/>
+                                <t t-if="o.asset_project_id.name == 'Samana Park Views'">
+
+                                    <div class="row" style="font-size:24px;font-weight: bold;">
+                                        <div class="col-12 text-center">
+                                            <b>
+                                                <span>SCHEDULE D</span>
+                                            </b>
+                                        </div>
+                                    </div>
+                                    <br/>
+                                    <br/>
+                                    <t t-if="o.finish_type=='standard_finish'">
+                                        <div class="row">
+                                            <div class="col-12 text-left" style="margin-left:30px;">
+                                                <strong style="font-size:22px;font-weight: bold;">
+                                                    <u>FINISHES</u>
+                                                </strong>
+                                            </div>
+                                        </div>
+                                        <br/>
+                                        <br/>
+
+                                        <div class="row" style="margin-left:60px;font-size:20px;">
+                                            <div class="col-12 text-left">
+                                                <!--<span>1. Standard Finish</span>-->
+                                                <!--<i class="fa fa-check-square"/>-->
+                                                <form action="#">
+                                                  <p>
+                                                    <label for="test3">1. Standard Finish </label>
+                                                      <input type="checkbox" id="test3" checked="checked" disabled="disabled" />
+                                                  </p>
+                                              </form>
+                                            </div>
+                                        </div>
+                                        <br/>
+                                        <br/>
+                                        <br/>
+                                        <div class="row" style="margin-left:60px;font-size:20px;">
+                                            <div class="col-12 text-left">
+                                                <span>2. Premium Finish</span>
+                                            </div>
+                                        </div>
+
+                                        <br/>
+                                        <br/>
+                                        <br/>
+                                        <br/>
+
+                                        <br/>
+                                        <br/>
+                                        <br/>
+                                        <br/>
+
+                                        <br/>
+                                        <br/>
+                                        <br/>
+                                        <br/>
+                                    </t>
+                                    <t t-if="o.finish_type=='premium_finish'">
+                                        <div class="row">
+                                            <div class="col-12 text-left" style="margin-left:30px;">
+                                                <strong style="font-size:22px;font-weight: bold;">
+                                                    <u>FINISHES</u>
+                                                </strong>
+                                            </div>
+                                        </div>
+
+                                        <br/>
+                                        <br/>
+
+                                        <div class="row" style="margin-left:60px;font-size:20px;">
+                                            <div class="col-12 text-left">
+                                                <span>1. Standard Finish</span>
+                                            </div>
+                                        </div>
+                                        <br/>
+                                        <br/>
+                                        <br/>
+                                        <div class="row" style="margin-left:60px;font-size:20px;">
+                                          <div class="col-12 text-left">
+                                                <form action="#">
+                                                  <p>
+                                                    <label for="test3">1. Premium Finish </label>
+                                                      <input type="checkbox" id="test3" checked="checked" disabled="disabled" />
+                                                  </p>
+                                              </form>
+                                            </div>
+                                            <!--<div class="col-12 text-left">-->
+                                            <!--    <span>2: Premium Finish</span>-->
+                                            <!--    <i class="fa fa-check-square-o"/>-->
+                                            <!--</div>-->
+                                        </div>
+                                        <br/>
+                                        <br/>
+
+
+                                        <table class="table table-bordered" style="border: 1px solid;">
+                                            <thead>
+                                                <tr>
+                                                    <th class="text-center">Premium Finish Cost</th>
+                                                    <td colspan="2" class="text-center">AED
+                                                        <span t-esc="'{:,.2f}'.format(o.premium_finish_cost)"/>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <th class="text-center" colspan="3">Payment Schedule</th>
+                                                </tr>
+                                                <tr>
+                                                    <th class="text-center">Description</th>
+                                                    <th class="text-center">Payment Date</th>
+                                                    <th class="text-center">Amount (AED)</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr t-foreach="o.premium_schedule_ids" t-as="ps">
+                                                    <td class="text-center">
+                                                        <span t-esc="ps.name"/>
+                                                    </td>
+                                                    <td class="text-center">
+                                                        <span/>
+                                                        <span t-field="ps.date"
+                                                              t-options="{&quot;format&quot;: &quot;dd-MM-yyyy&quot;}"/>
+                                                    </td>
+                                                    <td class="text-center">
+                                                        <span t-esc="ps.amount"
+                                                              t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}"/>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </t>
+                                </t>
+
+
+                                <br/>
+                                <br/>
+                                <br/>
+                                <br/>
+
+                                <br/>
+                                <br/>
+                                <br/>
+                                <br/>
+
+
+                                <div class="row">
+                                    <div class="text-center" style="width:25%; border-top: 1px solid;">
+                                        <b>
+                                            <span class="text-center">SELLER</span>
+                                        </b>
+                                    </div>
+                                    <div style="width:12%;">
+                                        <span/>
+                                    </div>
+                                    <div class="text-center" style="width:25%; border-top: 1px solid;">
+                                        <b>
+                                            <span class="text-center">SOLE/FIRST PURCHASER</span>
+                                        </b>
+                                    </div>
+                                    <div style="width:13%;">
+                                        <span/>
+                                    </div>
+                                    <div t-if="o.joint_partner_id" class="text-center"
+                                         style="width:25%; border-top: 1px solid;">
+                                        <b>
+                                            <span class="text-center">JOINT PURCHASER</span>
+                                        </b>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="text-center" style="width:25%;">
+                                        <span t-esc="o.company_id.name"/>
+                                    </div>
+                                    <div style="width:12%;">
+                                        <span/>
+                                    </div>
+                                    <div class="text-center" style="width:25%;">
+                                        <span t-esc="o.partner_id.name"/>
+                                    </div>
+                                    <div style="width:13%;">
+                                        <span/>
+                                    </div>
+                                    <div class="text-center" style="width:25%;">
+                                        <t t-foreach="o.joint_partner_id" t-as="j">
+                                            <span t-esc="j.name"/>
+                                            <br/>
+                                        </t>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div style="page-break-before: always;">
+                                <br/>
+                                <div class="row">
+                                    <div class="col-12 text-center">
+                                        <span t-raw="o.gethtmlval(o.schedule_e_eng)"/>
+                                    </div>
+                                </div>
+                                <br/>
+                                <br/>
+
+                            </div>
+
+
+                            <div style="page-break-before: always;">
+                                <br/>
+                                <div class="row">
+                                    <div class="col-12">
+                                        <span t-raw="o.gethtmlval(o.schedule_f_eng)"/>
+                                    </div>
+                                </div>
+
+
+                                <div class="row">
+                                    <div class="col-12">
+                                        <strong>Purchaser :</strong>
+                                        <span t-esc="o.partner_id.name"/>
+                                    </div>
+                                </div>
+                                <br/>
+                                <br/>
+                                <div class="row">
+                                    <div class="col-12">
+                                        <span>
+                                            <b>Signed :</b>
+                                            ___________________________________
+                                        </span>
+                                    </div>
+                                </div>
+                                <br/>
+                                <br/>
+                                <br/>
+                                <div class="row">
+                                    <div t-if="o.joint_partner_id" class="col-12">
+                                        <strong>Joint Purchaser :</strong>
+                                        <t t-foreach="o.joint_partner_id" t-as="j">
+
+                                            <span t-esc="j.name"/>
+                                            <br/>
+
+                                        </t>
+                                    </div>
+                                </div>
+                                <br/>
+                                <br/>
+                                <div class="row">
+                                    <div t-if="o.joint_partner_id" class="col-12">
+                                        <span>
+                                            <b>Signed :</b>
+                                            ___________________________________
+                                        </span>
+                                    </div>
+                                </div>
+
+
+                            </div>
+
+
+                            <div style="page-break-before: always;">
+                                <br/>
+                                <div class="row">
+                                    <div class="col-12 text-center">
+                                        <span t-raw="o.gethtmlval(o.schedule_g_eng)"/>
+                                    </div>
+                                </div>
+
+
+                                <div class="row">
+                                    <div class="col-12">
+                                        <strong>Purchaser :</strong>
+                                        <span t-esc="o.partner_id.name"/>
+                                    </div>
+                                </div>
+                                <br/>
+                                <br/>
+                                <div class="row">
+                                    <div class="col-12">
+                                        <span>
+                                            <b>Signed :</b>
+                                            ___________________________________
+                                        </span>
+                                    </div>
+                                </div>
+                                <br/>
+                                <br/>
+                                <br/>
+                                <div class="row">
+                                    <div t-if="o.joint_partner_id" class="col-12">
+                                        <strong>Joint Purchaser :</strong>
+                                        <t t-foreach="o.joint_partner_id" t-as="j">
+
+                                            <span t-esc="j.name"/>
+                                            <br/>
+
+                                        </t>
+                                    </div>
+                                </div>
+                                <br/>
+                                <br/>
+                                <div class="row">
+                                    <div t-if="o.joint_partner_id" class="col-12">
+                                        <span>
+                                            <b>Signed :</b>
+                                            ___________________________________
+                                        </span>
+                                    </div>
+                                </div>
+
+                            </div>
+
+
+                            <div style="page-break-before: always;">
+                                <br/>
+                                <div class="row">
+                                    <div class="col-12 text-center">
+                                        <span t-raw="o.gethtmlval(o.schedule_h_eng)"/>
+                                    </div>
+                                </div>
+
+
+                                <div class="row">
+                                    <div class="col-12">
+                                        <strong>Purchaser :</strong>
+                                        <span t-esc="o.partner_id.name"/>
+                                    </div>
+                                </div>
+                                <br/>
+                                <br/>
+                                <div class="row">
+                                    <div class="col-12">
+                                        <span>
+                                            <b>Signed :</b>
+                                            ___________________________________
+                                        </span>
+                                    </div>
+                                </div>
+                                <br/>
+                                <br/>
+                                <br/>
+                                <div class="row">
+                                    <div t-if="o.joint_partner_id" class="col-12">
+                                        <strong>Joint Purchaser :</strong>
+                                        <t t-foreach="o.joint_partner_id" t-as="j">
+
+                                            <span t-esc="j.name"/>
+                                            <br/>
+
+                                        </t>
+                                    </div>
+                                </div>
+                                <br/>
+                                <br/>
+                                <div class="row">
+                                    <div t-if="o.joint_partner_id" class="col-12">
+                                        <span>
+                                            <b>Signed :</b>
+                                            ___________________________________
+                                        </span>
+                                    </div>
+                                </div>
+
+
+                            </div>
+
+
+                            <div style="page-break-before: always;">
+                                <br/>
+                                <div class="row">
+                                    <div class="col-12 text-center">
+                                        <span t-raw="o.gethtmlval(o.schedule_i_eng)"/>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-12">
+                                        <strong>Purchaser :</strong>
+                                        <span t-esc="o.partner_id.name"/>
+                                    </div>
+                                </div>
+                                <br/>
+                                <br/>
+                                <div class="row">
+                                    <div class="col-12">
+                                        <span>
+                                            <b>Signed :</b>
+                                            ___________________________________
+                                        </span>
+                                    </div>
+                                </div>
+                                <br/>
+                                <br/>
+                                <br/>
+                                <div class="row">
+                                    <div t-if="o.joint_partner_id" class="col-12">
+                                        <strong>Joint Purchaser :</strong>
+                                        <t t-foreach="o.joint_partner_id" t-as="j">
+
+                                            <span t-esc="j.name"/>
+                                            <br/>
+
+                                        </t>
+                                    </div>
+                                </div>
+                                <br/>
+                                <br/>
+                                <div class="row">
+                                    <div t-if="o.joint_partner_id" class="col-12">
+                                        <span>
+                                            <b>Signed :</b>
+                                            ___________________________________
+                                        </span>
+                                    </div>
+                                </div>
+
+                            </div>
+
+
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </template>
+    </data>
+</odoo>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+
+        <record model="ir.ui.view" id="view_company_payment_pdc_multi">
+            <field name="name">res.company.payment_terms_multi.form</field>
+            <field name="inherit_id" ref="account_voucher_collection.view_company_payment_note_inherit"/>
+            <field name="model">res.company</field>
+            <field name="arch" type="xml">
+                <xpath expr="//notebook/page/group[@name='payment_grp']" position="after">
+                    <group name="multi_pdc_payment_grp" string="Multi PDC Payment-Terms &amp; Conditions">
+                        <field name="pdc_payment_terms" nolabel="1"
+                               placeholder="Multi PDC Payment-Terms &amp; Conditions..."/>
+                    </group>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</odoo>

@@ -1,0 +1,257 @@
+<odoo>
+    <template id="footer_custom" inherit_id="website.layout" name="Footer">
+    <xpath expr="//div[@id='footer']" position="replace">
+        <div></div>
+    </xpath>
+    </template>
+
+
+<!--    <template id="brand_promotion_custom" inherit_id="website.brand_promotion" name="Brand Promotion">-->
+<!--        <xpath expr="//div" position="replace">-->
+<!--            <div></div>-->
+<!--        </xpath>-->
+<!--    </template>-->
+
+    <template id="property_homepage" name="Homepage" inherit_id="website.homepage">
+        <xpath expr="//div[@id='wrap']" position="replace">
+            <section class="welcome-area">
+                <div class="welcome-slides owl-carousel">
+                    <div class="single-welcome-slide asset-homepage bg-img bg-overlay">
+                        <div class="rent-main-section">
+                            <div class="section-property">
+                                <h2>Find a Property</h2>
+                                <div class="col-md-offset-2 property-rent-search">
+                                    <form id="searchForm" class="form_filter_rent" name="body_property" method="post">
+                                        <div id="test2">
+                                           <!--  <div class="col-md-12">
+                                                <div class="nput-group-prepend">
+                                                    <span class="input-group-text" style="height:inherit;">
+                                                        <i class="fa fa-map-marker fa-lg"></i>
+                                                    </span>
+                                                    <input type="text" style="height:inherit;border-radius: 0px;border-top: none;border-bottom: none;" class="autocomplete form-control input-lg location_input_auto" id="location_input" name="city" placeholder="Enter Landmark" />
+                                                </div>
+                                            </div> -->
+                                            <div class="input-group mb-3">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text" id="basic-addon1">
+                                                        <i class="fa fa-map-marker fa-lg"></i>
+                                                    </span>
+                                                </div>
+                                                <input id="location_input" type="text" class="form-control" name='city' placeholder="Enter Landmark" aria-label="Landmark" aria-describedby="basic-addon1"/>
+                                            </div>
+                                            <input class="field street_name" id="street_name" disabled="true" type="hidden"/>
+                                            <input class="field street_number" id="street_number" disabled="true" type="hidden"/>
+                                            <input class="field route" id="route" disabled="true" type="hidden"/>
+                                            <input class="field locality" id="locality" disabled="true" type="hidden"/>
+                                            <input class="field administrative_area_level_1" id="administrative_area_level_1" disabled="true" type="hidden"/>
+                                            <input class="field postal_code" id="postal_code" disabled="true" type="hidden"/>
+                                            <input class="field country" id="country" disabled="true" type="hidden"/>
+                                        </div>
+                                        <div class="mb-3">
+                                            <ul class="nav navbar-nav nav-pills" role="tablist" data-dropdown-in="fadeInDown" data-dropdown-out="fadeOutUp" style="">
+                                                <li role="presentation" class="dropdown">
+                                                    <a class="col-md-12 btn btn-primary dropdown-toggle property-type-checkbox" data-toggle="dropdown" role="button" >
+                                                    Property Type
+                                                        <span class="caret"></span>
+                                                    </a>
+                                                    <ul class="dropdown-menu">
+                        <li>
+                            <div class="row" style="margin-right: 0px;">
+                                <t t-foreach="property_types" t-as="one_property_type">
+                                    <div class="col-md-4 col-sm-6 col-xs-12">
+                                        <div class="checkbox">
+                                            <label>
+                                                <input type="checkbox" id="check_property" t-att-data-property_type_id="one_property_type.id" />
+                                                <t t-esc="one_property_type.name" />
+                                            </label>
+                                        </div>
+                                    </div>
+                                </t>
+                            </div>
+                        </li>
+                    </ul>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        
+                                            <div class="mb-3">
+           <!--  <ul class="nav navbar-nav nav-pills" role="tablist" data-dropdown-in="fadeInDown" data-dropdown-out="fadeOutUp" style="height:inherit;width: 100%;border-radius: 0px;">
+                <li role="presentation" class="dropdown" style="height:inherit;width: 100%;border-radius: 0px;">
+                    <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="true">
+                      Budget
+                      <span class="caret" style="float:right;margin-top: 7px;"></span></a> -->
+                      <h5 class='float-left'>Price range</h5>
+                    <ul class="dropdown-menu6" style="padding:30px;list-style-type: none;">
+                        <li>
+                            <div class="home_min_max">
+                                <div class="home_page_filter_price">
+                                   
+                                    <div class="form-group price-slider col-md-12 mt8" style="padding-left:4px;">
+                                        <div id="slider_range">
+                                            <input type="hidden" name="min_max_range" />
+                                        </div>
+                                    </div>
+                                     <div class="">
+                                      
+                                        <div style="float:left;" class="col-md-6">Min<input type="hidden" name="min_range" id="min_property_range_id" /></div>
+                                        <div style="float:right;" class="col-md-6">Max<input type="hidden" name="max_range" id="max_property_range_id" /></div>
+                                          <div style="text-align:center;" class="price-slider col-md-12 ">
+                                            <input type="text" id="amount" readonly="true" style="border:0; font-weight:bold; background-color: rgba(255, 255, 255, 0.0);text-align: center;" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+               <!--  </li>
+            </ul> -->
+        </div>
+        <div class="col-md-12" style="padding: 0px;height: 40px !important;padding-left:5px;padding-right:5px;">
+                                                    <div data-click_value="rent" id="rent_btn_id" style="border-color: #444;background-color: #444;border-radius: 5px;height: inherit;">
+                                                        <i class="fa fa-search fa-2x" style="color:white;padding-top: 8px;"> Search</i>
+                                                    </div>
+                                                </div>
+                                        
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <div class='container'>
+                <div class='row mt32'>
+                    <div class="section-custom title col-md-12">
+                        <p>We can give you the</p>
+                        <p>Best Service</p>
+                    </div>
+
+                    <section class="col-md-12 section-custom property-services">
+                        <div class='row'>
+                            <div class='col-md-3 mt16'>
+                                <div class="services-card">
+                                    <div class='property-container'>
+                                        <div class="property-wrapper">
+                                            <img src="/property_website/static/src/image/dream.png" class="img img-responsive" style="height: 110px;margin: 0 auto;"/>
+                                        </div>
+                                    </div>
+                                    <div class="services-container">
+                                        <div class="services-text">
+                                            <span class="services-big">DREAM HOME</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class='col-md-3 mt16'>
+                            <div class="services-card">
+                                <div class='property-container'>
+                                    <div class="property-wrapper">
+                                        <img src="/property_website/static/src/image/my-house.png" class="img img-responsive" style="height: 110px;margin: 0 auto;"/>
+
+                                    </div>
+                                </div>
+                                <div class="services-container">
+                                    <div class="services-text">
+                                        <span class="services-big">HASSLE FREE</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class='col-md-3 mt16'>
+                            <div class="services-card">
+                                <div class='property-container'>
+                                    <div class="property-wrapper">
+                                        <img src="/property_website/static/src/image/house-rent.png" style="height: 110px;margin: 0 auto;" class="img img-responsive"/>
+
+                                    </div>
+                                </div>
+                                <div class="services-container">
+                                    <div class="services-text">
+                                        <span class="services-big">FLEXIBLE RENTALS</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class='col-md-3 mt16'>
+                            <div class="services-card">
+                                <div class='property-container'>
+                                    <div class="property-wrapper">
+                                        <img src="/property_website/static/src/image/target.png" class='img img-responsive' style="height: 110px;margin: 0 auto;"/>
+
+                                    </div>
+                                </div>
+                                <div class="services-container">
+                                    <div class="services-text">
+                                        <span class="services-big">LEGAL SUPPORT</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        </div>
+                    </section>
+
+                </div>
+                <!-- <div class="mt32 s col-md-12"> -->
+                <t t-if="all_property_objs">
+                    <div class='row mt32'>
+                        <div class='section-custom col-md-8 title'>
+                            <p>SAMANA PARK</p>
+                            <p>VIEW</p>
+                        </div>
+                        <div class='pull-right col-md-4 mt32'>
+                            <a class="about-btn pms-button responsive-width" id="view_all_asset_lease" style="cursor:pointer; color:#EC9B3B !important">View all Lease</a>
+                        </div>
+
+                        <t t-set="property_display_total_one_by_one" t-value="1"/>
+                        <t t-foreach="all_property_objs" t-as="account_asset_one_lease">
+                            <t t-if="(account_asset_one_lease.state == 'draft')">
+                                <t t-if="property_display_total_one_by_one in [1,2,3,4,5,6,7,8]">
+                                    <t t-call="property_website.dosplay_properties"/>
+                                </t>
+                                <t t-set="property_display_total_one_by_one" t-value="property_display_total_one_by_one+1"/>
+                            </t>
+                        </t>
+                    </div>
+                </t>
+
+                <t t-if="all_property_objs">
+                    <t t-set="one_time_past_lease_display" t-value="1"/>
+
+                    <div class='row mt32'>
+                        <!-- <t t-foreach="all_property_objs" t-as="account_asset_one_lease"> -->
+                             <t t-set="property_display_total_one_by_one" t-value="1" />
+                                <t t-if="one_time_past_lease_display == 1">
+                                    <div class='section-custom col-md-8 title'>
+                                        <p>Featured Past</p>
+                                        <p>Lease</p>
+                                    </div>
+                                    <div class='pull-right col-md-4 mt32'>
+                                        <a class="about-btn pms-button responsive-width" id="view_all_past_lease" style="cursor:pointer; color:#EC9B3B !important">View all Past Lease</a>
+                                    </div>
+                                    <t t-set="one_time_past_lease_display" t-value="one_time_past_lease_display + 1"/>
+                                </t>
+                                <t t-foreach="all_property_objs" t-as="account_asset_one_lease">
+                                    <t t-if="(account_asset_one_lease.state == 'normal' or account_asset_one_lease.state == 'book')">
+                                <t t-if="property_display_total_one_by_one in [1,2,3,4,5,6,7,8]">
+                                    <t t-call="property_website.dosplay_properties"/>
+                                </t>
+                            </t></t>
+                                <t t-set="property_display_total_one_by_one" t-value="property_display_total_one_by_one+1"/>
+                            <!-- </t> -->
+                        <!-- </t> -->
+                    </div>
+                </t>
+                <div class='row mt32'>
+                    <div class='section-custom col-md-12 title'>
+                        <p>Testimonials</p>
+                        <p>What Our Clients Say</p>
+                    </div>
+                    <t t-call="property_website.testimonials" />
+                </div>
+                <!-- <t t-call="property_website.testimonials" /> -->
+
+            </div>
+        </xpath>
+    </template>
+</odoo>

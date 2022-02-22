@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!--<report -->
+            <!--id="report_account_voucher_collection"-->
+            <!--string="Customer Payments Multi"-->
+            <!--model="account.voucher.collection" -->
+            <!--report_type="pdf"-->
+            <!--file="account_voucher_collection/report/account_voucher_collection.rml" -->
+            <!--name="account.voucher.collection.print" -->
+        <!--/>-->
+    </data>
+</odoo>

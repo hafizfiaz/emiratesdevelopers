@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+    <report
+            id="report_remaining_cheques"
+            string="PDC Acknowledgement"
+            model="account.payment"
+            report_type="qweb-pdf"
+            file="sd_receipts_report.report_remaining_cheques_template"
+            name="sd_receipts_report.report_remaining_cheques_template"/>
+
+    <record id="paperformat_remaining_cheques_format" model="report.paperformat">
+        <field name="name">PDC Acknowledgement</field>
+        <field name="default" eval="True"/>
+        <field name="format">custom</field>
+        <field name="page_height">350</field>
+        <field name="page_width">0</field>
+        <field name="orientation">Portrait</field>
+        <field name="margin_top">30</field>
+        <field name="margin_bottom">15</field>
+        <field name="header_line" eval="False"/>
+        <field name="header_spacing">30</field>
+    </record>
+    <record id="report_remaining_cheques" model="ir.actions.report">
+        <field name="paperformat_id" ref="paperformat_remaining_cheques_format"/>
+    </record>
+    <template id="remaining_cheques_form">
+        <t t-if="not o" t-set="o" t-value="doc"/>
+
+        <t t-if="not company">
+            <t t-if="company_id">
+                <t t-set="company" t-value="company_id"/>
+            </t>
+            <t t-elif="o and 'company_id' in o">
+                <t t-set="company" t-value="o.company_id.sudo()"/>
+            </t>
+            <t t-else="else">
+                <t t-set="company" t-value="res_company"/>
+            </t>
+        </t>
+
+        <t t-call="sd_receipts_report.external_layout_header_pdc"/>
+        <t t-call="sd_receipts_report.external_layout_footer_pdc"/>
+        <t t-if="company.external_report_layout_id" t-call="{{company.external_report_layout_id.key}}">
+            <t t-raw="0"/>
+        </t>
+        <t t-else="else" t-call="web.external_layout_standard">
+            <t t-raw="0"/>
+        </t>
+
+    </template>
+
+    <template id="external_layout_header_pdc">
+        <div class="header">
+        <div style='width:100%;'>
+            <br></br>
+            <br></br>
+            <br></br>
+            <div class="row" style="text-align: center;">
+                <div class="col-12">
+                    <span style='font-size: 20px; color:#011a8a;'>
+                        <b>UNDERTAKING</b>
+                    </span>
+                </div>
+            </div>
+        </div>
+            <br/>
+
+
+            <div class="row">
+                <div class="col-12" style='font-size: 16px;'>
+                    <strong>Date:</strong>
+                    <span t-esc="o.date.strftime('%d-%b-%Y')"/>
+                </div>
+            </div>
+        </div>
+        <br/>
+        <br/>
+    </template>
+
+    <template id="external_layout_footer_pdc">
+        <div class="footer">
+<!--            <div class="row text-left" style="border-top: 1px solid black;">-->
+<!--                <div class="col-12">-->
+<!--                    <span class="page"/>-->
+<!--                    <span>|</span>-->
+<!--                    <span>SAMANA INTERNATIONAL</span>-->
+<!--                </div>-->
+<!--            </div>-->
+        </div>
+    </template>
+    <template id="report_remaining_cheques_template">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="sd_receipts_report.remaining_cheques_form">
+                    <div class="page" style='font-size: 14px;'>
+
+                        <br/>
+                        <br/>
+                        <br/>
+                        <div class="row">
+                            <div class="col-12 text-center" style="font-size:17px;">
+
+                                <u>
+                                    <strong>SUBMISSION OF REMAINING CHEQUES</strong>
+                                </u>
+
+                            </div>
+                        </div>
+                        <br/>
+                        <div class="row">
+                            <div class="col-12 text-center" style="font-size:15px;">
+                                <u>
+                                    <strong>Project:
+                                        <span t-esc="o.asset_project_id.name"/>
+                                    </strong>
+                                </u>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12 text-center" style="font-size:15px; text-decoration-line: underline;">
+                                <u>
+                                    <strong>Unit:
+                                        <span t-esc="o.property_id.name"/>
+                                    </strong>
+                                </u>
+
+                            </div>
+
+                            <br/>
+                            <br/>
+                            <br/>
+                        </div>
+                        <p>
+                            It is acknowledged that I, the undersigned, do not have enough cheques in the Cheque Book to
+                            complete the obligation of submitting the Post Dated Cheques as per the Payment Schedule of
+                            the Sale &amp;amp; Purchase Agreement. Therefore, the undersigned has given a cheque,
+                            bearing number
+                            <strong>
+                                <span t-if="o.check_number" t-esc="o.check_number"/>
+                                <span t-if="not o.check_number">____</span>
+                            </strong>
+                            for the amount as Guarantee against the remaining Post Dated Cheques to be submitted.
+                            <br/>
+                            <br/>
+                            It is confirmed that I shall submit the remaining Post Dated Cheques within 30 days of this
+                            letter to take back the Guarantee Cheque submitted to you.
+                            <br/>
+                            <br/>
+                            <br/>
+                            <br/>
+                            Regards,
+                            <br/>
+                            <br/>
+                            <br/>
+                        </p>
+
+                        <div class="row">
+                            <div class="col-12" style='font-size: 16px;'>
+                                <strong>
+                                    <span t-esc="o.partner_id.name"/>
+                                </strong>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-12" style='font-size: 16px;'>
+                                <strong>
+                                    <span t-esc="o.partner_id.nationality_id.name"/>
+                                </strong>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12" style='font-size: 16px;'>
+                                <strong>
+                                    <span t-esc="o.partner_id.passport_no"/>
+                                </strong>
+                            </div>
+                        </div>
+
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+
+</odoo>

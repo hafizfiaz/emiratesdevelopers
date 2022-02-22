@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <record id="account_mv_line_inherit" model="ir.ui.view">
+        <field name="name">account.move.line.inherit</field>
+        <field name="model">account.move.line</field>
+        <field name="inherit_id" ref="accounting_reports_filters.view_move_line_form_inherit2"/>
+        <field name="arch" type="xml">
+            <field name="type_id" position="after">
+					<field name="collection_type_id"/>
+					<field name="maturity_date"/>
+					<field name="collection_date"/>
+					<field name="nets_amount"/>
+					<field name="posting_date"/>
+					<field name="paid_date"/>
+					<field name="bounced_date"/>
+					<field name="officer_id"/>
+					<field name="hold_date"/>
+					<field name="bank_deposit"/>
+					<field name="amount_payment"/>
+					<field name="vendor_type"/>
+					<field name="state_receipt"/>
+        </field>
+        </field>
+    </record>
+
+</odoo>

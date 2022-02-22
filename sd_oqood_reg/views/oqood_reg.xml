@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="oqood_reg_tree" model="ir.ui.view">
+        <field name="name">oqood.reg.tree</field>
+        <field name="model">oqood.reg</field>
+        <field name="arch" type="xml">
+            <tree string="Oqood Registration">
+                <field name="create_date"/>
+                <field name="partner_id"/>
+                <field name="project"/>
+                <field name="property"/>
+                <field name="spa"/>
+                <field name="spa_status"/>
+<!--                <field name="booking_id"/>-->
+<!--                <field name="booking_status"/>-->
+                <field name="stage_id"/>
+            </tree>
+        </field>
+    </record>
+
+ <record id="view_oqood_Reg" model="ir.ui.view">
+        <field name="name">oqood.reg.search</field>
+        <field name="model">oqood.reg</field>
+        <field name="arch" type="xml">
+            <search string="Oqood Registration">
+                 <field name="name" string="Name"
+                           filter_domain="[('name','ilike',self)]"/>
+                    <field name="spa" filter_domain="[('spa','ilike',self)]" string="SPA"/>
+                    <field name="project" filter_domain="[('project','ilike',self)]"
+                           string="Project"/>
+                    <field name="property" filter_domain="[('property','ilike',self)]" string="Property"/>
+                    <field name="partner_id" filter_domain="[('partner_id','child_of',self)]" string="Customer Name"/>
+            </search>
+        </field>
+    </record>
+    <record id="oqood_reg" model="ir.ui.view">
+        <field name="name">Oqood Registration</field>
+        <field name="model">oqood.reg</field>
+        <field name="arch" type="xml">
+            <form string="Oqood Registration">
+                <header>
+                    <field name="stage_id" widget="statusbar" options="{'clickable': '1', 'fold_field': 'fold'}"
+                           domain="[('project_ids', '=', model_id),('user_ids','in', [uid])]"/>
+                </header>
+                <sheet>
+                    <h3>Oqood Registration</h3>
+                    <div class="oe_title">
+                        <h3>
+                            <field name="sequence" nolabel="1"/>
+                        </h3>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="subject"/>
+                            <field name="clearance_type" invisible="1"/>
+                            <field name="create_uid" readonly="1"/>
+                            <field name="create_date" readonly="1"/>
+                            <field name="total_spa_customer"/>
+<!--                            <field name="total_bookings"/>-->
+                            <field name="model_id" invisible="1"/>
+                        </group>
+                        <group>
+                            <separator string="Customer Details"/>
+                            <field name="name" invisible="1"/>
+                            <field name="partner_id"/>
+                            <field name="mobile"/>
+                            <field name="email"/>
+<!--                            <field name="nationality"/>-->
+                            <field name="address"/>
+
+                        </group>
+                        <group>
+
+                            <separator string="SPA Details"/>
+                            <field name="project"/>
+                            <field name="property" domain="[('parent_id','=', project)]"/>
+                            <field name="spa"/>
+                            <field name="spa_status"/>
+                            <field name="booking_id"/>
+<!--                            <field name="booking_status"/>-->
+<!--                            <field name="unit_type_id"/>-->
+                            <field name="size"/>
+                            <field name="parking"/>
+                            <field name="oqood_status"/>
+                            <field name="admin_status"/>
+                            <field name="receivable_status"/>
+<!--                            <field name="tag_ids" widget="many2many_tags"-->
+<!--                                   options="{'color_field': 'color', 'no_create_edit': True}"/>-->
+                            <separator string="Discount &amp; Waiver"/>
+                            <br/>
+
+                            <label for="discount_amount"/>
+                            <div class="address_format">
+                                <field name="discount_amount" style="width:40%;" nolabel="1"/>
+                                <span style="width:10%;margin-left:10px;">
+                                    |
+                                </span>
+                                <field name="discount_amount_perc" nolabel="1"
+                                       style="width:20%; color:black;margin-left:20px;"/>
+                                <span style="font-weight: bold; color:black;">%%</span>
+                            </div>
+                            <field name="notes"/>
+
+                        </group>
+                        <group>
+                            <separator string="Accounts Remarks"/>
+                            <field name="due_amount_to_clear"/>
+                            <field name="account_remarks"/>
+                            <field name="total_spa" widget="monetary"/>
+
+                            <label for="total_due_amount"/>
+                            <div class="address_format">
+                                <field name="total_due_amount" style="width:40%;" nolabel="1"/>
+                                <span style="width:10%;margin-left:10px;">
+                                    |
+                                </span>
+                                <field name="total_due_amount_perc" nolabel="1"
+                                       style="width:20%; color:black;margin-left:20px;"/>
+                                <span style="font-weight: bold; color:black;">%%</span>
+                            </div>
+
+                            <label for="realized_collection" style="color: #32a84e;"/>
+                            <div class="address_format">
+                                <field name="realized_collection" style="font-weight: bold; width:40%;color: #32a84e;"
+                                       nolabel="1"/>
+                                <span style="width:10%;font-weight: bold; color:#32a84e;margin-left:10px;">
+                                    |
+                                </span>
+                                <field name="realized_collection_perc" nolabel="1"
+                                       style="width:20%;font-weight: bold; color: #32a84e;margin-left:20px;"/>
+                                <span style="font-weight: bold; color:#32a84e;">%%</span>
+
+                            </div>
+
+                            <label for="due_balance_collections" style="font-weight: bold; color: #eb0707;"/>
+                            <div class="address_format">
+                                <field name="due_balance_collections"
+                                       style="font-weight: bold; width:40%;color: #eb0707;" nolabel="1"/>
+                                <span style="width:10%;font-weight: bold; color: #eb0707;margin-left:10px;">
+                                    |
+                                </span>
+                                <field name="due_balance_perc" nolabel="1"
+                                       style="width:20%;font-weight: bold; color:#eb0707;margin-left:20px;"/>
+                                <span style="font-weight: bold; color:#eb0707;">%%</span>
+                            </div>
+                            <label for="total_collection" style="font-weight: bold; color: black;"/>
+                            <div class="address_format">
+                                <field name="total_collection" style="font-weight: bold; width:40%;color: black;"
+                                       nolabel="1"/>
+                                <span style="width:10%;font-weight: bold; color:black;margin-left:10px;">
+                                    |
+                                </span>
+                                <field name="total_collection_perc" nolabel="1"
+                                       style="width:20%;font-weight: bold; color:black;margin-left:20px;"/>
+                                <span style="font-weight: bold; color:black;">%%</span>
+                            </div>
+                            <label for="pending_collections" style="font-weight: bold; color:black;"/>
+                            <div class="address_format">
+                                <field name="pending_collections" style="font-weight: bold; width:40%;color: black;"
+                                       nolabel="1"/>
+                                <span style="width:10%;font-weight: bold; color:black;margin-left:10px;">
+                                    |
+                                </span>
+                                <field name="pending_collections_perc" nolabel="1"
+                                       style="width:20%;font-weight: bold; color:black;margin-left:20px;"/>
+                                <span style="font-weight: bold; color:black;">%%</span>
+                            </div>
+                            <separator string="Receipts Break Up"/>
+                            <br/>
+
+                            <label for="escrow"/>
+                            <div class="address_format">
+                                <field name="escrow" style="width:40%;" nolabel="1"/>
+                                <span style="width:10%;margin-left:10px;">
+                                    |
+                                </span>
+                                <field name="escrow_perc" nolabel="1"
+                                       style="width:20%; color:black;margin-left:20px;"/>
+                                <span style="font-weight: bold; color:black;">%%</span>
+                            </div>
+                            <label for="non_escrow"/>
+                            <div class="address_format">
+                                <field name="non_escrow" style="width:40%;" nolabel="1"/>
+                                <span style="width:10%;margin-left:10px;">
+                                    |
+                                </span>
+                                <field name="non_escrow_perc" nolabel="1"
+                                       style="width:20%; color:black;margin-left:20px;"/>
+                                <span style="font-weight: bold; color:black;">%%</span>
+                            </div>
+                            <label for="total_escrow" style="font-weight: bold; color:black;"/>
+                            <div class="address_format">
+                                <field name="total_escrow" style="font-weight: bold; width:40%;color: black;"
+                                       nolabel="1"/>
+                                <span style="width:10%;font-weight: bold; color:black;margin-left:10px;">
+                                    |
+                                </span>
+                                <field name="total_escrow_perc" nolabel="1"
+                                       style="font-weight: bold; width:20%; color:black;margin-left:20px;"/>
+                                <span style="font-weight: bold; color:black;">%%</span>
+                            </div>
+
+                        </group>
+                    </group>
+                    <notebook>
+<!--                        <page string="Handover Charges Details">-->
+<!--                            <field name="handover_lines" nolabel="1">-->
+<!--                                <tree string="Handover Lines" editable="bottom">-->
+<!--                                    <field name="detail"/>-->
+<!--                                    <field name="amount"/>-->
+<!--                                    <field name="approve_reject"/>-->
+<!--                                    <field name="remarks"/>-->
+<!--                                </tree>-->
+<!--                            </field>-->
+<!--                        </page>-->
+<!--                        <page string="Work Flow Status" name="work_flow_status">-->
+<!--                            <field name="status_log_ids" readonly="1"/>-->
+<!--                        </page>-->
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+    <record id="action_oqood_reg" model="ir.actions.act_window">
+        <field name="name">Oqood Registration</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">oqood.reg</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Oqood Registration Request!
+            </p>
+        </field>
+    </record>
+    <menuitem id="oqood_reg_form" name="Oqood Registration" parent="crm.crm_menu_sales" sequence="5"
+              action="action_oqood_reg"/>
+    <menuitem id="oqood_reg_form_accounting" name="Oqood Registration Request"
+              parent="account.menu_finance_receivables"
+              sequence="6"
+              action="action_oqood_reg"/>
+</odoo>

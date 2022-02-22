@@ -1,0 +1,60 @@
+<odoo>
+
+    <!-- PROPERTY TYPE DROPDOWN template  -->
+    <template id="common_form_rent_buy_homepage">
+        <div class="col-sm-3 col-sm-offset-0 col-xs-10 col-xs-offset-1" style="padding: 0px;height: 40px !important;border-radius: 0px;border-radius: 0px;border-left: 1px solid #ccc;cursor:pointer;">
+            <ul class="nav navbar-nav nav-pills" role="tablist" data-dropdown-in="fadeInDown" data-dropdown-out="fadeOutUp" style="height:inherit;width: 100%;border-radius: 0px;">
+                <li role="presentation" class="dropdown" style="height:inherit;width: 100%;border-radius: 0px;">
+                    <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="true" style="height:inherit;background-color: #fff;border-radius: 0px;padding-top: 12px;text-align:left;">
+                      Property Type
+                      <span class="caret" style="float:right;margin-top: 7px;"></span></a>
+                    <ul class="dropdown-menu" style="width: 230%;">
+                        <li>
+                            <div class="row" style="margin-right: 0px;">
+                                <t t-foreach="property_types" t-as="one_property_type">
+                                    <div class="col-md-4 col-sm-6 col-xs-12">
+                                        <div class="checkbox">
+                                            <label>
+                                                <input type="checkbox" id="check_property" t-att-data-property_type_id="one_property_type.id" />
+                                                <t t-esc="one_property_type.name" />
+                                            </label>
+                                        </div>
+                                    </div>
+                                </t>
+                            </div>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+        <div class="col-sm-2 col-sm-offset-0 col-xs-10 col-xs-offset-1" style="padding: 0px;height: 40px !important;border-radius: 0px;border-radius: 0px;border-right: 1px solid #ccc;border-left: 1px solid #ccc;cursor:pointer;">
+            <ul class="nav navbar-nav nav-pills" role="tablist" data-dropdown-in="fadeInDown" data-dropdown-out="fadeOutUp" style="height:inherit;width: 100%;border-radius: 0px;">
+                <li role="presentation" class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="true" style="height:inherit;background-color: #fff;border-radius: 0px;padding-top: 12px;text-align:left;">
+                      Budget
+                      <span class="caret" style="float:right;margin-top: 7px;"></span></a>
+                    <ul class="dropdown-menu" style="padding: 24px; position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(138px, -173px, 0px);">
+                        <li>
+                            <div class="home_min_max">
+                                <div class="home_page_filter_price">
+                                    <div class="">
+                                        <div style="text-align:center;" class="price-slider col-xs-12 ">
+                                            <input type="text" id="amount" readonly="true" style="border:0; font-weight:bold; background-color: rgba(255, 255, 255, 0.0);text-align: center;" />
+                                        </div>
+                                        <div style="text-align:left;" class="col-xs-8">Min<input type="hidden" name="min_range" id="min_property_range_id" /></div>
+                                        <div style="text-align:right;" class="col-xs-4">Max<input type="hidden" name="max_range" id="max_property_range_id" /></div>
+                                    </div>
+                                    <div class="form-group price-slider col-xs-12 mt8" style="padding-left:4px;">
+                                        <div id="slider_range">
+                                            <input type="hidden" name="min_max_range" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </template> 
+</odoo>

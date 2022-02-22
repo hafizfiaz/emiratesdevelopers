@@ -1,0 +1,95 @@
+<odoo>
+    <!--<template id="new_custom_layout" inherit_id="website.layout" name="Top Header">
+        <xpath expr="//div[@id='wrapwrap']//header//nav[hasclass('navbar')]" position="attributes">
+                &lt;!&ndash;<t t-if="nabar == 'inv'">&ndash;&gt;
+                    <attribute name="style">display: none;</attribute>
+                &lt;!&ndash;</t>&ndash;&gt;
+        </xpath>
+    </template>-->
+    <template id="web_view_onload" name="developer">
+        <t t-call="web.layout">
+            <t t-set="head_website">
+                <script type="text/javascript">
+                    odoo.session_info = {
+                    is_admin:<t t-esc="json.dumps(request.env.user._is_admin())"/>,
+                    is_system:<t t-esc="json.dumps(request.env.user._is_system())"/>,
+                    is_website_user:<t t-esc="json.dumps(request.env.user._is_public())"/>,
+                    user_id:<t t-esc="json.dumps(request.env.user.id)"/>,
+                    is_frontend: true,
+                    translationURL: '/website/translations',
+                    };
+                </script>
+
+                <t t-call-assets="web.assets_common" t-js="false"/>
+                <t t-call-assets="web.assets_frontend" t-js="false"/>
+
+                <t t-call-assets="web.assets_common" t-css="false"/>
+                <t t-call-assets="web.assets_frontend" t-css="false"/>
+            </t>
+            <t t-set="head" t-value="head_website + (head or '')"/>
+
+            <t t-set="direction" t-value="request.env['res.lang'].search([('code', '=', request.env.lang)]).direction"/>
+            <div id="wrapwrap"
+                 t-attf-class="#{pageName or ''} #{direction == 'rtl' and 'o_rtl' or ''} #{'o_portal' if is_portal else ''}">
+                <header>
+
+                </header>
+                <main>
+                    <t t-call="sd_qr_code.web_view"/>
+                </main>
+
+            </div>
+        </t>
+
+
+        <!--<t t-call="portal.frontend_layout">-->
+
+        <!--</t>-->
+    </template>
+    <template id="web_view" name="developer records">
+        <div id="wrap">
+            <div class="oe_structure">
+                <div class="container o_stock_reports_page o_stock_reports_no_print">
+                    <div class="row">
+                        <div class="col-6 text-right">
+                            <h2>
+                                <t t-esc="heading"/>
+                            </h2>
+                        </div>
+                        <div class="col-6 text-right">
+                            <div class="ribbon-wrapper">
+                                <img src="/sd_qr_code/static/src/img/ribbon.jpeg" style="transform: rotate(25deg);" alt="Odoo Logo" height="70" width="150"/>
+                                <!--<img src="/web/static/src/img/logo.png" alt="Odoo Logo" height="15"/>-->
+                            </div>
+
+                        </div>
+                    </div>
+                    <br/>
+                    <br/>
+                    <div class="row">
+                        <div>
+                            <table class="table table-sm table-striped table-responsive">
+                                <thead>
+                                    <tr>
+                                        <t t-foreach="table_header" t-as="header">
+                                            <th>
+                                                <t t-esc="header"/>
+                                            </th>
+                                        </t>
+                                    </tr>
+                                </thead>
+                                <tr>
+                                    <t t-foreach="records" t-as="rec">
+                                        <td>
+                                            <t t-esc="rec"/>
+                                        </td>
+                                    </t>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </template>
+</odoo>

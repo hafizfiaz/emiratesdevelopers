@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_unallocated_draft_wiz,unallocated.draft.wiz,model_unallocated_draft_wiz,,1,1,1,1
+access_mail_recipients,mail.recipients,model_mail_recipients,,1,1,1,1

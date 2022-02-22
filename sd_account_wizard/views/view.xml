@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+       <record id="group_shift_receipts" model="res.groups">
+            <field name="name">Shift Receipts</field>
+            <field name="comment">the user will have an access to the shift receipts.</field>
+        </record>
+    </data>
+</odoo>
+

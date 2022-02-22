@@ -1,0 +1,35 @@
+<odoo>
+    <template id="suggested_property_template_id" name="Suggested Property">
+        <div class="on-rent widget-properties property_name" t-att-data-lease_id="p.id">
+            <div class="media">
+                <div class="media-left rent-properties">
+                    <div class="property-box-image">
+                        <div class="image-inner ">
+                            <img class="thumbnail" width="140" height="84" t-att-src="'data:image/jpeg;base64,%s' %to_text(p.image)"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="media-body">
+                    <div class="suggested-content">
+                        <h6 class="suggested-title">
+                            <span class='suggested-title-name'>
+                                <t t-esc="p.name"/>
+                            </span>
+                            <br/>
+                            <t t-esc='p.street'/>
+                            <t t-esc='p.street2'/>
+                            <br/>
+                            <t t-esc='p.township'/>
+                            <t t-esc='p.city'/>
+                            <t t-esc='p.state_id.name'/>
+                            <br/>
+                            <t t-esc='p.country_id.name'/>
+                            <t t-esc='p.zip'/>
+                            <!-- <div class="property-price"> <span style="color: #81db54;"> <t t-esc='p.ground_rent' /> </span> <span class="property-price-label">/ month</span> </div> -->
+                        </h6>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </template>
+</odoo>

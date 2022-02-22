@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+                <!--menu="False"/>-->
+        <record id="paperformat_fgr_statement" model="report.paperformat">
+            <field name="name">FGR Payment</field>
+            <field name="default" eval="True"/>
+            <field name="format">custom</field>
+            <field name="page_height">350</field>
+            <field name="page_width">0</field>
+            <field name="orientation">Portrait</field>
+            <field name="margin_top">20</field>
+            <field name="margin_bottom">15</field>
+            <!--<field name="margin_left">7</field>-->
+            <!--<field name="margin_right">7</field>-->
+            <field name="header_line" eval="False"/>
+            <field name="header_spacing">23</field>
+            <!--<field name="dpi">90</field>-->
+        </record>
+
+
+        <record id="report_fgr_payment_form" model="ir.actions.report">
+            <field name="paperformat_id" ref="sd_fgr_payment_report.paperformat_fgr_statement"/>
+        </record>
+
+        <template id="report_fgr_payment_template">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-call="sd_fgr_payment_report.fgr_statement_report_layout">
+                        <t t-set="o" t-value="o.with_context({'lang': lang})"/>
+                        <div class="page" style='font-size: 12px;'>
+                            <style>
+
+                                .table-bordered {
+                                          border: 1px solid black;
+                                            margin: 6px;
+                                        }
+
+                                        .table-bordered th,
+                                        .table-bordered tr,
+                                        .table-bordered td {
+                                          border: 1px solid black;
+
+                                        }
+
+                                        .table-bordered thead th,
+                                        .table-bordered thead tr,
+                                        .table-bordered thead td {
+                                          border-bottom-width: 1px;
+                                        }
+
+                                .table {
+                                      width: 100%;
+                                      margin-bottom: 1rem;
+                                      background-color: transparent;
+                                    }
+
+                                    .table th,
+                                    .table td {
+                                      padding: 0.75rem;
+                                      vertical-align: top;
+                                      border-top: 1px solid balck;
+                                    }
+
+                                    .table thead th {
+                                      vertical-align: bottom;
+                                      border-bottom: 1px solid black;
+                                    }
+
+                                    .table tbody + tbody {
+                                      border-top: 1px solid black;
+                                    }
+
+                            </style>
+                            <div class="row">
+                                <div class="col-12 text-center">
+                                    <h4>
+                                        <strong>SPA SUPPLEMENTAL AGREEMENT</strong>
+                                    </h4>
+                                </div>
+                            </div>
+
+                            <br/>
+
+                            <span t-raw="o.gethtmlval(o.fgr_agreement)"/>
+                            <br/>
+                            <br/>
+                            <br/>
+                            <div class="row">
+                                <div class="col-3 text-center">
+                                    <strong>Purchaser Signature</strong>
+                                </div>
+                            </div>
+                            <br/>
+                            <br/>
+                            <div class="row">
+                                <div class="col-3 text-center" style="border-top: 1px solid black;">
+                                    <span t-esc="o.partner_id.name"/>
+                                </div>
+                            </div>
+                            <br/>
+                            <br/>
+                            <br/>
+                            <br/>
+                            <div class="row">
+                                <div class="col-3 text-center">
+                                    <strong>Developers Signature</strong>
+                                </div>
+                            </div>
+                            <br/>
+                            <br/>
+                            <br/>
+                            <div class="row">
+                                <div class="col-3" style="border-top: 1px solid black;">
+                                    <strong></strong>
+                                </div>
+                            </div>
+
+
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </template>
+
+    </data>
+</odoo>
+
+

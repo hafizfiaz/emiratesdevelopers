@@ -1,0 +1,400 @@
+<odoo>
+    <template id="dosplay_properties">
+        <div class="col-xs-3 col-sm-3 col-md-2 mb8 property-images">
+
+            <t t-call="property_website.display_property_content"/>
+        </div>
+    </template>
+    <template id="display_property_content">
+        <div class="property-rent-card orange" t-att-data-lease_id="account_asset_one_lease.id">
+            <div class='rent-content' t-if="account_asset_one_lease.web_state == 'sold'" style="background-color:#F15263;color:black;">
+
+                <!--<t t-if="account_asset_one_lease.state == 'draft'">
+                    <button id="reset_templates_button" t-att-data-lease_id="account_asset_one_lease.id">Create Offer
+                    </button>
+                </t>-->
+                <p>
+
+                    <b>Unit No:</b><![CDATA[&nbsp;]]>
+                    <!-- <div class="property_street_city"> -->
+                    <t t-if="account_asset_one_lease.name">
+                    <t  t-esc="account_asset_one_lease.name"/> /
+                    </t>
+                    <t t-if="account_asset_one_lease.web_state == 'draft'">
+                        <b>Available</b>
+                    </t>
+                    <t t-if="account_asset_one_lease.web_state == 'sold'">
+                        <b>Sold</b>
+                    </t>
+                    <!-- </div> -->
+                </p>
+                <p>
+                    <!-- <div class="property_street_city"> -->
+<!--                    <t t-esc="account_asset_one_lease.unit_type_id.name"/><![CDATA[&nbsp;]]><t t-esc="account_asset_one_lease.facing_id.name"/>-->
+                    <!-- </div> -->
+                </p>
+                <p>
+
+                    <!--<b>View:</b><![CDATA[&nbsp;]]>-->
+                    <!-- <div class="property_street_city"> -->
+                    <t t-esc="account_asset_one_lease.parent_id.name"/>
+                    <!-- </div> -->
+                </p>
+                <!--<p>
+                    <t t-if="account_asset_one_lease.state == 'draft'">
+                        <b>Available</b>
+                    </t>
+                    <t t-if="account_asset_one_lease.state == 'sold'">
+                        <b>Sold</b>
+                    </t>
+                </p>-->
+
+                <!--<div class='property-details-sf'>
+                    <ul class="property-sf-ul">
+                        <li>
+                            <i class="fa fa-object-ungroup" style="color: coral !important;"/>
+                            <a href="#" class="active" style="color:white;"><t
+                                    t-esc="'{0:,.2f}'.format(float(account_asset_one_lease.gfa_feet))"/>
+                                <![CDATA[&nbsp;]]>SQF
+                            </a>
+                        </li>
+                        <li>
+                            <i class="fa fa-bed" style="color: coral;"/>
+                            <a href="#" class="active" style="color:white;">
+                                <t t-esc="account_asset_one_lease.bedroom"/>
+                            </a>
+                        </li>
+                        <li>
+                            <i class="fa fa-shower" style="color: coral;"/>
+                            <a href="#" class="active" style="color:white;">
+                                <t t-esc="account_asset_one_lease.bathroom"/>
+                            </a>
+                        </li>
+                    </ul>
+                </div>-->
+                <!--<div style='position: absolute;left: 40px;top: 185px;'>
+                    <div t-if="page_of_saved" t-att-data-lease_id="account_asset_one_lease.id"
+                         t-att-data-page_info="property_type" class="listing-delete" style="cursor:pointer;">
+                        <i class="fa fa-heart fa-lg col-xs-1" style="color: red;" aria-hidden="true"></i>
+                    </div>
+                    <t t-if="not page_of_saved">
+                        <t t-if="account_asset_one_lease.id in product_ids_from_cookies_list">
+                            &lt;!&ndash;<div t-att-data-lease_id="account_asset_one_lease.id" class="listing-save" style="display:none;">&ndash;&gt;
+                            &lt;!&ndash;<i class="fa fa-heart-o fa-lg col-xs-1" style="padding: 0;"></i>&ndash;&gt;
+                            &lt;!&ndash;</div>&ndash;&gt;
+                            <div t-att-data-lease_id="account_asset_one_lease.id" class="listing-saved-data"
+                                 style="cursor:pointer">
+                                <i class="fa fa-heart fa-lg col-xs-1" style="color: red;padding: 0;"></i>
+                            </div>
+                        </t>
+                        <t t-if="not account_asset_one_lease.id in product_ids_from_cookies_list">
+                            &lt;!&ndash;<div t-att-data-lease_id="account_asset_one_lease.id" class="listing-save" style="cursor:pointer">&ndash;&gt;
+                            &lt;!&ndash;<i class="fa fa-heart-o fa-lg col-xs-1" style="padding: 0;"></i>&ndash;&gt;
+                            &lt;!&ndash;</div>&ndash;&gt;
+                            <div t-att-data-lease_id="account_asset_one_lease.id" class="listing-saved-data"
+                                 style="display:none;" data-check_value="false">
+                                <i class="fa fa-heart fa-lg col-xs-1" style="color: red;padding: 0;"></i>
+                            </div>
+                        </t>
+                    </t>
+                </div>-->
+                <t t-if="account_asset_one_lease.web_state == 'draft'">
+                    <div class='rent-price'>
+                            AED<![CDATA[&nbsp;]]>
+
+                            <t t-esc="'{0:,.0f}'.format(float(account_asset_one_lease.value))"/>
+
+                    </div>
+                </t>
+            </div>
+            <div class='rent-content wizard' t-att-data-lease_id="account_asset_one_lease.id" t-if="account_asset_one_lease.web_state == 'draft'" style="background-color:#DEDFDF;color:black;cursor:default;">
+
+                <!--<t t-if="account_asset_one_lease.state == 'draft'">
+                    <button id="reset_templates_button" t-att-data-lease_id="account_asset_one_lease.id">Create Offer
+                    </button>
+                </t>-->
+                <p class="wizard" t-att-data-lease_id="account_asset_one_lease.id">
+
+                    <b t-att-data-lease_id="account_asset_one_lease.id">Unit No:</b><![CDATA[&nbsp;]]>
+                    <!-- <div class="property_street_city"> -->
+                    <t t-esc="account_asset_one_lease.name"/> /
+                    <t t-if="account_asset_one_lease.web_state == 'draft'">
+                        <b t-att-data-lease_id="account_asset_one_lease.id">Available</b>
+                    </t>
+                    <t t-if="account_asset_one_lease.web_state == 'sold'">
+                        <b t-att-data-lease_id="account_asset_one_lease.id">Sold</b>
+                    </t>
+                    <!-- </div> -->
+                </p>
+                <p class="wizard" t-att-data-lease_id="account_asset_one_lease.id">
+
+                    <b t-att-data-lease_id="account_asset_one_lease.id"></b><!--<![CDATA[&nbsp;]]>-->
+                    <!-- <div class="property_street_city"> -->
+<!--                    <t t-esc="account_asset_one_lease.unit_type_id.name"/><![CDATA[&nbsp;]]><t t-esc="account_asset_one_lease.facing_id.name"/>-->
+                    <!-- </div> -->
+                </p>
+                <p class="wizard" t-att-data-lease_id="account_asset_one_lease.id">
+
+                    <!--<b t-att-data-lease_id="account_asset_one_lease.id">View:</b><![CDATA[&nbsp;]]>-->
+                    <!-- <div class="property_street_city"> -->
+                    <t t-esc="account_asset_one_lease.parent_id.name"/>
+                    <!-- </div> -->
+                </p>
+                <!--<p>
+                    <t t-if="account_asset_one_lease.state == 'draft'">
+                        <b>Available</b>
+                    </t>
+                    <t t-if="account_asset_one_lease.state == 'sold'">
+                        <b>Sold</b>
+                    </t>
+                </p>-->
+
+                <!--<div class='property-details-sf'>
+                    <ul class="property-sf-ul">
+                        <li>
+                            <i class="fa fa-object-ungroup" style="color: coral !important;"/>
+                            <a href="#" class="active" style="color:white;"><t
+                                    t-esc="'{0:,.2f}'.format(float(account_asset_one_lease.gfa_feet))"/>
+                                <![CDATA[&nbsp;]]>SQF
+                            </a>
+                        </li>
+                        <li>
+                            <i class="fa fa-bed" style="color: coral;"/>
+                            <a href="#" class="active" style="color:white;">
+                                <t t-esc="account_asset_one_lease.bedroom"/>
+                            </a>
+                        </li>
+                        <li>
+                            <i class="fa fa-shower" style="color: coral;"/>
+                            <a href="#" class="active" style="color:white;">
+                                <t t-esc="account_asset_one_lease.bathroom"/>
+                            </a>
+                        </li>
+                    </ul>
+                </div>-->
+                <!--<div style='position: absolute;left: 40px;top: 185px;'>
+                    <div t-if="page_of_saved" t-att-data-lease_id="account_asset_one_lease.id"
+                         t-att-data-page_info="property_type" class="listing-delete" style="cursor:pointer;">
+                        <i class="fa fa-heart fa-lg col-xs-1" style="color: red;" aria-hidden="true"></i>
+                    </div>
+                    <t t-if="not page_of_saved">
+                        <t t-if="account_asset_one_lease.id in product_ids_from_cookies_list">
+                            &lt;!&ndash;<div t-att-data-lease_id="account_asset_one_lease.id" class="listing-save" style="display:none;">&ndash;&gt;
+                            &lt;!&ndash;<i class="fa fa-heart-o fa-lg col-xs-1" style="padding: 0;"></i>&ndash;&gt;
+                            &lt;!&ndash;</div>&ndash;&gt;
+                            <div t-att-data-lease_id="account_asset_one_lease.id" class="listing-saved-data"
+                                 style="cursor:pointer">
+                                <i class="fa fa-heart fa-lg col-xs-1" style="color: red;padding: 0;"></i>
+                            </div>
+                        </t>
+                        <t t-if="not account_asset_one_lease.id in product_ids_from_cookies_list">
+                            &lt;!&ndash;<div t-att-data-lease_id="account_asset_one_lease.id" class="listing-save" style="cursor:pointer">&ndash;&gt;
+                            &lt;!&ndash;<i class="fa fa-heart-o fa-lg col-xs-1" style="padding: 0;"></i>&ndash;&gt;
+                            &lt;!&ndash;</div>&ndash;&gt;
+                            <div t-att-data-lease_id="account_asset_one_lease.id" class="listing-saved-data"
+                                 style="display:none;" data-check_value="false">
+                                <i class="fa fa-heart fa-lg col-xs-1" style="color: red;padding: 0;"></i>
+                            </div>
+                        </t>
+                    </t>
+                </div>-->
+<!--                <div style="margin-top:8px;" class="wizard" t-att-data-lease_id="account_asset_one_lease.id"></div>-->
+                <t t-if="account_asset_one_lease.web_state == 'draft'">
+                    <div class='rent-price wizard' t-att-data-lease_id="account_asset_one_lease.id">
+                            AED<![CDATA[&nbsp;]]>
+
+                            <t t-esc="'{0:,.0f}'.format(float(account_asset_one_lease.value))"/>
+
+                    </div>
+                </t>
+            </div>
+        </div>
+
+
+    </template>
+    <template id="display_property_contents">
+        <div class="mt32">
+            <div class="property-card property_name" t-att-data-lease_id="account_asset_one_lease.id">
+                <div class="property-card-img">
+                    <t t-if="account_asset_one_lease.property_photo_ids">
+                        <t t-set="image_display" t-value="0"/>
+                        <t t-foreach="account_asset_one_lease.property_photo_ids" t-as="one_property_photo_id">
+                            <t t-if="one_property_photo_id.secondary_photo">
+                                <t t-if="account_asset_one_lease.image">
+                                    <div id="img_hover">
+                                        <img class="img-responsive" id="property_image1"
+                                             t-att-value="one_property_photo_id.photos"
+                                             t-att-src="website.image_url(one_property_photo_id, 'photos')"
+                                             style="height: 200px; width: 255px;border-radius: 25px 25px 0 0;"/>
+                                        <img class="img-responsive listing-item-additional" id="property_image2"
+                                             t-att-value="account_asset_one_lease.image"
+                                             t-att-src="website.image_url(account_asset_one_lease, 'image')"
+                                             style="height: 200px; width: 255px;border-radius: 25px 25px 0 0;"/>
+                                    </div>
+                                </t>
+                                <t t-if="not account_asset_one_lease.image">
+                                    <img style="height: 200px; width: 255px;border-radius: 25px 25px 0 0;"
+                                         class="img-responsive" id="property_image11"
+                                         t-att-value="one_property_photo_id.photos"
+                                         t-att-src="website.image_url(one_property_photo_id, 'photos')"/>
+                                </t>
+                                <t t-set="image_display" t-value="image_display+1"/>
+                            </t>
+                        </t>
+                    </t>
+                    <t t-if="not image_display">
+                        <img style="height: 200px; width: 255px;border-radius: 25px 25px 0 0;" class="img-responsive"
+                             id="property_image11" t-att-value="account_asset_one_lease.image"
+                             t-att-src="website.image_url(account_asset_one_lease, 'image')"/>
+                    </t>
+
+
+                </div>
+
+                <div class="property-details">
+
+                    <div class="product-desc">
+                        <span class="property-title property_name">
+                            <!-- Hartbee<b>spoort</b> -->
+                            <b>
+                                <t t-esc="account_asset_one_lease.name"/>
+                            </b>
+                            <!-- <span class="badge"> New </span> -->
+                        </span>
+                        <span class="property-caption">
+                            <i class="fa fa-map-marker"></i><![CDATA[&nbsp;]]>
+                            <!-- <div class="property_street_city"> -->
+                            <t t-esc="account_asset_one_lease.street"/>
+                            <t t-esc="account_asset_one_lease.city"/>
+                            <!-- </div> -->
+                        </span>
+                        <!-- <span class="property-rating">
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star grey"></i>
+                        </span> -->
+                    </div>
+                    <div class="property-properties">
+                        <span class="property-sf">
+                            <ul class="property-sf-ul">
+                                <li>
+                                    <i class="fa fa-object-ungroup" style="color: coral !important;"/>
+                                    <a href="#" class="active">
+                                        <t t-esc="'{0:,.2f}'.format(float(account_asset_one_lease.gfa_feet))"/>
+                                    </a>
+                                </li>
+                                <li>
+                                    <i class="fa fa-bed" style="color: coral;"/>
+                                    <a href="#" class="active">
+                                        <t t-esc="account_asset_one_lease.bedroom"/>
+                                    </a>
+                                </li>
+                                <li>
+                                    <i class="fa fa-shower" style="color: coral;"/>
+                                    <a href="#" class="active">
+                                        <t t-esc="account_asset_one_lease.bathroom"/>
+                                    </a>
+                                </li>
+                            </ul>
+                        </span>
+                        <div class='heart-like'>
+                            <div t-if="page_of_saved" t-att-data-lease_id="account_asset_one_lease.id"
+                                 t-att-data-page_info="property_type" class="listing-delete" style="cursor:pointer;">
+
+                                <!-- <i class="fa fa-heart fa-lg col-xs-1" style="font-weight: 700;color: red;font-size: 3em; left: 17px;" aria-hidden="true"></i> -->
+                            </div>
+                            <t t-if="not page_of_saved">
+                                <t t-if="account_asset_one_lease.id in product_ids_from_cookies_list">
+                                    <div t-att-data-lease_id="account_asset_one_lease.id" class="listing-save heart"
+                                         style="display:none;">
+
+                                        <!-- <i class="fa fa-heart-o fa-lg col-xs-1" style="font-weight: 700;padding: 0;font-size: 3em; left: 50px;"></i> -->
+                                    </div>
+                                    <div t-att-data-lease_id="account_asset_one_lease.id"
+                                         class="listing-saved-data heart" style="cursor:pointer">
+
+                                        <!-- <i class="fa fa-heart fa-lg col-xs-1" style="font-weight: 700;color: red;padding: 0;font-size: 3em; left: 50px;"></i> -->
+                                    </div>
+                                </t>
+                                <t t-if="not account_asset_one_lease.id in product_ids_from_cookies_list">
+                                    <div t-att-data-lease_id="account_asset_one_lease.id" class="listing-save heart"
+                                         style="cursor:pointer;">
+
+                                        <!-- <i class="fa fa-heart-o fa-lg col-xs-1" style="font-weight: 700; padding: 0;font-size: 3em; left: 50px;"></i> -->
+                                    </div>
+                                    <div t-att-data-lease_id="account_asset_one_lease.id"
+                                         class="listing-saved-data heart" style="left:50px;display:none;"
+                                         data-check_value="false">
+
+                                        <!-- <i class="fa fa-heart fa-lg col-xs-1" style="color: red;font-weight: 700;padding: 0;font-size: 3em; left: 17px;"></i> -->
+                                    </div>
+                                </t>
+                            </t>
+
+                            <!--<div class="social_share_property" style="left: 80px;bottom: 37px;">
+                                <ul class="nav navbar-nav nav-pills col-xs-1" role="tablist"
+                                    data-dropdown-in="fadeInDown" data-dropdown-out="fadeOutUp">
+                                    <li role="presentation" class="dropdown col-xs-1"
+                                        style="padding: 0;cursor:pointer;">
+                                        <a class="dropdown-toggle col-xs-1" data-toggle="dropdown" role="button"
+                                           aria-haspopup="true" aria-expanded="true" style="padding:0">
+                                            <i class="fa fa-share-alt fa-lg col-xs-1"
+                                               style="color: #aab8c2;;padding:0; font-size: 3em;font-weight: 700;"></i>
+                                        </a>
+                                        <ul class="dropdown-menu">
+                                            <li>
+                                                <div style="cursor:pointer;">
+                                                    <ul class="rrssb-buttons clearfix" style="padding: 2%;">
+                                                        <li class="rrssb-facebook col-xs-4">
+
+                                                            <a t-attf-href="https://www.facebook.com/sharer/sharer.php?u=#{facebook_share}/selected_property_page?id=#{account_asset_one_lease.id}"
+                                                               class="popup" style="padding: 0;">
+
+                                                                <i class="fa fa-facebook-square fa-3x col-xs-1"
+                                                                   style="padding: 0;"></i>
+                                                            </a>
+                                                        </li>
+                                                        <li class="rrssb-twitter col-xs-4">
+
+                                                            <a t-attf-href="https://twitter.com/intent/tweet?text=#{account_asset_one_lease.name}%20http%3A%2F%2F#{twitter_share}%2Fselected_property_page?id=#{account_asset_one_lease.id}%20%7C%20http%3A%2F%2F#{twitter_share}%2Fselected_property_page?id=#{account_asset_one_lease.id}"
+                                                               class="popup" style="padding: 0;">
+
+                                                                <i class="fa fa-twitter-square fa-3x col-xs-1"
+                                                                   style="padding: 0;"></i>
+                                                            </a>
+                                                        </li>
+
+                                                        <li class="rrssb-whatsapp col-xs-4">
+
+                                                            <a t-attf-href="https://twitter.com/intent/tweet?text=#{account_asset_one_lease.name}%20http%3A%2F%2F#{twitter_share}%2Fselected_property_page?id=#{account_asset_one_lease.id}%20%7C%20http%3A%2F%2F#{twitter_share}%2Fselected_property_page?id=#{account_asset_one_lease.id}"
+                                                               class="popup" style="padding: 0;">
+
+                                                                <i class="fa fa-whatsapp fa-3x col-xs-1"
+                                                                   style="padding: 0;"></i>
+                                                            </a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </div>-->
+
+                        </div>
+                        <!-- <span class="property-sf"> <h4>Size</h4> <ul class="property-sf-ul"> <li> <a href="#" class="active">10</a> </li> </ul> </span> <span class="property-sf"> <h4>Size</h4> <ul class="property-sf-ul"> <li> <a href="#" class="active">10</a> </li>
+                        </ul> </span> -->
+                        <!-- <span class="product-color"> <h4>Colour</h4> <ul class="ul-color"> <li> <a href="#" class="orange active"></a> </li> <li> <a href="#" class="green"></a> </li> <li> <a href="#" class="yellow"></a> </li> </ul> </span> -->
+                        <span class="property-price">
+
+                            <t t-esc="'{0:,.2f}'.format(float(account_asset_one_lease.ground_rent))"/>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </template>
+</odoo>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+
+        <record id="ir_cron_fgr_due_alert" model="ir.cron">
+            <field name="name">FGR Due Email Alert</field>
+            <field name="user_id" ref="base.user_root"/>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="numbercall">0</field>
+            <field name="doall" eval="False"/>
+            <field name="model_id" ref="fgr_payment_request.model_fgr_details"/>
+            <field name="code">model.send_fgr_due_email()</field>
+            <field name="state">code</field>
+        </record>
+
+        <record id="fgr_due_users" model="mail.recipients">
+            <field name="name">FGR Due Alert</field>
+            <field name="from_data">True</field>
+        </record>
+    </data>
+</odoo>

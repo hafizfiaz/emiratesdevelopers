@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="paperformat_agent_expression_of_interest" model="report.paperformat">
+            <field name="name">Agent Expression of Interest</field>
+            <field name="default" eval="True"/>
+            <field name="format">custom</field>
+            <field name="page_height">350</field>
+            <field name="page_width">0</field>
+            <field name="orientation">Portrait</field>
+            <field name="margin_top">20</field>
+            <field name="margin_bottom">15</field>
+            <field name="header_line" eval="False"/>
+            <field name="header_spacing">23</field>
+        </record>
+
+
+        <record id="report_agent_expression_of_interest_form" model="ir.actions.report">
+            <field name="paperformat_id" ref="sd_sale_order_report.paperformat_agent_expression_of_interest"/>
+        </record>
+
+        <template id="report_agent_expression_of_interest">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-call="sd_sale_order_report.sale_order_closure">
+                        <t t-set="o" t-value="o.with_context({'lang': lang})"/>
+                        <div class="page" style='font-size: 12px;'>
+                            <style>
+
+                                .table-bordered {
+                                border: 1px solid black;
+                                margin: 6px;
+                                }
+
+                                .table-bordered th,
+                                .table-bordered tr,
+                                .table-bordered td {
+                                border: 1px solid black;
+
+                                }
+
+                                .table-bordered thead th,
+                                .table-bordered thead tr,
+                                .table-bordered thead td {
+                                border-bottom-width: 1px;
+                                }
+
+                                .table {
+                                width: 100%;
+                                margin-bottom: 1rem;
+                                background-color: transparent;
+                                }
+
+                                .table th,
+                                .table td {
+                                padding: 0.75rem;
+                                vertical-align: top;
+                                border-top: 1px solid balck;
+                                }
+
+                                .table thead th {
+                                vertical-align: bottom;
+                                border-bottom: 1px solid black;
+                                }
+
+                                .table tbody + tbody {
+                                border-top: 1px solid black;
+                                }
+
+                            </style>
+                            <br></br>
+                            <br></br>
+                            <h4 class="text-center">
+                                <strong>AGENCY EXPRESSION OF INTEREST</strong>
+                            </h4>
+                            <br></br>
+                            <br></br>
+                            <div class="row text-left">
+                                <div class="col-12">
+                                    <span style='font-size: 16px;'>
+                                        <strong>DATE:</strong>
+                                        <span t-field="o.booking_date" t-options='{"format": "dd/MM/yyyy"}'/>
+                                    </span>
+                                </div>
+                            </div>
+                            <br></br>
+
+                            <table class="table table-bordered">
+                                <tbody>
+                                    <tr>
+                                        <td style="width:25%">
+                                            <span>Agent Name</span>
+                                        </td>
+                                        <td style="width:25%">
+                                            <span t-esc="o.agent_id.name"/>
+                                        </td>
+                                        <td style="width:25%">
+                                            <span>Contact Number</span>
+                                        </td>
+                                        <td style="width:25%">
+                                            <span t-esc="o.agent_id.mobile"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <span>Phone:</span>
+                                        </td>
+                                        <td>
+                                            <span t-if="o.agent_id and o.agent_id.phone" t-esc="o.agent_id.phone"/>
+                                            <span t-if="o.agent_id and not o.agent_id.phone">-</span>
+                                            <span t-if="not o.agent_id">-</span>
+                                        </td>
+                                        <td>
+                                            <span>Email ID</span>
+                                        </td>
+                                        <td>
+                                            <span t-esc="o.agent_id.email"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <span>Project</span>
+                                        </td>
+                                        <td>
+                                            <span t-esc="o.asset_project_id.name"/>
+                                        </td>
+                                        <td>
+                                            <span>Property</span>
+                                        </td>
+                                        <td>
+                                            <span t-esc="o.property_id.name"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <span>Unit Type</span>
+                                        </td>
+                                        <td>
+                                            <span t-esc="o.property_id.unit_type_id.name"/>
+                                        </td>
+                                        <td>
+                                            <span>Size</span>
+                                        </td>
+                                        <td>
+                                            <span t-esc="o.property_id.gfa_feet"/>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+
+                            <br></br>
+                            <div class="row" style='font-size: 16px;'>
+                                <div class="col-12">
+                                    <span>
+                                        <strong>TERMS:</strong>
+                                    </span>
+                                </div>
+                            </div>
+                            <br></br>
+
+                            <table class="table table-bordered">
+                                <tbody>
+                                    <tr>
+                                        <td style="width:33%">
+                                            <span>Payment Terms</span>
+                                        </td>
+                                        <td style="width:67%" colspan="2">
+                                            <strong>As per the reservation form of the individual client</strong>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <span>Special Terms (If any)</span>
+                                        </td>
+                                        <td colspan="2">
+                                            <span t-esc="o.booking_remarks"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <span>Internal Agent</span>
+                                        </td>
+                                        <td>
+                                            <span t-esc="o.user_id.name"/>
+                                        </td>
+                                        <td style="width:37%">
+                                            <span>Sign:</span>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <br/>
+                            <br/>
+                            <p style='font-size: 14px;'>NOTE: I,
+                                <strong>
+                                    <span t-esc="o.agent_id.name"/>
+                                </strong>
+                                express my interest in the unit/s highlighted in the addendum attached at Samana Golf
+                                Avenue/Samana Greens/Samana Hills for the purpose of sale to my investor/s.
+                                <br/>
+                                A commission of 6% will be paid on any unit subject to meeting the standard agency terms
+                                of your Agency Agreement.
+                                <br/>
+                                I confirm that I have made an AEOI payment of AED 10,000 – per unit (As per the attached
+                                schedule) and that the unit/s will be blocked in my name for a period of 21 days from
+                                the date of this AEOI in order to give me the opportunity to market the unit/s to my
+                                investors.
+                                <br/>
+                                <strong>Should I be unable to secure an investor/s at the end of the 21 day period I
+                                    CONFIRM that the AEOI payment will be deemed forfeit.
+                                </strong>
+                            </p>
+                            <br></br>
+                            <br></br>
+                            <br></br>
+
+                            <div class="row text-center" style='font-size: 14px;'>
+                                <div class="col-4">
+                                    <strong>Agent</strong>
+                                </div>
+                                <div class="col-4">
+                                    <strong>General Manager/CEO</strong>
+                                </div>
+                                <div class="col-4">
+                                    <strong>Manager</strong>
+                                </div>
+                            </div>
+
+                            <br></br>
+                            <br></br>
+                            <div class="row text-center">
+                                <div class="col-4">
+                                    <strong>_________________</strong>
+                                </div>
+                                <div class="col-4">
+                                    <strong>_________________</strong>
+                                </div>
+                                <div class="col-4">
+                                    <strong>_________________</strong>
+                                </div>
+                            </div>
+
+
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </template>
+    </data>
+</odoo>
+
+

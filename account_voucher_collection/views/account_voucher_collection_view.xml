@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+
+        <!-- Customer Payment Multi-->
+        <!--<record id="account_voucher_collection_search_view" model="ir.ui.view">
+            <field name="name">account.voucher.collection.select</field>
+            <field name="model">account.voucher.collection</field>
+            <field name="arch" type="xml">
+                <search string="Search Account Vouchers Collection">
+                    <field name="number" string="Search All"
+                           filter_domain="['|','|','|','|',('number','ilike',self),('partner_id','ilike',self)
+                                            ,('partner_id.name','ilike',self),('partner_id.email','ilike',self),
+                                           ('partner_id.mobile','ilike',self)]"/>
+                    <field name="property_id" filter_domain="[('property_id','ilike',self)]" string="Property"/>
+                </search>
+            </field>
+        </record>-->
+        
+        <record model="ir.ui.view" id="account_voucher_collection_tree_view">
+            <field name="name">account.voucher.collection.tree</field>
+            <field name="model">account.voucher.collection</field>
+            <field name="arch" type="xml">
+                <tree string="Customer Payment Multi" decoration-info="state == 'draft'">
+                    <field name="date"/>
+                    <field name="number"/>
+                    <field name="partner_id"/>
+                    <field name="mobile"/>
+                    <field name="asset_project_id"/>
+                    <field name="property_id"/>
+                    <field name="user_id"/>
+                    <!--<field name="shop_id" />-->
+                    <field name="amount_total" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                    <field name="state"/>
+                    <field name="currency_id" invisible="1"/>
+                </tree>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="account_voucher_collection_form_view">
+            <field name="name">account.voucher.collection.form</field>
+            <field name="model">account.voucher.collection</field>
+            <field name="arch" type="xml">
+                <form string="Customer Payment Multi">
+
+    				<header>
+                        <button name="action_collect" string="Collect/Validate" type="object" states="draft,gm_approved,under_accounts_verification" class="oe_highlight"/>
+    					<button name="action_under_gm_review" string="Submit To GM" type="object" states="draft,gm_rejected" groups="base.group_user"/>
+		            	<button name="submit_accounts_verification" string="Confirm for Print" type="object" states="draft"/>
+                        <button name="action_under_gm_review" string="Submit To GM" type="object" states="under_accounts_verification"/>
+                        <button name="action_gm_approved" string="GM Approve" states="under_gm_review" type="object"/>
+	            		<button name="action_gm_rejected" string="GM Reject" states="under_gm_review" type="object"/>
+	            		<button name="action_cancel" string="Cancel" states="draft,under_gm_review,collected,gm_approved,gm_rejected,under_accounts_verification" type="object"/>
+	            		<button name="action_draft" string="Set To Draft" type="object" states="cancelled"/>
+
+    					<field name="state" widget="statusbar" statusbar_visible="draft,collected"/>
+    				</header>
+                <sheet>
+                    <h1 attrs="{'invisible': [('number','=',False)]}"><field name="number"/></h1>
+                    <group>
+                        <group>
+                            <field name="partner_id" required="1" string="Customer"/>
+                            <field name="mobile"/>
+                            <field name="journal_id" invisible="1"/>
+                            <field name="payment_term"/>
+                            <field name="officer_id"/>
+                            <field name="bank_deposit" invisible="1"/>
+                            <field name="currency_id" invisible="1"/>
+                        </group>
+                        <group>
+                            <field name="date"/>
+                            <field name="reference" string="Payment Ref" placeholder="e.g. 003/10"/>
+                            <field name="name" colspan="2" placeholder="e.g. Invoice SAJ/0042"/>
+                            <field name="company_id" widget="selection" groups="base.group_multi_company"/>
+<!--                            <field name="booking_id"/>-->
+                            <field name="sale_id" options="{'no_create':True, 'no_create_edit':True}"/>
+                            <field name="asset_project_id"/>
+                            <field name="property_id"/>
+
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="PDC Collections">
+                            <field name="collection_line">
+                                <tree string="Collections" editable="bottom" colors="gray:amount==0">
+                                    <field name="journal_id" domain="[('type','in',['bank', 'cash', 'pdc'])]"
+		                                options="{'no_create': True, 'no_create_edit':True, 'no_open': True,}"
+		                                string="Payment Method"/>
+		                            <field name="bank_issued_check" readonly="0"/>
+		                            <field name="account_holder_name" readonly="0"/>
+		                            <field name="check_number" readonly="0"/>
+		                            <field name="maturity_date" readonly="0"/>
+		                            <field name="remarks" />
+                                    <field name="asset_project_id" invisible="1"/>
+                                    <field name="property_id" invisible="1"/>
+                                    <field name="date" invisible="1"/>
+                                    <field name="reference" invisible="1"/>
+                                    <field name="name" invisible="1"/>
+                                    <field name="partner_id" invisible="1" />
+<!--                                    <field name="booking_id" invisible="1" />-->
+
+                                    <field name="bank_deposit" attrs="{'readonly':[('chk','=',False)]}" invisible="1"/>
+                                    <field name="amount" string="Amount"/>
+                                    <field name="currency_id" invisible="1"/>
+                                    <field name="destination_account_id" invisible="1"/>
+                                    <field name="partner_type" invisible="1"/>
+                                    <field name="payment_type" invisible="1"/>
+<!--                                    <field name="payment_method_id" invisible="1"/>-->
+                                    <field name="company_id" invisible="1"/>
+                                    <field name="chk"  invisible="1"/>
+                                    <field name="other_payment" invisible="1"/>
+                                    <field name="state"/>
+<!--                                    <field name="payment_difference" invisible="1"/>-->
+<!--                                    <field name="writeoff_account_id" invisible="1"/>-->
+                                </tree>
+                            </field>
+                            <group class="oe_subtotal_footer oe_right" colspan="2" name="collection_total">
+                                <field name="amount_total" widget='monetary' options="{'currency_field': 'currency_id'}"/>
+                            </group>
+
+                        </page>
+                        <page name="info" string="Other Info">
+                        	<group>
+                        		<field name="user_id"/>
+                        	</group>
+                            <separator string="Terms and conditions"/>
+                            <field name="note"  placeholder="Terms and conditions..."/>
+                        </page>
+                            
+                    </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+	                    <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+	                    <field name="message_ids" widget="mail_thread"/>
+	                </div>
+                    
+                </form>
+            </field>
+        </record>
+
+        <record id="action_account_voucher_collection" model="ir.actions.act_window">
+            <field name="name">Customer Payments Multi</field>
+            <field name="res_model">account.voucher.collection</field>
+            <!--<field name="search_view_id" ref="account_voucher_collection_search_view"/>-->
+            <field name="view_id" eval="False"/>
+            <field name="target">current</field>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Click to register a new collection payment. 
+              </p>
+            </field>
+        </record>
+        <!--<record id="action_account_voucher_collection_tree" model="ir.actions.act_window.view">-->
+            <!--<field eval="1" name="sequence"/>-->
+            <!--<field name="view_mode">tree</field>-->
+            <!--<field name="view_id" ref="account_voucher_collection_tree_view"/>-->
+            <!--<field name="act_window_id" ref="action_account_voucher_collection"/>-->
+        <!--</record>-->
+        <!--<record id="action_account_voucher_collection_form" model="ir.actions.act_window.view">-->
+            <!--<field eval="2" name="sequence"/>-->
+            <!--<field name="view_mode">form</field>-->
+            <!--<field name="view_id" ref="account_voucher_collection_form_view"/>-->
+            <!--<field name="act_window_id" ref="action_account_voucher_collection"/>-->
+        <!--</record>-->
+
+        <menuitem action="action_account_voucher_collection" sequence="4"
+            id="menu_action_account_voucher_collection"  parent="account_voucher_collection.menu_receipts_and_payments" name="PDC Receipts"/>
+        <menuitem action="account_voucher_collection.action_account_voucher_collection" sequence="3"
+            id="menu_action_account_voucher_collection_crm"  parent="crm_menu_receipts" name="PDC Receipts"/>
+    </data>
+</odoo>

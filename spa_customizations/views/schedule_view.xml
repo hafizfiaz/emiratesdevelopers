@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_spa_schedule_view" model="ir.ui.view">
+            <field name="name">spa.schedule.view.wiz</field>
+            <field name="model">spa.schedule.view</field>
+            <field name="arch" type="xml">
+                <form string="SPA Schedule" name="spa_schedule">
+                    <sheet string="SPA Schedule" name="spa_schedule">
+                        <separator string="Schedule A"/>
+                        <field name="schedule_a_eng" widget="html"/>
+                        <separator string="Schedule B"/>
+                        <field name="schedule_b_eng" widget="html"/>
+                        <separator string="Schedule C"/>
+                        <field name="schedule_c_eng" widget="html"/>
+                        <separator string="Schedule D"/>
+                        <field name="schedule_d_eng" widget="html"/>
+                        <separator string="Schedule E"/>
+                        <field name="schedule_e_eng" widget="html"/>
+                        <separator string="Schedule F"/>
+                        <field name="schedule_f_eng" widget="html"/>
+                        <separator string="Schedule G"/>
+                        <field name="schedule_g_eng" widget="html"/>
+                        <separator string="Schedule H"/>
+                        <field name="schedule_h_eng" widget="html"/>
+                        <separator string="Schedule I"/>
+                        <field name="schedule_i_eng" widget="html"/>
+
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+    </data>
+</odoo>

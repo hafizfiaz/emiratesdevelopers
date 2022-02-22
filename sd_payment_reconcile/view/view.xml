@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="spa_summary_fields" model="ir.ui.view">
+            <field name="name">sale.order.form</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="spa_customizations.view_spa_form"/>
+            <field name="arch" type="xml">
+                <field name="booking_remarks" position="after">
+                    <field name="investor_field_margin"/>
+                </field>
+            </field>
+        </record>
+
+        <record id="view_spa_form_reconcile" model="ir.ui.view">
+            <field name="name">sale.order.form</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//header" position="inside">
+                    <button name="reconcile_receipt" string="Reconcile"
+                            attrs="{'invisible': ['|',('state','in',['refund_cancellation','rejected','cancel']),('internal_type', '!=', 'spa')]}"
+                            type="object" class="oe_highlight" groups="account.group_account_user"/>
+                </xpath>
+            </field>
+        </record>
+
+
+        <record id="pay_posttt_spa_wiz" model="ir.ui.view">
+            <field name="name">spa.summary.view.pay_post</field>
+            <field name="model">spa.summary.view</field>
+            <field name="inherit_id" ref="spa_customizations.view_spa_summary_view"/>
+            <field name="arch" type="xml">
+                <group name="summary" position="after">
+                    <group name="invoice_detail" string="Invoices Detail">
+                        <field name="posted_receipts_reconcile"/>
+                        <field name="posted_receipts_unreconciled"/>
+                        <field name="paid_invoices"/>
+                        <field name="unpaid_open_invoices"/>
+                        <separator name="sale_comm_detail" string="Sale, Commission, Investor Deal Margin"/>
+                        <field name="investor_field_margin"/>
+                        <field name="total_comm_sale"/>
+                        <field name="tot_comm_paid"/>
+                        <field name="property_size_sqft"/>
+                        <field name="net_sale_value"/>
+                        <field name="net_sale_value_sqft"/>
+                        <field name="comm_psqft"/>
+                        <field name="comm_paid_psqft"/>
+                    </group>
+
+                </group>
+            </field>
+        </record>
+<!--        <record id="view_account_payment_search_filter_reconciled" model="ir.ui.view">-->
+<!--            <field name="name">account.payment.search.reconciled</field>-->
+<!--            <field name="model">account.payment</field>-->
+<!--            <field name="inherit_id" ref="account.view_account_payment_search"/>-->
+<!--            <field name="arch" type="xml">-->
+<!--                <xpath expr="//filter[@name='reconciled']" position="replace">-->
+<!--                    <filter string="Reconciled" name="payment_reconciled" domain="[('payment_reconciled','=',True)]"/>-->
+<!--                    <filter string="Not Reconciled" name="payment_not_reconciled" domain="[('payment_reconciled','!=',True)]"/>-->
+<!--                </xpath>-->
+<!--            </field>-->
+<!--        </record>-->
+
+<!--        <record id="view_account_payment_reconciled" model="ir.ui.view">-->
+<!--            <field name="name">account.payemnt.inherit.reconciled</field>-->
+<!--            <field name="model">account.payment</field>-->
+<!--            <field name="inherit_id" ref="account.view_account_payment_form"/>-->
+<!--            <field name="arch" type="xml">-->
+<!--                <xpath expr="//sheet" position="inside">-->
+<!--                    <field name="payment_reconciled" invisible="1"/>-->
+<!--                </xpath>-->
+<!--            </field>-->
+<!--        </record>-->
+
+        <record model="ir.ui.view" id="view_account_payment_form_reconcile_unreconcile">
+            <field name="name">account.payment.reconcile.form</field>
+            <field name="model">account.payment</field>
+            <field name="inherit_id" ref="account_pdc.view_account_payment_form_pdc"/>
+            <field name="arch" type="xml">
+                <xpath expr="//page[1]" position="inside">
+                    <group class="oe_subtotal_footer oe_right" colspan="2" name="reconciles"  attrs="{'invisible':[('payment_type','!=','inbound')]}">
+                        <field name="reconciled_amount" widget='monetary' options="{'currency_field': 'currency_id'}"/>
+                        <field name="unreconciled_amount" widget='monetary' options="{'currency_field': 'currency_id'}"/>
+                    </group>
+                </xpath>
+            </field>
+        </record>
+
+        <!--<record model="ir.ui.view" id="view_account_payment_tree_reconcile_unreconcile">-->
+            <!--<field name="name">account.payment.reconcile.tree</field>-->
+            <!--<field name="model">account.payment</field>-->
+            <!--<field name="inherit_id" ref="account.view_account_payment_tree"/>-->
+            <!--<field name="arch" type="xml">-->
+                <!--<field name="state" position="before">-->
+                    <!--<field name="reconciled_amount" widget='monetary' options="{'currency_field': 'currency_id'}"/>-->
+                    <!--<field name="unreconciled_amount" widget='monetary' options="{'currency_field': 'currency_id'}"/>-->
+                <!--</field>-->
+            <!--</field>-->
+        <!--</record>-->
+
+    </data>
+</odoo>

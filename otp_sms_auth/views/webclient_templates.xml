@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (c) 2016-Present Webkul Software Pvt. Ltd. (<https://webkul.com/>) -->
+<!-- See LICENSE file for full copyright and licensing details. -->
+<odoo>
+    <!--<template id="wk_web_mobile_login" inherit_id="web.login" name="OTP SMS Login" priority="20">
+        <xpath expr="//div[@class='form-group field-login']" position="before">
+            <t t-set='enable_signin_auth' t-value="request.env['ir.default'].sudo().get('website.otp.settings', 'signin_auth')"/>
+            <t t-if="enable_signin_auth == 1">
+                <div class="form-group field-login-option">
+                    <div id="wk_otp_label">
+                        Login
+                    </div>
+                    <hr/>
+                    <div>
+                        <label class="radio-container wk_login">Email ID
+                            <input type="radio" value="radiemail" name="radio-login"/>
+                            <span class="otpcheck"></span>
+                        </label>
+                        <label class="radio-container wk_login">Mobile No
+                            <input type="radio" value="radiomobile" name="radio-login"/>
+                            <span class="otpcheck"></span>
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group field-mobile">
+                    <label for="mobile" class="control-label">Mobile</label>
+                    <input type="text" name="mobile" t-att-value="mobile" id="mobile" class="form-control" autocapitalize="off"/>
+                </div>
+            </t>
+        </xpath>
+        
+    </template>-->
+    <template id="wk_wk_web_login_inherit" inherit_id="web.login" name="OTP SMS Login">
+        <xpath expr="//div[@class='form-group field-login'] " position="before">
+            <hr id="smsotp" style="display: none;"/>
+
+        </xpath>
+        <xpath expr="//p[@class='alert alert-success']" position="after">
+<!--            <t t-set='enable_signin_auth' t-value="request.env['ir.default'].sudo().get('website.otp.settings', 'signin_auth')"/>-->
+<!--            <t t-if="enable_signin_auth == 1">-->
+                <p id="otplogincounter"/>
+<!--            </t>-->
+            <div id="wk_loader"/>
+            <input type="hidden" name="otploginobj" value="1"/>
+        </xpath>
+        <!--<xpath expr="//button[@type='submit']" position="attributes">
+            <attribute name="style">display: none;</attribute>
+        </xpath>-->
+        <xpath expr="//button[@type='submit']" position="after">
+<!--            <t t-set='enable_signin_auth' t-value="request.env['ir.default'].sudo().get('website.otp.settings', 'signin_auth')"/>-->
+<!--            <t t-if="enable_signin_auth == 1">-->
+                <button type="button" class="wk_next_btn btn btn-primary btn-block">Log In</button>
+                <div class="justify-content-between mt-2 d-flex small">
+                    <a t-if="signup_enabled" t-attf-href="/web/signup?{{ keep_query() }}">Don't have an account?</a>
+                    <a t-attf-href="/web/reset_password?{{ keep_query() }}">Reset Password</a>
+                </div>
+<!--            </t>-->
+        </xpath>
+        <xpath expr="//button[@type='submit']" position="replace">
+            <button type="submit" style="display:none;" class="btn btn-primary btn-block">Log in</button>
+        </xpath>
+
+    </template>
+</odoo>

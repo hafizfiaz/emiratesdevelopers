@@ -1,0 +1,7 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_pdc_movement_report_wizard,pdc.movement.report.wizard,model_pdc_movement_report_wizard,,1,1,1,1
+access_pdc_security_movement_report_wizard,pdc.security.movement.report.wizard,model_pdc_security_movement_report_wizard,,1,1,1,1
+access_pdc_bounced_movement_report_wizard,pdc.bounced.movement.report.wizard,model_pdc_bounced_movement_report_wizard,,1,1,1,1
+access_receivable_summary_wizard,receivable.summary.wizard,model_receivable_summary_wizard,,1,1,1,1
+access_profit_loss_wizard,profit.loss.wizard,model_profit_loss_wizard,,1,1,1,1
+access_sales_expense_wizard,sales.expense.wizard,model_sales_expense_wizard,,1,1,1,1

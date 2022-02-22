@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <menuitem
+                id="menu_crm_properties1"
+                parent="crm.crm_menu_root"
+                name="Properties"
+                sequence="6"/>
+
+
+        <record model="ir.ui.view" id="change_web_status_wizard">
+            <field name="name">Change Web Status</field>
+            <field name="model">change.web.status</field>
+            <field name="arch" type="xml">
+                <form string="Change Web Status">
+                    <group>
+                        <field name="asset_project_id"/>
+                        <field name="property_id"/>
+                        <field name="web_state"/>
+                    </group>
+
+                    <footer>
+                        <button string="Apply" name="action_apply" type="object" class="oe_highlight"/>
+                        or
+                        <button string="Cancel" class="oe_link" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_change_web_status_wizard" model="ir.actions.act_window">
+            <field name="name">Change Web Status</field>
+            <field name="res_model">change.web.status</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="change_web_status_wizard"/>
+            <field name="target">new</field>
+        </record>
+         <record id="action_property_assets_crm_view1" model="ir.actions.act_window">
+            <field name="name">Properties</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">account.asset.asset</field>
+            <field name="view_mode">tree,kanban,form,pivot</field>
+            <field name="domain">[('project','=', False),('state','=','draft')]</field>
+        </record>
+
+
+        <menuitem id="property_assets_crm_menu"
+              name="Properties"
+              parent="menu_crm_properties1"
+              groups="crm.group_use_lead"
+              action="action_property_assets_crm_view1"
+              sequence="1"/>
+
+        <menuitem
+                id="menu_change_web_status"
+                parent="menu_crm_properties1"
+                name="Change Property Web Status"
+                groups="sales_team.group_sale_manager"
+                action="action_change_web_status_wizard"
+                sequence="2"/>
+
+    </data>
+</odoo>

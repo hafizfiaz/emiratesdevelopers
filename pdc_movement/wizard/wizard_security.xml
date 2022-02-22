@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="pdc_security_movement_report_view" model="ir.ui.view">
+            <field name="name">PDC Security Movement Report</field>
+            <field name="model">pdc.security.movement.report.wizard</field>
+            <field name="arch" type="xml">
+                <form>
+                    <group>
+                        <group>
+                            <field name="start_date"/>
+                            <field name="end_date"/>
+                        </group>
+                        <group>
+                        </group>
+                    </group>
+                    <footer>
+                        <button name="check_report" string="Export XLSX" type="object" class="oe_highlight"/>
+                        or
+                        <button string="Cancel" class="oe_link" special="cancel" />
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+
+        <record id="action_pdc_security_movement_report" model="ir.actions.act_window">
+            <field name="name">PDC Security Movement Report</field>
+            <field name="res_model">pdc.security.movement.report.wizard</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="pdc_security_movement_report_view"/>
+            <field name="target">new</field>
+        </record>
+
+
+        <menuitem id="pdc_security_movement_report_menu" name="PDC Security Movement Report" groups="base.group_erp_manager"
+                  action="action_pdc_security_movement_report" parent="account.menu_finance_reports" sequence="2"/>
+
+
+    </data>
+</odoo>

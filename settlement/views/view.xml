@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record id="view_account_settlement_tree" model="ir.ui.view">
+            <field name="name">account.settlement.tree</field>
+            <field name="model">account.settlement</field>
+            <field name="arch" type="xml">
+                <tree string="Account Settlement" default_order="create_date desc">
+                    <field name="create_date"/>
+                    <field name="create_uid"/>
+                    <field name="journal_id"/>
+                    <field name="unsettled_receipt_total"/>
+                    <field name="net_of_settlement"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_account_settlement_form" model="ir.ui.view">
+            <field name="name">account.settlement.form</field>
+            <field name="model">account.settlement</field>
+            <field name="arch" type="xml">
+                <form string="Account Settlement">
+                    <header>
+                        <button name="action_draft" type="object" string="Back To Draft" states="cancel"
+                                class="oe_highlight"/>
+                        <button name="action_validate" type="object" string="Validate" states="draft"
+                                class="oe_highlight"/>
+                        <button name="action_compute" type="object" string="Compute" states="draft"
+                                class="oe_highlight"/>
+                        <button name="action_cancel" type="object" string="Cancel" states="draft,posted"/>
+                        <field name="state" widget="statusbar"
+                               statusbar_visible="draft,posted,cancel"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <label for="name"/>
+                            <h1>
+                                <field name="name"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="create_date"/>
+                                <field name="create_uid"/>
+                            </group>
+                            <newline/>
+                            <group string="Settlement Detail">
+                                <field name="journal_id"/>
+                                <!--<field name="bank_id" attrs="{'invisible': [('type','!=','bank')]}"/>-->
+                                <field name="ledger_cr_id"/>
+                                <field name="company_id" invisible="1"/>
+                                <field name="date_range"/>
+                                <field name="start_date" attrs="{'invisible':[('date_range','=', False)]}"/>
+                                <field name="end_date" attrs="{'invisible':[('date_range','=', False)]}"/>
+                                <field name="unsettled_receipt_total"/>
+
+                                <field name="charges_calc_type"/>
+                                <!--<div class="o_row">-->
+                                    <!--<label for="charges_perc" class="oe_inline" attrs="{'invisible':[('charges_calc_type','!=','percent')]}"/>-->
+                                    <field name="charges_perc" class="oe_inline" attrs="{'invisible':[('charges_calc_type','!=','percent')]}"/>
+                                    <!--<span  class="oe_inline" attrs="{'invisible':[('charges_calc_type','!=','percent')]}">%</span>-->
+                                <!--</div>-->
+                                <!--<field name="charges_calc_type"/>-->
+                                <!--<field name="charges_perc"/>-->
+                                <field name="charges_amount" attrs="{'readonly':[('charges_calc_type','=','percent')]}"/>
+                                <field name="vat_calc_type"/>
+                                <field name="vat_perc" class="oe_inline" attrs="{'invisible':[('vat_calc_type','!=','percent')]}"/>
+                                <field name="vat_amount" attrs="{'readonly':[('vat_calc_type','=','percent')]}"/>
+                            </group>
+                            <group string="Settlement Entry Detail">
+                                <field name="net_of_settlement"/>
+                                <field name="actual_as_per_bank"/>
+                                <field name="difference"/>
+                                <field name="entry_journal_id"/>
+                                <field name="debit_ledger_settlement_id"/>
+                                <field name="debit_ledger_charges_id"/>
+                                <field name="debit_ledger_vat_id"/>
+                                <field name="journal_entry_id" invisible="1"/>
+                            </group>
+                        </group>
+
+                        <notebook>
+                            <page string="Unsettled Receipts">
+                                <field name="unsettled_receipts_ids"/>
+                                <!--<group class="oe_subtotal_footer oe_right">-->
+                                    <!--<field name="total_receipts_amount"/>-->
+                                <!--</group>-->
+                            </page>
+                            <page string="Journal Items">
+                                <field name="journal_item_ids">
+                                    <tree>
+                                        <field name="date"/>
+                                        <field name="move_id" required="0" groups="account.group_account_user"/>
+                                        <field name="journal_id" options="{&quot;no_open&quot;:True}"/>
+                                        <field name="name"/>
+                                        <field name="ref"/>
+                                        <field name="statement_id" invisible="1"/>
+                                        <field name="partner_id"/>
+                                        <field name="account_id" options="{&quot;no_open&quot;:True}" domain="[('company_id', '=', company_id)]" groups="account.group_account_user"/>
+                                        <field name="analytic_account_id" groups="account.group_account_user"/>
+                                        <field name="analytic_tag_ids" widget="many2many_tags" groups="analytic.group_analytic_tags"/>
+                                        <field name="reconciled" invisible="1"/>
+                                        <field name="full_reconcile_id"/>
+                                        <field name="debit" sum="Total Debit"/>
+                                        <field name="credit" sum="Total Credit"/>
+                                        <field name="amount_currency" readonly="True" groups="base.group_multi_currency"/>
+                                        <field name="currency_id" readonly="True" invisible="1"/>
+                                        <field name="date_maturity"/>
+                                        <field name="company_currency_id" invisible="1"/>
+                                        <field name="company_id" invisible="1"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+
+                </form>
+            </field>
+        </record>
+
+
+        <record model="ir.actions.act_window" id="action_account_settlement_action">
+            <field name="name">Settlement</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">account.settlement</field>
+<!--            <field name="view_type">form</field>-->
+            <field name="view_mode">tree,form</field>
+        </record>
+        <!--<record id="action_view_account_settlement_form" model="ir.actions.act_window">
+            <field name="name">Settlement</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">account.settlement</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+&lt;!&ndash;            <field name="context">{'default_unsettled_receipt_total': active_id}</field>&ndash;&gt;
+            <field name="view_id" ref="view_account_settlement_form"/>
+            <field name="target">new</field>
+        </record>
+-->
+        <!--<menuitem name="Bank reconciliation"-->
+                  <!--id="menu_bank_reconciliation_main"-->
+                  <!--parent="base.menu_sales"-->
+                  <!--sequence="50"/>-->
+        <menuitem action="action_account_settlement_action"
+                  name="Settlement"
+                  id="menu_account_settlement_action"
+                  parent="account.menu_finance_entries"
+                  sequence="102"/>
+
+        <!--<record model="ir.ui.view" id="view_account_payment_inherit_settle">
+            <field name="name">account.payment.settle.form.inherit</field>
+            <field name="model">account.payment</field>
+            <field name="inherit_id" ref="account.view_account_payment_form"/>
+            <field name="arch" type="xml">
+                <button name="action_cancel" position="after">
+                    <button name="action_settle" string="Settle" type="object"
+                            attrs="{'invisible':['|',('state','!=','refused'),('chk','=',False)]}"/>
+                    <button name="cancel" state="settle" string="Cancel" type="object" groups="account_voucher_collection.group_account_general_financial_manager"/>
+
+                </button>
+            </field>
+        </record>-->
+
+    	<!--<record id="view_account_journal_form_inherit_settlement" model="ir.ui.view">
+            <field name="name">account.journal.form.settlement</field>
+            <field name="model">account.journal</field>
+	        <field name="inherit_id" ref="account_pdc.view_account_journal_form_inherit"/>
+	        <field name="arch" type="xml">
+	        	<field name="subtype" position="after">
+                    <field name="settlement"/>
+	        	</field>
+	        </field>
+    	</record>
+-->
+
+        <!--<record model="ir.ui.view" id="view_account_payment_form_pdc_settlement">
+            <field name="name">account.payment.pdc.form.settlement</field>
+            <field name="model">account.payment</field>
+            <field name="inherit_id" ref="account_pdc.view_account_payment_form_pdc"/>
+	        <field name="arch" type="xml">
+	        	<field name="account_holder_name" position="after">
+                    <field name="settlement" attrs="{'invisible':[('partner_type','=','supplier')]}"/>
+                    <field name="settlement_check" invisible="True"/>
+	        	</field>
+                <button name="action_draft_to_cancel" position="after">
+                    <button name="create_settlement" string="Create Settlement" type="object"
+                            attrs="{'invisible':['|','|',('state','not in',('posted')),('settlement_check','=',False),('settlement','in',['done'])]}"/>
+
+                </button>
+	        </field>
+    	</record>-->
+
+
+
+    </data>
+</openerp>

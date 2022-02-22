@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+<!--        <record id="view_account_payment_form_sms_email_button" model="ir.ui.view">-->
+<!--            <field name="name">account.payment.form.qr.inherit</field>-->
+<!--            <field name="model">account.payment</field>-->
+<!--            <field name="inherit_id" ref="account.view_account_payment_form"/>-->
+<!--            <field name="arch" type="xml">-->
+<!--                <button name="action_cancel" position="after">-->
+<!--                    <button name="action_email_sms" string="Send Email and SMS" type="object" attrs="{'invisible': ['|',('state', 'not in', ['approved','posted']),('payment_type','=','outbound')]}"/>-->
+<!--                </button>-->
+<!--            </field>-->
+<!--        </record>-->
+
+        <record id="receipts_email" model="mail.template">
+            <field name="name">Receipts Email</field>
+            <field name="email_from">${object.company_id and object.company_id.email or ''}</field>
+            <field name="subject">Receipts Email ${object.date.strftime('%B %d, %Y')}</field>
+            <field name="partner_to">${object.partner_id.id}</field>
+            <field name="lang">${user.partner_id.lang}</field>
+            <field name="model_id" ref="next_installment_template.model_account_payment"/>
+            <field name="auto_delete" eval="False"/>
+            <!--<field name="attachment_ids" eval="[(6, 0, [ref(${object.success_mail.lang})])]"/>-->
+            <field name="body_html">
+               <![CDATA[
+        <p>Dear <b>${object.partner_id.name}</b>,<br/><br/>
+        We have received your payment amounting AED${'{:,.0f}'.format(object.amount)} (Receipt # ${object.name}). Thank you for registering the payment with us.<br/><br/>
+        Regards
+        <br/>
+        Samana International Real Estate Development
+        </p>
+        ]]>
+            </field>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+
+        <record model="ir.ui.view" id="view_company_payment_note_inherit">
+            <field name="name">res.company.payment.note.form</field>
+            <field name="inherit_id" ref="base.view_company_form"/>
+            <field name="model">res.company</field>
+            <field name="arch" type="xml">
+                <field name="phone" position="after">
+                    <field name="fax"/>
+                </field>
+                <xpath expr="//notebook" position="inside">
+                    <page name="payment_info" string="Payment Info">
+                        <group name="payment_grp" string="Customer Payment - Terms &amp; Condition ">
+                            <field name="payment_note" nolabel="1"
+                                   placeholder="Customer Payment terms &amp; conditions..."/>
+                        </group>
+                    </page>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</odoo>

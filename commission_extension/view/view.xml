@@ -1,0 +1,557 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+
+        <record id="commission_invoice_tree1" model="ir.ui.view">
+            <field name="name">Commissions Invoice tree</field>
+            <field name="model">commission.invoice</field>
+            <field name="inherit_id" ref="property_commission.commission_invoice_tree"/>
+            <field name="arch" type="xml">
+                <xpath expr="//tree" position="replace">
+                    <tree string="Commissions Invoice">
+                        <field name="number" optional="show"/>
+                        <field name="partner_id" optional="show"/>
+                        <field name="agent" optional="show"/>
+                        <field name="date" optional="show"/>
+                        <field name="asset_project_id" optional="show"/>
+                        <field name="property_id" optional="show"/>
+                        <field name="total_price" optional="show"/>
+                        <field name="commission_type_id" optional="show"/>
+                        <field name="matured_pdcs" optional="show"/>
+                        <field name="realized_collection_perc" optional="show"/>
+                        <field name="write_date" optional="show"/>
+                         <field name="state" widget="badge"
+                           decoration-danger="state in ('under_legal_review','under_manager_review')"
+                           decoration-info="state == 'draft'"
+                           decoration-warning="state in ('cancel', 'rejected')"
+                           decoration-success="state in ('paid','approved')" optional="show"/>
+
+                        <field name="amount_total" optional="show"/>
+                    </tree>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="view_attachment_tree_on_model" model="ir.ui.view">
+            <field name="name">ir.attachment.tree.new</field>
+            <field name="model">ir.attachment</field>
+            <field name="arch" type="xml">
+                <tree string="Attachments">
+                    <field name="name"/>
+                    <field name="res_model"/>
+                    <field name="res_id"/>
+                    <field name="datas" widget="binary"/>
+                    <field name="company_id" groups="base.group_multi_company"/>
+                    <field name="create_uid"/>
+                    <field name="create_date"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="commission_invoice_form_inherit" model="ir.ui.view">
+            <field name="name">Commissions Invoice form</field>
+            <field name="model">commission.invoice</field>
+            <field name="inherit_id" ref="property_commission.commission_invoice_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//form" position="replace">
+                    <form string="Commission Invoice">
+                        <header>
+                            <button name="action_draft" type="object" string="Back To Draft" states="cancel"
+                                    class="oe_highlight" groups="base.group_erp_manager,account.group_account_manager"/>
+                            <!--<button name="submit_for_review" type="object" string="Submit For Review" states="draft" class="oe_highlight" groups="sales_team.group_sale_salesman_all_leads"/>-->
+                            <button name="action_send_legal_review" type="object" string="Submit to legal"
+                                    attrs="{'invisible': [('state', '!=', 'draft')]}" class="oe_highlight"
+                                    groups="sales_team.group_sale_salesman_all_leads"/>
+                            <!--<button name="action_send_legal_review" type="object" string="Submit to legal" attrs="{'invisible': ['|',('subject', '!=', False),('state', '!=', 'draft')]}" class="oe_highlight" groups="sales_team.group_sale_salesman_all_leads"/>-->
+                            <button name="submit_for_verification" type="object" string="Submit to Accounts"
+                                    attrs="{'invisible': [('state', '!=', 'draft')]}" class="oe_highlight"
+                                    groups="property_commission.groups_commission_pay_manager"/>
+
+                            <button name="submit_for_review" type="object" string="Legal Review"
+                                    states="under_legal_review" class="oe_highlight"
+                                    groups="commission_extension.group_legal_consultant"/>
+                            <button name="action_reject" type="object" string="Reject" states="under_legal_review"
+                                    class="oe_highlight" groups="commission_extension.group_legal_consultant"/>
+                            <button name="action_send_back" type="object" string="Roll Back" states="under_legal_review"
+                                    class="oe_highlight" groups="commission_extension.group_legal_consultant"/>
+
+                            <button name="action_manager_review" type="object" string="Manager Review"
+                                    states="under_manager_review" class="oe_highlight"
+                                    groups="sales_team.group_sale_manager"/>
+                            <button name="action_reject" type="object" string="Reject" states="under_manager_review"
+                                    class="oe_highlight" groups="sales_team.group_sale_manager"/>
+                            <button name="action_send_back" type="object" string="Roll Back"
+                                    states="under_manager_review" class="oe_highlight"
+                                    groups="sales_team.group_sale_manager"/>
+
+
+                            <button name="submit_for_verification" type="object" string="Submit to Accounts"
+                                    states="under_sales_hod_review" class="oe_highlight"
+                                    groups="property_commission.groups_commission_pay_manager"/>
+                            <button name="action_reject" type="object" string="Reject" states="under_sales_hod_review"
+                                    class="oe_highlight" groups="property_commission.groups_commission_pay_manager"/>
+                            <button name="action_send_back" type="object" string="Roll Back"
+                                    states="under_sales_hod_review" class="oe_highlight"
+                                    groups="property_commission.groups_commission_pay_manager"/>
+
+                            <button name="action_verify" type="object" string="Verify" states="under_verification"
+                                    class="oe_highlight" groups="account.group_account_user"/>
+                            <button name="action_reject" type="object" string="Reject" states="under_verification"
+                                    class="oe_highlight" groups="account.group_account_user"/>
+                            <button name="action_send_back" type="object" string="Roll Back" states="under_verification"
+                                    class="oe_highlight" groups="account.group_account_user"/>
+
+                            <button name="action_fc_authorize" type="object" string="Review"
+                                    states="under_fc_authorization" class="oe_highlight"
+                                    groups="account.group_account_manager"/>
+                            <button name="action_reject" type="object" string="Reject" states="under_fc_authorization"
+                                    class="oe_highlight" groups="account.group_account_manager"/>
+                            <button name="action_send_back" type="object" string="Roll Back"
+                                    states="under_fc_authorization" class="oe_highlight"
+                                    groups="account.group_account_manager"/>
+
+                            <button name="action_cfo_authorize" type="object" string="FC Authorize"
+                                    states="under_cfo_authorization" class="oe_highlight"
+                                    groups="commission_extension.group_financial_controller"/>
+                            <button name="action_reject" type="object" string="Reject" states="under_cfo_authorization"
+                                    class="oe_highlight" groups="commission_extension.group_financial_controller"/>
+                            <button name="action_send_back" type="object" string="Roll Back"
+                                    states="under_cfo_authorization" class="oe_highlight"
+                                    groups="commission_extension.group_financial_controller"/>
+
+                            <!--                            <button name="action_approve" type="object" string="Approve" states="under_approval" class="oe_highlight" groups="account_voucher_collection.group_ceo"/>-->
+                            <button name="action_approve" type="object" string="Approve" states="under_approval"
+                                    class="oe_highlight"/>
+                            <button name="action_reject" type="object" string="Reject" states="under_approval"
+                                    class="oe_highlight"/>
+                            <button name="action_send_back" type="object" string="Roll Back" states="under_approval"
+                                    class="oe_highlight"/>
+
+                            <button name="action_reject" type="object" string="Reject" states="approved"
+                                    class="oe_highlight"/>
+                            <button name="action_send_back" type="object" string="Roll Back" states="approved"
+                                    class="oe_highlight"/>
+
+                            <button name="action_cancel" type="object" string="Cancel" states="draft,rejected"
+                                    groups="base.group_erp_manager,account.group_account_manager"/>
+
+
+                            <button name="create_invoice" states="approved" string="Create Invoice" type="object"
+                                    class="oe_highlight"/>
+                            <button name="open_invoice" states="invoice" string="Open Invoice" type="object"
+                                    class="oe_highlight"/>
+                            <field name="state" widget="statusbar" statusbar_visible="draft,rejected,cancel"
+                                   readonly="1"/>
+
+                        </header>
+                        <sheet>
+                            <div class="oe_button_box" name="button_box">
+                                <button class="oe_stat_button" name="get_related_attachments"
+                                        string="Related Attachments" type="object"
+                                        icon="fa-paperclip"/>
+                            </div>
+                            <div class="oe_left" style="width: 300px;">
+                                <div class="oe_title">
+                                    <label class="oe_edit_only" for="number" string="Commission#"/>
+                                    <h1>
+                                        <field name="number" readonly="1"/>
+                                    </h1>
+                                    <h1>
+                                        <field name="subject" readonly="1"/>
+                                    </h1>
+                                </div>
+                                <div>
+                                    <label class="oe_inline" for="commission_for_rent"
+                                           attrs="{'invisible': ['&amp;',('commission_for_rent', '!=', True),('commission_for_sale', '=', True)]}"/>
+                                    <field class="oe_inline" name="commission_for_rent"
+                                           attrs="{'invisible': ['&amp;',('commission_for_rent', '!=', True),('commission_for_sale', '=', True)]}"/>
+                                    <br/>
+                                    <label class="oe_inline" for="commission_for_sale"
+                                           attrs="{'invisible': ['&amp;',('commission_for_sale', '!=', True),('commission_for_rent', '=', True)]}"/>
+                                    <field class="oe_inline" name="commission_for_sale"
+                                           attrs="{'invisible': ['&amp;',('commission_for_sale', '!=', True),('commission_for_rent', '=', True)]}"/>
+                                    <br/>
+                                    <label class="oe_inline" for="comm_payment_type"
+                                    />
+                                    <field class="oe_inline" name="comm_payment_type"
+                                    />
+                                </div>
+
+                            </div>
+                            <group>
+                                <group attrs="{'invisible': [('commission_for_rent', '!=', True)]}">
+                                    <!--<field attrs="{'readonly': [('state', 'in', ['invoice','cancel'])]}"-->
+                                    <!--context="{'show_address':1}" default_focus="1" name="patner_id"-->
+                                    <!--options="{'always_reload':1}" required="1" string="Tenant"/>-->
+                                    <field attrs="{'readonly': [('state', 'in', ['invoice','cancel'])]}"
+                                           context="{'show_address':1}" default_focus="1" name="partner_id"
+                                           options="{'always_reload':1}" required="1" string="Customer"/>
+                                    <field attrs="{'readonly': [('state', 'in', ['invoice','cancel'])]}"
+                                           name="asset_project_id"
+                                    options="{'no_create':True, 'no_create_edit':True, 'no_open': True}"/>
+                                    <field attrs="{'readonly': [('state', 'in', ['invoice','cancel'])]}"
+                                           required="1" name="property_id"
+                                    options="{'no_create':True, 'no_create_edit':True, 'no_open': True}"/>
+                                    <field attrs="{'readonly': [('state', 'in', ['invoice','cancel'])]}"
+                                           domain="[('is_property','=','True')]" name="tenancy"
+                                    options="{'no_create':True, 'no_create_edit':True, 'no_open': True}"/>
+                                    <field attrs="{'readonly': [('state', 'in', ['invoice','cancel'])]}"
+                                           name="currency_id"
+                                    options="{'no_create':True, 'no_create_edit':True, 'no_open': True}"/>
+                                </group>
+                                <group attrs="{'invisible': [('commission_for_rent', '!=', True)]}">
+                                    <field attrs="{'readonly': [('state', 'in', ['invoice','cancel'])]}" name="date"/>
+                                    <field attrs="{'readonly': [('state', 'in', ['invoice','cancel'])]}" name="agent"
+                                           required="1" options="{'no_create':True, 'no_create_edit':True, 'no_open': True}"/>
+                                    <field attrs="{'readonly': [('state', 'in', ['invoice','cancel'])]}"
+                                           name="company_id"
+                                    options="{'no_create':True, 'no_create_edit':True, 'no_open': True}"/>
+                                    <field invisible="1" name="inv"/>
+                                    <field invisible="1" name="invc_id"/>
+                                </group>
+                                <group attrs="{'invisible': [('commission_for_sale', '!=', True)]}">
+                                    <field name="partner_id"
+                                    options="{'no_create':True, 'no_create_edit':True, 'no_open': True}"/>
+                                    <!--                                    <field name="agent"/>-->
+                                    <field name="mobile"/>
+                                    <field name="asset_project_id"
+                                           attrs="{'readonly': [('state', 'in', ['invoice','cancel'])]}"
+                                    options="{'no_create':True, 'no_create_edit':True, 'no_open': True}"/>
+                                    <field name="property_id" required="1"
+                                           attrs="{'readonly': [('state', 'in', ['invoice','cancel'])]}"
+                                    options="{'no_create':True, 'no_create_edit':True, 'no_open': True}"/>
+                                    <field name="related_booking_id"
+                                    options="{'no_create':True, 'no_create_edit':True, 'no_open': True}"/>
+                                    <field attrs="{'readonly': [('state', 'in', ['invoice','cancel'])]}"
+                                           name="booking_date"/>
+                                    <!--                                    <field name="booking_status"/>-->
+                                    <field name="related_spa_id"
+                                    options="{'no_create':True, 'no_create_edit':True, 'no_open': True}"/>
+                                    <!--                                    <field name="spa_status"/>-->
+                                    <separator string="Commission Detail:"/>
+                                    <field name="commission_type_id"/>
+                                    <field name="team_up" attrs="{'invisible': [('team_up', '=', False)]}"/>
+                                    <label for="commission_share_perc" style="color: #8B0000;"
+                                           attrs="{'invisible': [('team_up', '=',False)]}"/>
+                                    <div class="address_format">
+                                        <field name="commission_share_perc" style="width:20%;color: #8B0000;"
+                                               nolabel="1"
+                                               attrs="{'invisible': [('team_up', '=',False)]}"/>
+                                        <span style="width:10%;font-weight: bold; color:black;margin-left:38px;"
+                                              attrs="{'invisible': [('team_up', '=',False)]}">
+                                            |
+                                        </span>
+                                        <field name="commission_share_amount" nolabel="1"
+                                               style="width:20%;font-weight: bold; color:black;margin-left:20px;"
+                                               attrs="{'invisible': [('team_up', '=',False)]}"/>
+                                    </div>
+                                    <field name="agent_ref" invisible="1"/>
+                                    <field name="agent_chk" invisible="1"/>
+                                    <field name="com1_chk" invisible="1"/>
+                                    <field name="com2_chk" invisible="1"/>
+                                    <field name="com3_chk" invisible="1"/>
+                                    <field name="agent_discount_perc"
+                                           attrs="{'invisible': [('agent_chk', '=',False)]}"/>
+                                    <field name="net_commission_perc"
+                                           attrs="{'invisible': [('agent_chk', '=',False)]}"/>
+                                    <field name="total_commission_amount"/>
+                                    <field name="total_commission_paid"/>
+                                    <field name="balance_commission"/>
+                                </group>
+                                <group attrs="{'invisible': [('commission_for_sale', '!=', True)]}">
+                                    <field attrs="{'readonly': [('state', 'in', ['invoice','cancel'])]}" name="date"/>
+                                    <field attrs="{'readonly': [('state', 'in', ['invoice','cancel'])]}" name="agent"
+                                           required="1"
+                                    options="{'no_create':True, 'no_create_edit':True, 'no_open': True}"/>
+                                    <field attrs="{'readonly': [('state', 'in', ['invoice','cancel'])]}"
+                                           name="total_price"/>
+                                    <label for="total_received_amount" string="Total Collections"/>
+                                    <div class="address_format">
+                                        <field name="total_received_amount" style="width:20%;color: #32CD32;"
+                                               nolabel="1"/>
+                                        <span style="width:10%;font-weight: bold; color:black;margin-left:38px;">
+                                            |
+                                        </span>
+                                        <field name="collection_perc" nolabel="1"
+                                               style="width:20%;font-weight: bold; color: #32CD32;margin-left:20px;margin-right:9px;"/>
+                                        <span>%</span>
+                                    </div>
+
+                                    <label for="matured_pdcs"/>
+                                    <div class="address_format">
+                                        <field name="matured_pdcs" style="width:20%;color: #32CD32;" nolabel="1"/>
+                                        <span style="width:10%;font-weight: bold; color:black;margin-left:38px;">
+                                            |
+                                        </span>
+                                        <field name="realized_collection_perc" nolabel="1"
+                                               style="width:20%;font-weight: bold; color:#32CD32;margin-left:20px;margin-right:9px;"/>
+                                        <!--<span attrs="{'invisible': ['|',('realized_collections', '=',0),('realized_collections', '=',False)]}">%</span>-->
+                                        <span>%</span>
+                                    </div>
+
+                                    <label for="unsecured_collections"/>
+                                    <div class="address_format">
+                                        <field name="unsecured_collections" style="width:20%;" nolabel="1"/>
+                                        <span style="width:10%; color:black;margin-left:38px;">
+                                            |
+                                        </span>
+                                        <field name="unsecured_collections_perc" nolabel="1"
+                                               style="width:20%; color:black;margin-left:20px;margin-right:9px;"/>
+                                        <span>%</span>
+                                    </div>
+                                    <separator/>
+                                    <field style="font-weight: bold; color:black;" name="ten_perc_of_price"/>
+                                    <label for="oqood_charge" string="Oqood 4% | Admin"/>
+                                    <div class="address_format">
+                                        <field name="oqood_charge" style="width:20%;" nolabel="1"/>
+                                        <span style="width:10%; color:black;margin-left:38px;">
+                                            |
+                                        </span>
+                                        <field name="admin_fee_charge" nolabel="1"
+                                               style="width:20%; color:black;margin-left:20px;margin-right:9px;"/>
+                                        <!--<span>%</span>-->
+                                    </div>
+                                    <field name="eligible_amount"/>
+
+                                    <label for="amount_receive1" string="Amount Received"/>
+                                    <div class="address_format">
+                                        <field name="amount_receive1" style="width:20%;" nolabel="1"/>
+                                        <span style="width:10%; color:black;margin-left:38px;">
+                                            |
+                                        </span>
+                                        <field name="ten_in_perc" nolabel="1"
+                                               style="width:20%; color:black;margin-left:20px;margin-right:9px;"/>
+                                        <span>%</span>
+                                    </div>
+
+                                    <field name="diff_four_five" attrs="{'invisible': [('diff_four_five', '&lt;',0)]}"
+                                           style="font-weight: bold; color:#32CD32;" string="Difference"/>
+                                    <field name="diff_four_five" attrs="{'invisible': [('diff_four_five', '&gt;=',0)]}"
+                                           style="font-weight: bold; color:#8B0000;" string="Difference"/>
+                                    <!--<field name="diff_four_five" style="font-weight: bold; color:black;" string="Difference"/>-->
+
+                                    <separator/>
+
+                                    <field style="font-weight: bold; color:black;" name="fifteen_perc_of_price"/>
+
+                                    <field name="fifteen_perc_amount"/>
+
+                                    <label for="amount_receive2" string="Amount Received"/>
+                                    <div class="address_format">
+                                        <field name="amount_receive2" style="width:20%;" nolabel="1"/>
+                                        <span style="width:10%; color:black;margin-left:38px;">
+                                            |
+                                        </span>
+                                        <field name="fifteen_in_perc" nolabel="1"
+                                               style="width:20%; color:black;margin-left:20px;margin-right:9px;"/>
+                                        <span>%</span>
+                                    </div>
+                                    <field name="diffrence2" attrs="{'invisible': [('diffrence2', '&lt;',0)]}"
+                                           style="font-weight: bold; color:#32CD32;" string="Difference"/>
+                                    <field name="diffrence2" attrs="{'invisible': [('diffrence2', '&gt;=',0)]}"
+                                           style="font-weight: bold; color:#8B0000;" string="Difference"/>
+
+                                </group>
+                            </group>
+                            <notebook>
+                                <page name="commission_information" string="Commission Information"
+                                      attrs="{'invisible': [('commission_for_rent', '!=', True)]}">
+                                    <field attrs="{'readonly': [['state', 'in', ['invoice','cancel']]]}" mode="tree"
+                                           name="commission_line" options="{'reload_whole_on_button': true}">
+                                        <tree editable="top" string="Commission Line">
+                                            <field name="name" string="Discription"/>
+                                            <field name="commission_type" required="1" string="Commission Type"/>
+                                            <field name="date"/>
+                                            <field name="end_date"/>
+                                            <field name="rent_amt" string="Total Rent"/>
+                                            <field name="amount"/>
+                                        </tree>
+                                    </field>
+                                    <group class="oe_subtotal_footer oe_right" colspan="2" name="sale_total">
+                                        <div class="oe_subtotal_footer_separator oe_inline o_td_label">
+                                            <label for="amount_total"/>
+                                        </div>
+                                        <field class="oe_subtotal_footer_separator" name="amount_total" nolabel="1"
+                                               options="{'currency_field': 'currency_id'}" widget="monetary"/>
+                                    </group>
+                                    <div class="oe_clear"/>
+                                </page>
+                                <page name="commission_information1" string="Commission Information"
+                                      attrs="{'invisible': [('commission_for_sale', '!=', True)]}">
+                                    <field attrs="{'readonly': [['state', 'in', ['invoice','cancel']]]}" mode="tree"
+                                           name="commission_line" options="{'reload_whole_on_button': true}">
+                                        <tree editable="top" string="Commission Line">
+                                            <field name="name" string="Discription"/>
+                                            <field name="commission_type" required="1" string="Commission Type"/>
+                                            <!--<field name="date"/>-->
+                                            <!--<field name="end_date"/>-->
+                                            <field name="rent_amt" string="Total Sale"/>
+                                            <field name="amount"/>
+                                        </tree>
+                                    </field>
+                                    <group class="oe_subtotal_footer oe_right" colspan="2" name="sale_total">
+                                        <div class="oe_subtotal_footer_separator oe_inline o_td_label">
+                                            <label for="amount_total"/>
+                                        </div>
+                                        <field class="oe_subtotal_footer_separator" name="amount_total" nolabel="1"
+                                               options="{'currency_field': 'currency_id'}" widget="monetary"/>
+                                    </group>
+                                    <div class="oe_clear"/>
+                                </page>
+                                <page name="all_spa_booking_commission"
+                                      string="All Commissions for this SPA &amp; Booking"
+                                      attrs="{'invisible': [('commission_for_sale', '!=', True)]}">
+                                    <field name="all_related_commissions">
+                                        <tree string="Commissions Invoice">
+                                            <field name="number"/>
+                                            <field name="partner_id"/>
+                                            <field name="agent"/>
+                                            <field name="date"/>
+                                            <field name="asset_project_id"/>
+                                            <field name="property_id"/>
+                                            <field name="tenancy" invisible="1"/>
+                                            <field name="state"/>
+                                            <field name="amount_total"/>
+                                        </tree>
+                                    </field>
+                                </page>
+                                <page name="all_agent_commission" string="All Commissions for this Agent"
+                                      attrs="{'invisible': [('commission_for_sale', '!=', True)]}">
+                                    <field name="all_related_commissions_of_agent">
+                                        <tree string="Commissions Invoice">
+                                            <field name="number"/>
+                                            <field name="agent"/>
+                                            <field name="date"/>
+                                            <field name="asset_project_id"/>
+                                            <field name="property_id"/>
+                                            <field name="tenancy" invisible="1"/>
+                                            <field name="state"/>
+                                            <field name="amount_total"/>
+                                        </tree>
+                                    </field>
+                                </page>
+
+                                <page name="unit_commissions" string="Unit Commission History"
+                                      attrs="{'invisible': [('commission_for_sale', '!=', True)]}">
+                                    <field name="unit_commission_history">
+                                        <tree string="Commissions Invoice">
+                                            <field name="number"/>
+                                            <field name="agent"/>
+                                            <field name="date"/>
+                                            <field name="asset_project_id"/>
+                                            <field name="property_id"/>
+                                            <field name="tenancy" invisible="1"/>
+                                            <field name="state"/>
+                                            <field name="amount_total"/>
+                                        </tree>
+                                    </field>
+                                </page>
+                                <page string="Total Collections" name="collections">
+                                    <field name="total_collection_ids"/>
+                                </page>
+                                <page string="Amount Received" name="received">
+                                    <field name="amount_received_ids"/>
+                                </page>
+                                <page name="description" string="Terms &amp; Conditions"
+                                      attrs="{'invisible': [('commission_for_sale', '!=', True),('commission_for_rent', '!=', True)]}">
+                                    <separator string="Terms &amp; Conditions"/>
+                                    <field colspan="4" name="description" placeholder="Other Information"/>
+                                </page>
+                            </notebook>
+                        </sheet>
+                    </form>
+                </xpath>
+
+                <xpath expr="//sheet" position="after">
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="activity_ids" widget="mail_activity"/>
+                        <field name="message_ids" widget="mail_thread" options="{'post_refresh': 'recipients'}"/>
+                    </div>
+                </xpath>
+
+            </field>
+        </record>
+
+        <!--        <record id="crm_case_form_view_booking1_inherit_commission" model="ir.ui.view">-->
+        <!--            <field name="name">crm.booking.form.commision</field>-->
+        <!--            <field name="model">crm.booking</field>-->
+        <!--            <field name="inherit_id" ref="crm_extension.crm_case_form_view_booking1"/>-->
+        <!--            <field name="arch" type="xml">-->
+        <!--                <xpath expr="//div[@name='button_box_booking']" position="inside">-->
+        <!--                    <button class="oe_stat_button" icon="fa-ticket" type="object" name="create_commission"-->
+        <!--                            attrs="{'invisible': ['|',('is_buy_state', '!=','approved'),('commission_create', '=',True)]}"-->
+        <!--                            groups="sales_team.group_sale_manager,account.group_account_user">-->
+        <!--                        <div class="o_stat_info">-->
+        <!--                            <span class="o_stat_text">Commission</span>-->
+        <!--                        </div>-->
+        <!--                    </button>-->
+        <!--                </xpath>-->
+        <!--                <xpath expr="//notebook" position="inside">-->
+        <!--                    <page name="commissions" string="Commissions"-->
+        <!--                          groups="sales_team.group_sale_manager,account.group_account_user">-->
+        <!--                        <field name="commission_ids">-->
+        <!--                            <tree string="Commissions Invoice">-->
+        <!--                                <field name="number"/>-->
+        <!--                                <field name="partner_id"/>-->
+        <!--                                <field name="agent"/>-->
+        <!--                                <field name="date"/>-->
+        <!--                                <field name="asset_project_id"/>-->
+        <!--                                <field name="property_id"/>-->
+        <!--                                <field name="tenancy" invisible="1"/>-->
+        <!--                                <field name="state"/>-->
+        <!--                                <field name="amount_total"/>-->
+        <!--                            </tree>-->
+        <!--                        </field>-->
+        <!--                    </page>-->
+        <!--                </xpath>-->
+        <!--                <group name="marketing_details" position="before">-->
+        <!--                    <group name="commission_detail" string="Commission Detail">-->
+        <!--                        <field name="commission_create" invisible="1"/>-->
+        <!--                        <field name="commission"/>-->
+        <!--                        <field name="agent"-->
+        <!--                               attrs="{'invisible': [('commission', '=', False)], 'required': [('commission', '=', True)]}"/>-->
+
+
+        <!--                        <field name="commission_type_id"-->
+        <!--                               attrs="{'invisible': [('commission', '=', False)], 'required': [('commission', '=', True)]}"/>-->
+
+        <!--                        <field name="total_commission" attrs="{'invisible': [('commission', '=', False)]}"/>-->
+
+        <!--                        <newline/>-->
+        <!--                        <field name="commission2"/>-->
+        <!--                        <field name="agent2"-->
+        <!--                               attrs="{'invisible': [('commission2', '=', False)], 'required': [('commission2', '=', True)]}"/>-->
+
+        <!--                        <field name="commission_type_id2"-->
+        <!--                               attrs="{'invisible': [('commission2', '=', False)], 'required': [('commission2', '=', True)]}"/>-->
+        <!--                        <field name="total_commission2" attrs="{'invisible': [('commission2', '=', False)]}"/>-->
+        <!--                        <newline/>-->
+        <!--                        <field name="commission3" groups="sales_team.group_sale_manager,account.group_account_user"/>-->
+        <!--                        <field name="agent3" groups="sales_team.group_sale_manager,account.group_account_user"-->
+        <!--                               attrs="{'invisible': [('commission3', '=', False)], 'required': [('commission3', '=', True)]}"/>-->
+        <!--                        <field name="commission_type_id3"-->
+        <!--                               groups="sales_team.group_sale_manager,account.group_account_user"-->
+        <!--                               attrs="{'invisible': [('commission3', '=', False)], 'required': [('commission3', '=', True)]}"/>-->
+        <!--                        <field name="total_commission3"-->
+        <!--                               groups="sales_team.group_sale_manager,account.group_account_user"-->
+        <!--                               attrs="{'invisible': [('commission3', '=', False)]}" readonly="0"/>-->
+
+        <!--                    </group>-->
+        <!--                </group>-->
+        <!--            </field>-->
+        <!--        </record>-->
+
+
+        <menuitem action="property_commission.action_commission_invoice" id="menu_invoice_commissions_sales"
+                  name="Commission Invoice" parent="sale.sale_menu_root" sequence="2"
+                  groups="sales_team.group_sale_manager"/>
+        <menuitem action="property_commission.action_commission_invoice" id="menu_invoice_commissions_account"
+                  name="Commission Invoice" parent="account_accountant.menu_accounting" sequence="3"
+                  groups="account.group_account_user"/>
+
+        <!--property_commission.menu_invoice_commissions-->
+
+    </data>
+</odoo>

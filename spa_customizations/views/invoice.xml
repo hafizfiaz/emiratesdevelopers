@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+      <record id="account_invoice_filters" model="ir.ui.view">
+        <field name="name">account.move.inherit.spa</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_account_invoice_filter"/>
+        <field name="arch" type="xml">
+            <field name="name" position="after">
+                    <field name="asset_project_id" filter_domain="[('asset_project_id','ilike',self)]"
+                           string="Project"/>
+                    <field name="property_id" filter_domain="[('property_id','ilike',self)]" string="Property"/>
+                    <field name="partner_id" filter_domain="[('partner_id','child_of',self)]" string="Customer Name"/>
+            </field>
+
+        </field>
+    </record>
+
+    <record id="account_move_inherit_spa" model="ir.ui.view">
+        <field name="name">account.move.inherit.spa</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_move_form"/>
+        <field name="arch" type="xml">
+            <field name="ref" position="after">
+                <field name="asset_project_id" attrs="{'readonly': [('state', 'in', ['posted','cancel'])]}"/>
+                <field name="property_id" attrs="{'readonly': [('state', 'in', ['posted','cancel'])]}"/>
+                <field name="invoice_type" attrs="{'readonly': [('state', 'in', ['posted','cancel'])], 'invisible': [('move_type', '=', 'entry')]}"/>
+            </field>
+            <xpath expr="//field[@name='invoice_line_ids']/tree/field[@name='name']" position="after">
+                <field name="asset_project_id"/>
+                <field name="property_id"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>
