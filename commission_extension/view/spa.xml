@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_order_form_inherit_commission" model="ir.ui.view">
+            <field name="name">sale.order.form.commision</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+                <!--                <xpath expr="//header" position="inside">-->
+
+                <!--                    <button name="action_create_commission"-->
+                <!--                            string="Create Commission" class="object" type="object"/>-->
+                <!--                </xpath>-->
+                <xpath expr="//div[@class='oe_button_box']" position="inside">
+
+                    <!--                            groups="sales_team.group_sale_manager,account.group_account_user">-->
+                    <button class="oe_stat_button" icon="fa-ticket" type="object" name="action_create_commission">
+                        <div class="o_stat_info">
+                            <span class="o_stat_text">Create Commission</span>
+                        </div>
+                    </button>
+                    <!--                    <button name="action_create_commission"-->
+                    <!--                            string="Create Commission" class="object" icon="fa-list icon" type="object"/>-->
+                    <button name="view_commissions" attrs="{'invisible': [('commission_create', '!=', True)]}"
+                            string="View Commissions" class="oe_stat_button" icon="fa-list icon" type="object"/>
+                </xpath>
+                <!--                <xpath expr="//notebook" position="inside">-->
+                <!--                    <page name="commissions" string="Commissions"-->
+                <!--                          groups="sales_team.group_sale_manager,account.group_account_user">-->
+                <!--                        <field name="commission_ids">-->
+                <!--                            <tree string="Commissions Invoice">-->
+                <!--                                <field name="number"/>-->
+                <!--                                <field name="partner_id"/>-->
+                <!--                                <field name="date"/>-->
+                <!--                                <field name="asset_project_id"/>-->
+                <!--                                <field name="property_id"/>-->
+                <!--                                <field name="tenancy" invisible="1"/>-->
+                <!--                                <field name="state"/>-->
+                <!--                                <field name="amount_total"/>-->
+                <!--                            </tree>-->
+                <!--                        </field>-->
+                <!--                    </page>-->
+                <!--                </xpath>-->
+
+                <group name="order_details" position="after">
+                    <!--                    <group string="Price &amp; Payment Plan">-->
+
+                    <!--                    </group>-->
+                    <group string="Agent Ref, Commission &amp; Discount">
+                        <field name="agent_ref"
+                               attrs="{'readonly': [('state', 'in',['cancel','approved'])]}"/>
+                        <field name="agent_id" domain="[('agent', '=', True)]"
+                               context="{'default_agent':True}"
+                               attrs="{'invisible': [('agent_ref', '=', False)], 'required': [('agent_ref', '!=', False)], 'readonly': [('state', 'in',['cancel','approved'])]}"
+                               options="{'no_create':True, 'no_create_edit':True, 'no_open': True}"/>
+                        <field name="agent_commission_type_id"
+                               options="{'no_create':True, 'no_create_edit':True, 'no_open': True}"
+                               attrs="{'invisible': [('agent_ref', '=', False)], 'required': [('agent_ref', '=', True)]}"/>
+                        <field name="agent_discount_perc"
+                               attrs="{'invisible': [('agent_ref', '=', False)]}"/>
+                        <field name="net_commission_perc"
+                               attrs="{'invisible': [('agent_ref', '=', False)]}"/>
+                        <field name="net_commission_sp"
+                               attrs="{'invisible': [('agent_ref', '=', False)]}"/>
+                        <field name="agent_commission_remarks"
+                               attrs="{'invisible': [('agent_ref', '=', False)]}"/>
+                    </group>
+                    <group name="commission_detail" string="Commission Detail">
+                        <field name="commission_create" invisible="1"/>
+                        <field name="commission"/>
+                        <field name="agent"
+                               options="{'no_create':True, 'no_create_edit':True, 'no_open': True}"
+                               attrs="{'invisible': [('commission', '=', False)], 'required': [('commission', '=', True)]}"/>
+
+
+                        <field name="commission_type_id"
+                               options="{'no_create':True, 'no_create_edit':True, 'no_open': True}"
+                               attrs="{'invisible': [('commission', '=', False)], 'required': [('commission', '=', True)]}"/>
+
+                        <field name="total_commission" attrs="{'invisible': [('commission', '=', False)]}"/>
+                        <field name="team_up" attrs="{'invisible': [('commission', '=', False)]}"/>
+                        <field name="team_up_agents" widget="many2many_tags"
+                               attrs="{'invisible': [('team_up', '=',False)]}"
+                               options="{'no_create':True, 'no_create_edit':True, 'no_open': True}"/>
+
+                        <label for="commission_share_perc" style="color: #8B0000;"
+                               attrs="{'invisible': [('team_up', '=',False)]}"/>
+                        <div class="address_format">
+                            <field name="commission_share_perc" style="width:20%;color: #8B0000;" nolabel="1"
+                                   attrs="{'invisible': [('team_up', '=',False)]}"/>
+                            <span style="width:10%;font-weight: bold; color:black;margin-left:10px;"
+                                  attrs="{'invisible': [('team_up', '=',False)]}">
+                                |
+                            </span>
+                            <field name="commission_share_amount" nolabel="1"
+                                   style="width:20%;font-weight: bold; color:black;margin-left:20px;"
+                                   attrs="{'invisible': [('team_up', '=',False)]}"/>
+                        </div>
+                        <newline/>
+                        <field name="commission2"/>
+                        <field name="agent2"
+                               options="{'no_create':True, 'no_create_edit':True, 'no_open': True}"
+                               attrs="{'invisible': [('commission2', '=', False)], 'required': [('commission2', '=', True)]}"/>
+
+                        <field name="commission_type_id2"
+                               options="{'no_create':True, 'no_create_edit':True, 'no_open': True}"
+                               attrs="{'invisible': [('commission2', '=', False)], 'required': [('commission2', '=', True)]}"/>
+                        <field name="total_commission2" attrs="{'invisible': [('commission2', '=', False)]}"/>
+                        <newline/>
+                        <field name="commission3" groups="sales_team.group_sale_manager,account.group_account_user"/>
+                        <field name="agent3" groups="sales_team.group_sale_manager,account.group_account_user"
+                               options="{'no_create':True, 'no_create_edit':True, 'no_open': True}"
+                               attrs="{'invisible': [('commission3', '=', False)], 'required': [('commission3', '=', True)]}"/>
+                        <field name="commission_type_id3"
+                               options="{'no_create':True, 'no_create_edit':True, 'no_open': True}"
+                               groups="sales_team.group_sale_manager,account.group_account_user"
+                               attrs="{'invisible': [('commission3', '=', False)], 'required': [('commission3', '=', True)]}"/>
+                        <field name="total_commission3"
+                               groups="sales_team.group_sale_manager,account.group_account_user"
+                               attrs="{'invisible': [('commission3', '=', False)]}" readonly="0"/>
+
+                    </group>
+
+                </group>
+
+            </field>
+        </record>
+
+    </data>
+</odoo>

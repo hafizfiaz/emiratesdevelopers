@@ -1,0 +1,417 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <report
+            id="action_broker_statement"
+            model="report.sd_broker_statement.report_broker_statement"
+            string="Broker Statement"
+            report_type="qweb-pdf"
+            name="sd_broker_statement.report_broker_statement"
+            file="sd_broker_statement.report_broker_statement"
+    />
+
+    <record id="paperformat_broker_statement" model="report.paperformat">
+        <field name="name">Broker Statement Report</field>
+        <field name="default" eval="True"/>
+        <field name="format">custom</field>
+        <field name="page_height">297</field>
+        <field name="page_width">210</field>
+        <field name="orientation">Landscape</field>
+        <field name="margin_top">19</field>
+        <field name="margin_bottom">15</field>
+        <!--<field name="margin_left">7</field>-->
+        <!--<field name="margin_right">7</field>-->
+        <field name="header_line" eval="False"/>
+        <field name="header_spacing">12</field>
+        <!--<field name="dpi">90</field>-->
+    </record>
+
+    <record id="action_broker_statement" model="ir.actions.report">
+        <field name="paperformat_id" ref="paperformat_broker_statement"/>
+    </record>
+
+
+    <template id="report_broker_statement">
+        <t t-call="web.html_container">
+            <t t-set="o" t-value="docs[0]"/>
+            <t t-call="sd_broker_statement.bs_external_layout">
+                <!--<div class="header" style="height:4px">-->
+                <!--</div>-->
+                <t t-set="o" t-value="o.with_context({'lang': lang})"/>
+                <div class="page" style="font-size:12px;">
+                    <style>
+
+                        .table-bordered {
+                        border: 1px solid black;
+                        margin: 6px;
+                        }
+
+                        .table-bordered th,
+                        .table-bordered tr,
+                        .table-bordered td {
+                        border: 1px solid black;
+                        padding: 0.2rem;
+
+                        }
+
+                        .table-bordered thead th,
+                        .table-bordered thead tr,
+                        .table-bordered thead td {
+                        border-bottom-width: 1px;
+                        padding: 0.2rem;
+                        }
+
+
+                    </style>
+
+                    <div class="row text-center">
+                        <div class="col-7">
+                            <h4 class="text-right">
+                                <strong>BROKER STATEMENT</strong>
+                            </h4>
+                        </div>
+                        <div class="col-5 text-right">
+                            <img t-if="o.name" t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s' %('Code128',o.name,220,30)"/>
+                            <!--</t>-->
+                        </div>
+                    </div>
+                    <br/>
+                    <table class="table" style="padding:none;margin:none; line-height: 2pt">
+
+                        <tr style="padding:none;margin:none; line-height: 9pt;">
+                            <td style="border:none" width="20%"><strong>Broker Name:</strong></td>
+                            <td style="border:none" width="30%"><span t-esc="partner.name"/></td>
+                            <td style="border:none" width="20%"><strong>Print Date &amp; Time:</strong></td>
+                            <td style="border:none" width="30%"><span t-esc="time.strftime('%d/%m/%Y %H:%M:%S')"/></td>
+                        </tr>
+                        <tr style="padding:none;margin:none">
+                            <td style="border:none"><strong>Broker ID:</strong></td>
+                            <td style="border:none"><span t-esc="partner.account_id_no"/></td>
+                            <td style="border:none"><strong>Print By:</strong></td>
+                            <td style="border:none"><span t-esc="user.name"/></td>
+                        </tr>
+                        <tr>
+                            <td style="border:none"><strong>Mobile:</strong></td>
+                            <td style="border:none"><span t-esc="partner.mobile"/></td>
+                            <td style="border:none"></td>
+                            <td style="border:none"></td>
+                        </tr>
+                        <tr>
+                            <td style="border:none"><strong>Email:</strong></td>
+                            <td style="border:none"><span t-esc="partner.email"/></td>
+                            <td style="border:none"></td>
+                            <td style="border:none"></td>
+                        </tr>
+
+                    </table>
+                    <!--<table class="table" wodth="100%" style="padding:none;margin:none; line-height: 2pt">-->
+                        <!--<tr>-->
+                            <!--<td style="border:none" width="30%"><strong>Total Commission Invoiced:</strong></td>-->
+                            <!--<td style="border:none" width="20%"><span t-esc="'{:,.2f}'.format(total_invoiced)"/></td>-->
+                            <!--<td style="border:none" width="30%"></td>-->
+                            <!--<td style="border:none" width="20%"></td>-->
+                        <!--</tr>-->
+                        <!--<tr>-->
+                            <!--<td style="border:none"><strong>Total Paid:</strong></td>-->
+                            <!--<td style="border:none"><span t-esc="'{:,.2f}'.format(total_paid)"/></td>-->
+                            <!--&lt;!&ndash;<td style="border:none">Oqood Paid</td>&ndash;&gt;-->
+                            <!--&lt;!&ndash;<td style="border:none"><span t-esc="'{:,.2f}'.format(oqood_paid)"/></td>&ndash;&gt;-->
+                        <!--</tr>-->
+                        <!--<tr>-->
+                            <!--<td style="border:none"><strong>Total Balance:</strong></td>-->
+                            <!--<td style="border:none"><span t-esc="'{:,.2f}'.format(total_balance)"/></td>-->
+                            <!--&lt;!&ndash;<td style="border:none">Admin Fee Charged</td>&ndash;&gt;-->
+                            <!--&lt;!&ndash;<td style="border:none"><span t-esc="'{:,.2f}'.format(admin_charged)"/></td>&ndash;&gt;-->
+                        <!--</tr>-->
+                    <!--</table>-->
+                    <!--<table class="table" style="padding:none;margin:none; line-height: 2pt">-->
+                        <!--<tr style="padding:none;margin:none; line-height: 9pt;">-->
+                            <!--<td style="border:none; font-size: 16px;" colspan="2"><strong>Eligibility Criteria</strong></td>-->
+                            <!--<td style="border:none; font-size: 16px;" colspan="2"><strong>Oqood &amp; Admin Details</strong></td>-->
+                        <!--</tr>-->
+                        <!--<tr style="padding:none;margin:none">-->
+                            <!--<td style="border:none" width="30%">Commission Eligibility 15% Price:</td>-->
+                            <!--<td style="border:none" width="20%"><span t-esc="'{:,.2f}'.format(fifteen_perc)"/></td>-->
+                            <!--<td style="border:none" width="30%">Oqood Charged:</td>-->
+                            <!--<td style="border:none" width="20%"><span t-esc="'{:,.2f}'.format(oqood_charged)"/></td>-->
+                        <!--</tr>-->
+                        <!--<tr>-->
+                            <!--<td style="border:none">15%+Oqood+Admin:</td>-->
+                            <!--<td style="border:none"><span t-esc="'{:,.2f}'.format(fifteen_oqood_admin)"/></td>-->
+                            <!--<td style="border:none">Oqood Paid</td>-->
+                            <!--<td style="border:none"><span t-esc="'{:,.2f}'.format(oqood_paid)"/></td>-->
+                        <!--</tr>-->
+                        <!--<tr>-->
+                            <!--<td style="border:none">Amount Received:</td>-->
+                            <!--<td style="border:none"><span t-esc="'{:,.2f}'.format(fifteen_received)"/></td>-->
+                            <!--<td style="border:none">Admin Fee Charged</td>-->
+                            <!--<td style="border:none"><span t-esc="'{:,.2f}'.format(admin_charged)"/></td>-->
+                        <!--</tr>-->
+                        <!--<tr>-->
+                            <!--<td style="border:none">Difference:</td>-->
+                            <!--<td style="border:none"><span t-esc="'{:,.2f}'.format(fifteen_diff)"/></td>-->
+                            <!--<td style="border:none">Admin Fee Paid</td>-->
+                            <!--<td style="border:none"><span t-esc="'{:,.2f}'.format(admin_paid)"/></td>-->
+                        <!--</tr>-->
+                    <!--</table>-->
+                    <!--<div class="row" style="border-top: 1px solid balck;">-->
+                        <!--<div class="col-12"> </div>-->
+                    <!--</div>-->
+                    <table class="table" style="width:100%;padding:none;margin:none; line-height: 2pt">
+                        <tr style="border-top: 1px solid black; font-size:14px;font-weight: bold;">
+                            <td style="width:20%"><strong>Total Commission Invoiced:</strong></td>
+                            <td style="width:15%"><span t-esc="'{:,.2f}'.format(total_invoiced)"/></td>
+                            <td style="width:20%"><strong>Total Paid:</strong></td>
+                            <td style="width:15%"><span t-esc="'{:,.2f}'.format(total_paid)"/></td>
+                            <td style="width:15%"><strong>Total Balance:</strong></td>
+                            <td style="width:15%"><span t-esc="'{:,.2f}'.format(total_balance)"/></td>
+                        </tr>
+                    </table>
+                    <br/>
+                    <div class="row" style="margin-left:6px; page-break-inside: avoid; background-color:#1f497d;line-height: 2;color: white;width:100%">
+                      <div class="col-6" style="font-size:18px;font-weight: bold;">SALES &amp; COMMISSION</div>
+                    </div>
+                    <table class="table table-bordered text-center" style="font-size:12px; width:100%;">
+                        <thead>
+                            <tr style="background-color:#b8cce4">
+                                <th style="width:6%">Booking Date</th>
+                                <!--<th width="85px">Property No</th>-->
+                                <th>Property No</th>
+                                <th>Unit Type</th>
+                                <th>Project</th>
+                                <th>Customer</th>
+                                <th>Total SPA Value</th>
+                                <th>Total Realized Collections</th>
+                                <th>Realized Collections %</th>
+                                <th>Total Collections</th>
+                                <th>Commission Type</th>
+                                <th>Discount % From Commission</th>
+                                <th>Commission Requested</th>
+                                <th>Commission Invoiced</th>
+                                <th>Commission Paid</th>
+                                <th>Balance Commission</th>
+                                <th>Booking Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr t-foreach="result" t-as="r">
+                                <td>
+                                    <span t-esc="r['booking_date']"/>
+                                </td>
+                                <td>
+                                    <span t-esc="r['unit']"/>
+                                </td>
+                                <td>
+                                    <span t-esc="r['unit_type']"/>
+                                </td>
+                                <td>
+                                    <span t-esc="r['project']"/>
+                                </td>
+                                <td>
+                                    <span t-esc="r['customer']"/>
+                                </td>
+                                <td>
+                                    <span t-esc="'{:,.2f}'.format(r['total_spa'])"/>
+                                </td>
+                                <td>
+                                    <span t-esc="'{:,.2f}'.format(r['total_realized'])"/>
+                                </td>
+                                <td>
+                                    <span t-esc="'{:,.2f}'.format(r['collections_perc'])"/>
+                                </td>
+                                <td>
+                                    <span t-esc="'{:,.2f}'.format(r['total_collection'])"/>
+                                </td>
+                                <td>
+                                    <span t-esc="r['commission_type']"/>
+                                </td>
+                                <td>
+                                    <span t-esc="r['discount_from_comm']"/>
+                                </td>
+                                <td>
+                                    <span t-esc="'{:,.2f}'.format(r['total_comm'])"/>
+                                </td>
+                                <td>
+                                    <span t-esc="'{:,.2f}'.format(r['comm_invc'])"/>
+                                </td>
+                                <td>
+                                    <span t-esc="'{:,.2f}'.format(r['comm_paid'])"/>
+                                </td>
+                                <td>
+                                    <span t-esc="'{:,.2f}'.format(r['total_comm']-r['comm_paid'])"/>
+                                </td>
+                                <td>
+                                    <span t-esc="r['booking_status']"/>
+                                </td>
+                            </tr>
+                            <tr>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <br/>
+                    <div t-if="commissions" class="row" style="margin-left:6px; page-break-inside: avoid; background-color:#1f497d;line-height: 2;color: white;width:100%">
+                      <div class="col-6" style="font-size:18px;font-weight: bold;">COMMISSION DETAILS</div>
+                    </div>
+                    <table t-if="commissions" class="table table-bordered text-center" style="font-size:12px; width:100%;">
+                        <thead>
+                            <tr style="background-color:#b8cce4">
+                                <th>Date</th>
+                                <th>Reference</th>
+                                <th>Property No.</th>
+                                <th>Type</th>
+                                <th>Project</th>
+                                <th>Customer</th>
+                                <th>Total SPA Value</th>
+                                <th>Amount Requested</th>
+                                <th>Invoice Amount</th>
+                                <th>Paid Amount</th>
+                                <th>Balance Amount</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr t-foreach="commissions" t-as="c">
+                                <td>
+                                    <span t-esc="c.date.strftime('%d/%m/%Y')"/>
+                                </td>
+                                <td>
+                                    <span t-esc="c.invoice_reference"/>
+                                </td>
+                                <td>
+                                    <span t-esc="c.property_id.name"/>
+                                </td>
+                                <td>
+                                    <span t-esc="c.commission_type_id.name"/>
+                                </td>
+                                <td>
+                                    <span t-esc="c.asset_project_id.name"/>
+                                </td>
+                                <td>
+                                    <span t-esc="c.partner_id.name"/>
+                                </td>
+                                <td>
+                                    <span t-esc="'{:,.2f}'.format(c.related_booking_id.total_spa_value)"/>
+                                </td>
+                                <td>
+                                    <span t-esc="'{:,.2f}'.format(c.total_commission_amount)"/>
+                                </td>
+                                <td>
+                                    <span t-esc="'{:,.2f}'.format(c.invoiced_amount)"/>
+                                </td>
+                                <td>
+                                    <span t-esc="'{:,.2f}'.format(c.total_commission_paid)"/>
+                                </td>
+                                <td>
+                                    <span t-esc="'{:,.2f}'.format(c.balance_commission)"/>
+                                </td>
+                            </tr>
+                            <tr>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <br/>
+                    <div class="row" style="margin-left:6px; page-break-inside: avoid; background-color:#1f497d;line-height: 2;color: white;width:100%">
+                      <div class="col-6" style="font-size:18px;font-weight: bold;">COMMISSION ELIGIBILITY</div>
+                    </div>
+                    <table class="table table-bordered text-center" style="font-size:12px; width:100%;">
+                        <thead>
+                            <tr style="background-color:#b8cce4">
+                                <th style="width:11%">Project</th>
+                                <th>Property</th>
+                                <th>Oqood Charged</th>
+                                <th>Oqood Paid</th>
+                                <th>Admin Fee Charged</th>
+                                <th>Admin Fee Paid</th>
+                                <th>Eligibility: 15% + Oqood + Admin</th>
+                                <th>Amount Received (Realized Collections)</th>
+                                <th>Total Collections</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr t-foreach="eligibility" t-as="e">
+                                <td>
+                                    <span t-esc="e['project']"/>
+                                </td>
+                                <td>
+                                    <span t-esc="e['property']"/>
+                                </td>
+                                <td>
+                                    <span t-esc="'{:,.2f}'.format(e['oqood_charge'])"/>
+                                </td>
+                                <td>
+                                    <span t-esc="'{:,.2f}'.format(e['oqood_paid'])"/>
+                                </td>
+                                <td>
+                                    <span t-esc="'{:,.2f}'.format(e['admin_charge'])"/>
+                                </td>
+                                <td>
+                                    <span t-esc="'{:,.2f}'.format(e['admin_paid'])"/>
+                                </td>
+                                <td>
+                                    <span t-esc="'{:,.2f}'.format(e['fifteen_oqood_admin'])"/>
+                                </td>
+                                <td>
+                                    <span t-esc="'{:,.2f}'.format(e['amount_realized'])"/>
+                                </td>
+                                <td>
+                                    <span t-esc="'{:,.2f}'.format(e['collection'])"/>
+                                </td>
+                            </tr>
+                            <tr>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <br/>
+                    <div t-if="payments" class="row" style="margin-left:6px; page-break-inside: avoid; background-color:#1f497d;line-height: 2;color: white;width:100%">
+                      <div class="col-6" style="font-size:18px;font-weight: bold;">COMMISSION PAYMENTS</div>
+                    </div>
+                    <table t-if="payments" class="table table-bordered text-center" style="font-size:12px; width:100%;">
+                        <thead>
+                            <tr style="background-color:#b8cce4">
+                                <th>Date</th>
+                                <th>Payment Ref</th>
+                                <th>Project</th>
+                                <th>Property No</th>
+                                <th>Customer</th>
+                                <th>Payment Amount</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-set="total_pay" t-value="0"/>
+                            <tr t-foreach="payments" t-as="p">
+                                <td>
+                                    <span t-esc="p.date.strftime('%d/%m/%Y')"/>
+                                </td>
+                                <td>
+                                    <span t-esc="p.reference"/>
+                                </td>
+                                <td>
+                                    <span t-esc="p.asset_project_id.name"/>
+                                </td>
+                                <td>
+                                    <span t-esc="p.property_id.name"/>
+                                </td>
+                                <td>
+                                    <span t-esc="p.partner_id.name"/>
+                                </td>
+                                <td>
+                                    <span t-esc="'{:,.2f}'.format(p.amount)"/>
+                                    <t t-set="total_pay" t-value="total_pay + p.amount"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>
+                                    <span >Total</span>
+                                </th>
+                                <th colspan="4">
+                                    <span> </span>
+                                </th>
+                                <th>
+                                    <span t-esc="'{:,.2f}'.format(total_pay)"/>
+                                </th>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </t>
+        </t>
+    </template>
+</odoo>

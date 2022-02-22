@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <record id="view_account_payment_broker" model="ir.ui.view">
+            <field name="name">view.account.payment.form.inherit.payment.broker</field>
+            <field name="model">account.payment</field>
+            <field name="inherit_id" ref="account_pdc.view_account_payment_form_pdc"/>
+            <field name="arch" type="xml">
+                <xpath expr='//group[2]' position="inside">
+                    <field name="visible_on_broker_statement"
+                           groups="sd_broker_statement.group_bs_payment_visible"/>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</odoo>

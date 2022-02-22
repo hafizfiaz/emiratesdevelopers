@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+
+        <record id="view_payment_in_invoices" model="ir.ui.view">
+            <field name="name">account.payment.form.inherit</field>
+            <field name="model">account.payment</field>
+            <field name="inherit_id" ref="account_pdc.view_account_payment_form_pdc"/>
+            <field name="arch" type="xml">
+                <xpath expr="//notebook" position="inside">
+                    <page string="Invoices for Payments" attrs="{'invisible': [('payment_type', '!=', 'outbound')]}">
+                        <field name="invoices_not_used" invisible="1"/>
+                        <field name="invoice_lines" widget="many2many"
+                               domain="[('state', 'in', ['paid','posted']),('move_type', 'in', ['in_invoice']),('id','in',invoices_not_used)]"
+                               attrs="{'readonly': [('state', 'in', ['posted'])]}"
+                               context="{'default_move_type': 'in_invoice','tree_view_ref': 'account.view_in_invoice_tree'}"/>
+                    </page>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</odoo>

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="bs_external_layout">
+        <t t-if="not o" t-set="o" t-value="doc"/>
+        <t t-if="not company">
+            <!-- Multicompany -->
+            <t t-if="company_id">
+                <t t-set="company" t-value="company_id"/>
+            </t>
+            <t t-elif="o and 'company_id' in o">
+                <t t-set="company" t-value="o.company_id.sudo()"/>
+            </t>
+            <t t-else="else">
+                <t t-set="company" t-value="res_company"/>
+            </t>
+        </t>
+        <t t-call="sd_broker_statement.external_layout_header_bs"/>
+        <t t-call="sd_broker_statement.external_layout_footer_bs"/>
+        <t t-if="company.external_report_layout_id" t-call="{{company.external_report_layout_id.key}}"><t t-raw="0"/></t>
+        <t t-else="else" t-call="web.external_layout_standard"><t t-raw="0"/></t>
+    </template>
+
+    <template id="external_layout_header_bs">
+        <div class="header">
+            <div class="row">
+                <div class="col-3 mb4">
+                    <img t-if="company.logo" t-att-src="image_data_uri(company.logo)" style="max-height: 45px;" alt="Logo"/>
+                </div>
+                <div class="col-9 text-right" style="margin-top:22px;" t-field="company.name" name="moto"/>
+            </div>
+            <div t-if="company.logo or company.report_header" class="row zero_min_height">
+                <div class="col-12">
+                    <div style="border-bottom: 1px solid black;"/>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <template id="external_layout_footer_bs">
+        <div class="footer">
+            <div class="text-center" style="border-top: 1px solid black; font-size:13px">
+                <!--<div class="list-inline mb4">-->
+                    <span t-if="company.street" class="oe-inline"><span t-field="company.street"/></span>,
+                    <span t-if="company.street2" class="oe-inline"><span t-field="company.street2"/></span>,
+                    <span t-if="company.city" class="oe-inline"><span t-field="company.city"/></span>,
+                    <span t-if="company.state_id" class="oe-inline"><span t-field="company.state_id.name"/></span>,
+                    <span t-if="company.zip" class="oe-inline"><span t-field="company.zip"/></span>,
+                    <span t-if="company.country_id" class="oe-inline"><span t-field="company.country_id.name"/></span>,
+                    <span t-if="company.phone" class="oe-inline">Phone: <span t-field="company.phone"/></span>,
+                    <span t-if="company.email" class="oe-inline">Email: <span t-field="company.email"/></span>,
+                    <span t-if="company.website" class="oe-inline">Web: <span t-field="company.website"/></span>,
+                    <span t-if="company.vat" class="oe-inline"><t t-esc="company.country_id.vat_label or 'Tax ID'"/>: <span t-field="company.vat"/></span>
+                <!--</div>-->
+
+                <div name="financial_infos">
+                    <span t-field="company.report_footer"/>
+                </div>
+
+                <div t-if="report_type == 'pdf'" class="text-muted">
+                    Page: <span class="page"/> / <span class="topage"/>
+                </div>
+            </div>
+        </div>
+    </template>
+    
+
+</odoo>

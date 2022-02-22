@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<!--        <menuitem name="Accounting"-->
+<!--            id="account.menu_finance"-->
+<!--            groups="account.group_account_user,account.group_account_manager,account.group_account_invoice"-->
+<!--            web_icon="account,static/description/icon.png"-->
+<!--            sequence="40"/>-->
+
+
+        <menuitem id="menu_receipts_and_payments"
+                  parent="account_accountant.menu_accounting" sequence="4" name="Receipts &amp; Payments"/>
+
+        <menuitem action="account.action_account_payments" id="account.menu_action_account_payments_receivable"
+                  parent="menu_receipts_and_payments" sequence="2" name="Receipts"/>
+
+        <menuitem action="account.action_account_payments_payable" id="account.menu_action_account_payments_payable"
+                  parent="menu_receipts_and_payments" sequence="3" name="Payments"/>
+
+        <!--<menuitem action="account.action_account_payments" id="account.menu_action_account_payments_receivable"-->
+                  <!--parent="account.menu_finance_receivables" sequence="15" name="Receipts"/>-->
+
+        <menuitem name="Receipts"
+            id="crm_menu_receipts"
+            groups="account.group_account_user,account.group_account_manager,account.group_account_invoice"
+            parent="crm.crm_menu_root"
+            sequence="8"/>
+
+        <menuitem action="account.action_account_payments" id="crm_menu_action_account_payments_receivable"
+                  parent="crm_menu_receipts" sequence="2" name="Receipts"/>
+
+
+</odoo>

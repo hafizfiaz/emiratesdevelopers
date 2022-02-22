@@ -1,0 +1,355 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="paperformat_early_settlement" model="report.paperformat">
+        <field name="name">Early Settlement Offer</field>
+        <field name="default" eval="True"/>
+        <field name="format">custom</field>
+        <field name="page_height">350</field>
+        <field name="page_width">0</field>
+        <field name="orientation">Portrait</field>
+        <field name="margin_top">20</field>
+        <field name="margin_bottom">15</field>
+        <field name="header_line" eval="False"/>
+        <field name="header_spacing">23</field>
+    </record>
+    <record id="sd_early_settlement.report_early_settlment" model="ir.actions.report">
+        <field name="paperformat_id" ref="sd_early_settlement.paperformat_early_settlement"/>
+    </record>
+    <template id="early_settlemnt_form">
+        <t t-if="not o" t-set="o" t-value="doc"/>
+
+        <t t-if="not company">
+            <t t-if="company_id">
+                <t t-set="company" t-value="company_id"/>
+            </t>
+            <t t-elif="o and 'company_id' in o">
+                <t t-set="company" t-value="o.company_id.sudo()"/>
+            </t>
+            <t t-else="else">
+                <t t-set="company" t-value="res_company"/>
+            </t>
+        </t>
+
+        <t t-call="sd_early_settlement.header_early_settlement"/>
+        <t t-call="sd_early_settlement.footer_early_settlement"/>
+        <t t-if="company.external_report_layout_id" t-call="{{company.external_report_layout_id.key}}">
+            <t t-raw="0"/>
+        </t>
+        <t t-else="else" t-call="web.external_layout_standard">
+            <t t-raw="0"/>
+        </t>
+
+    </template>
+
+    <template id="header_early_settlement">
+        <div class="header">
+            <div style='width:100%;'>
+                <br></br>
+                <div class="row">
+                    <div class="col-7">
+                        <span style='font-size: 24px; color:#286A9D;'>
+                            <b>SAMANA INTERNATIONAL</b>
+                        </span>
+                    </div>
+                    <div class="col-5" style='font-size: 12px;'>
+                        <p>4th Floor , Building 7-Bay Square Business Bay,
+                            <br/>
+                            Dubai - United Arab Emirates
+                        </p>
+                        <!--<p>Dubai - United Arab Emirates</p>-->
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-7">
+                        <span style='font-size: 16px;'>REAL ESTATE DEVELOPMENT</span>
+                    </div>
+                    <div class="col-5" style='font-size: 12px;'>
+                        <p>Email:
+                            <span t-field="company.email"/>
+                            Website:
+                            <span t-field="company.website"/>
+                            Phone:
+                            <span t-field="company.phone"/>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+                        <br/>
+        <br/>
+        <br/>
+    </template>
+
+    <template id="footer_early_settlement">
+        <div class="footer">
+            <div class="row text-left" style="border-top: 1px solid black;">
+                <div class="col-12">
+                    <span class="page"/>
+                    <span>|</span>
+                    <span>SAMANA INTERNATIONAL</span>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <template id="report_early_settlement1">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="sd_early_settlement.early_settlemnt_form">
+                         <div class='page' style="line-height:13px;font-size:13px;">
+                             <br></br>
+                            <br></br>
+                            <br></br>
+                        <div class="row text-center">
+
+                            <div class="col-8">
+                                <h4 class="text-right">
+                                    <strong>EARLY SETTLEMENT FORM</strong>
+                                </h4>
+                                 <br/>
+                            <br/>
+                            </div>
+                            <div class="col-4 text-center">
+                                    <t t-set="code" t-value="str() + str(o.spa.name)"/>
+                                    <div>
+                                        <img t-if="o.spa.name" t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s' %('Code128',code,300,40)"/>
+                                    </div>
+                                    <span t-esc="code"/>
+                                </div>
+                        </div>
+
+
+                             <br/>
+                             <br/>
+                             <br/>
+                        <style>
+
+                            .table-bordered {
+                            border: 1px solid black;
+                            margin: 6px;
+                            }
+
+                            .table-bordered th,
+                            .table-bordered tr,
+                            .table-bordered td {
+                            border: 1px solid black;
+
+                            }
+
+                            .table-bordered thead th,
+                            .table-bordered thead tr,
+                            .table-bordered thead td {
+                            border-bottom-width: 1px;
+                            }
+
+                            .table {
+                            width: 100%;
+                            margin-bottom: 1rem;
+                            background-color: transparent;
+                            }
+
+                            .table th,
+                            .table td {
+                            padding: 0.75rem;
+                            vertical-align: top;
+                            border-top: 1px solid balck;
+                            }
+
+                            .table thead th {
+                            vertical-align: bottom;
+                            border-bottom: 1px solid black;
+                            }
+
+                            .table tbody + tbody {
+                            border-top: 1px solid black;
+                            }
+                            <br/>
+                            <br/>
+                            <br/>
+
+
+                        </style>
+                             <div class="row">
+                            <div class="col-6" style="font-size: 20px;">
+                                        <strong>SPA Detail
+                                            </strong>
+
+
+
+                            </div>
+                                 <div class="col-6" style="font-size: 20px;">
+                                   <strong>
+                                       Date:
+                                            </strong>
+                                    <span t-esc="time.strftime('%d-%b-%Y')"></span>
+
+                            </div>
+                        </div>
+<br/>
+
+                        <table class="table table-bordered">
+                            <tbody>
+
+                                <tr>
+                                    <th style="width:25%">
+                                        <span>Customer Name</span>
+                                    </th>
+                                    <td>
+                                        <span t-esc="o.partner_id.name"/>
+                                    </td>
+                                     <th style="width:25%">
+                                        <span>SPA No</span>
+                                    </th>
+                                    <td>
+                                        <span t-esc="o.spa.name"/>
+                                    </td>
+                                </tr>
+                                <tr style="width:25%">
+                                    <th>
+                                        <span>Mobile</span>
+                                    </th>
+                                    <td>
+<!--                                        <span t-esc="o.spa.mobile"/>-->
+                                    </td>
+                                    <th style="width:25%">
+                                        <span>Sale Date</span>
+                                    </th>
+                                    <td>
+<!--                                        <span t-esc="o.spa.declaration_date.strftime('%d-%b-%Y')"/>-->
+                                    </td>
+                                </tr>
+                                <tr style="width:25%">
+                                    <th>
+                                        <span>Phone</span>
+                                    </th>
+                                    <td>
+                                         <span t-esc="o.spa.partner_id.phone" />
+                                    </td>
+                                    <th>
+                                        <span>Unit No</span>
+                                    </th>
+                                    <td>
+                                        <span t-esc="o.property.name"/>
+                                    </td>
+                                </tr>
+                                <tr style="width:25%">
+                                    <th>
+                                        <span>Email</span>
+                                    </th>
+                                    <td>
+<!--                                        <span t-esc="o.spa.partner_address_email"/>-->
+                                    </td>
+                                    <th>
+                                        <span>Project</span>
+                                    </th>
+                                    <td>
+                                        <span t-esc="o.project.name"/>
+                                    </td>
+
+                                </tr>
+                                <tr style="width:25%">
+                                    <th>
+                                        <span>Nationality</span>
+                                    </th>
+                                    <td>
+<!--                                        <span t-esc="o.spa.nationality_id.name"/>-->
+                                    </td>
+                                    <th>
+                                        <span>Property Price</span>
+                                    </th>
+                                    <td>
+<!--                                        <span t-esc="o.spa.order_line.price_unit" t-options='{"widget": "float", "precision": 2}' />-->
+                                    </td>
+                                </tr>
+
+                            </tbody>
+                        </table>
+<br/>
+<br/>
+<br/>
+<br/>
+                             <div class="row">
+                            <div class="col-12" style="text-left">
+                                <span style='font-size: 16px;'>
+                                    <h5>
+                                        <strong>Early Settlement Detail
+                                    </strong>
+                                    </h5>
+                                </span>
+                            </div>
+                             </div>
+<br/>
+                        <table class="table table-bordered">
+                            <tbody>
+
+                                <tr>
+                                    <th style="width:25%">
+                                        <span>Eligible Amount</span>
+                                    </th>
+
+                                    <td>
+                                        <span t-esc="o.eligible_discount" t-options='{"widget": "float", "precision": 2}'/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>
+                                        <span>Early Settlement Amount</span>
+                                    </th>
+                                    <td>
+                                        <span t-esc="o.early_settlement_amount" t-options='{"widget": "float", "precision": 2}'/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>
+                                        <span>Discount%</span>
+                                    </th>
+                                    <td>
+<!--                                        <span t-esc="o.discount.name"/>-->
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>
+                                        <span>Discount Amount</span>
+                                    </th>
+                                    <td>
+                                        <span t-esc="o.discount_amount" t-options='{"widget": "float", "precision": 2}'/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>
+                                        <span>Amount To Pay</span>
+                                    </th>
+                                    <td>
+                                        <span t-esc="o.amount_collect" t-options='{"widget": "float", "precision": 2}'/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>
+                                        <span>Officer Name</span>
+                                    </th>
+                                    <td>
+                                        <span t-esc="o.spa.user_id.name"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>
+                                        <span>Officer Remarks</span>
+                                    </th>
+                                    <td>
+                                      <span t-esc="o.officer_remarks"/>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <br/>
+
+                        <br/>
+
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+
+</odoo>

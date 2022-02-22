@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="payment_schedule_aging_days" model="ir.ui.view">
+        <field name="name">sale.rent.schedule.inherit</field>
+        <field name="model">sale.rent.schedule</field>
+        <field name="inherit_id" ref="spa_customizations.sale_rent_form"/>
+        <field name="arch" type="xml">
+            <field name="start_date" position="after">
+                <field name="aging_date"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="accounting_workflow_inherit" model="ir.ui.view">
+        <field name="name">account.payment.inherit</field>
+        <field name="model">account.payment</field>
+        <field name="inherit_id" ref="account_pdc.view_account_payment_form_pdc"/>
+        <field name="arch" type="xml">
+            <xpath expr="//button[@name='submit_for_approval'][2]" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <button name="submit_for_review" position="after">
+                <button name="action_under_fm_review"
+                        attrs="{'invisible':['|',('payment_type','!=','outbound'),('state','not in',('under_review'))]}"
+                        string="Send For FM Review" type="object" class="oe_highlight"
+                        groups="security_groups.group_chief_payable_accountant"/>
+                <button name="submit_for_approval"
+                        attrs="{'invisible':['|',('payment_type','!=','outbound'),('state','not in',('under_fm_review'))]}"
+                        string="Review" type="object" class="oe_highlight"
+                        groups="security_groups.group_chief_payable_accountant"/>
+                <button name="action_reject" type="object" string="Reject"
+                        attrs="{'invisible':['|',('state','not in',('under_fm_review')),('payment_type','!=','outbound')]}"
+                        class="oe_highlight" groups="security_groups.group_chief_payable_accountant"/>
+            </button>
+        </field>
+    </record>
+
+
+</odoo>

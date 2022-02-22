@@ -1,0 +1,10 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_payment_certificate,payment.certificate,model_payment_certificate,,1,1,1,1
+access_consume_material_line,consume.material.line,model_consume_material_line,,1,1,1,1
+access_planned_boq,planned.boq,model_planned_boq,,1,1,1,1
+
+
+
+
+
+

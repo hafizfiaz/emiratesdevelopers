@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <record id="booking_sale_tree_inherit" model="ir.ui.view">
+        <field name="name">sale.order.inherit</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sd_menuitems_crm.inherited_booking_tree"/>
+        <field name="arch" type="xml">
+            <field name="property_inc_vat_amount" position="before">
+                <field name="unit_type"/>
+                <field name="down_payment_amnt" string="DP AMT"/>
+                <field name="down_payment_perct" string="DP%"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="spa_wiz_field_inherit" model="ir.ui.view">
+        <field name="name">spa.summary.view.inherit</field>
+        <field name="model">spa.summary.view</field>
+        <field name="inherit_id" ref="spa_customizations.view_spa_summary_view"/>
+        <field name="arch" type="xml">
+                <field name="installment_balance_pending" position="after">
+                    <field name="future_installments"/>
+                <field name="handover_dates"/>
+                <field name="installment_till_handover"/>
+                <field name="installment_after_handover"/>
+                </field>
+        </field>
+    </record>
+
+    <record id="comm_add_fields" model="ir.ui.view">
+        <field name="name">sale.order.view.inherit</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="commission_extension.view_order_form_inherit_commission"/>
+        <field name="arch" type="xml">
+                <field name="total_commission3" position="after">
+                    <field name="commission4" groups="sales_team.group_sale_manager,account.group_account_user"/>
+                        <field name="agent4" groups="sales_team.group_sale_manager,account.group_account_user"
+                               options="{'no_create':True, 'no_create_edit':True, 'no_open': True}"
+                               attrs="{'invisible': [('commission4', '=', False)], 'required': [('commission4', '=', True)]}"/>
+                        <field name="commission_type_id4"
+                               options="{'no_create':True, 'no_create_edit':True, 'no_open': True}"
+                               groups="sales_team.group_sale_manager,account.group_account_user"
+                               attrs="{'invisible': [('commission4', '=', False)], 'required': [('commission4', '=', True)]}"/>
+                        <field name="total_commission4"
+                               groups="sales_team.group_sale_manager,account.group_account_user"
+                               attrs="{'invisible': [('commission4', '=', False)]}" readonly="0"/>
+
+                    <field name="commission5" groups="sales_team.group_sale_manager,account.group_account_user"/>
+                        <field name="agent5" groups="sales_team.group_sale_manager,account.group_account_user"
+                               options="{'no_create':True, 'no_create_edit':True, 'no_open': True}"
+                               attrs="{'invisible': [('commission5', '=', False)], 'required': [('commission5', '=', True)]}"/>
+                        <field name="commission_type_id5"
+                               options="{'no_create':True, 'no_create_edit':True, 'no_open': True}"
+                               groups="sales_team.group_sale_manager,account.group_account_user"
+                               attrs="{'invisible': [('commission5', '=', False)], 'required': [('commission5', '=', True)]}"/>
+                        <field name="total_commission5"
+                               groups="sales_team.group_sale_manager,account.group_account_user"
+                               attrs="{'invisible': [('commission5', '=', False)]}" readonly="0"/>
+                </field>
+        </field>
+    </record>
+
+
+    <record id="spa_unit_type_field" model="ir.ui.view">
+        <field name="name">sale.order.inherit</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="spa_customizations.view_spa_form"/>
+        <field name="arch" type="xml">
+            <field name="property_id" position="after">
+                <field name="unit_type"/>
+                <field name="future_installments" invisible="1"/>
+                <field name="handover_dates" invisible="1"/>
+                <field name="installment_till_handover" invisible="1"/>
+                <field name="installment_after_handover" invisible="1"/>
+            </field>
+            <field name="payment_plan_creation" position="after">
+                <label for="down_payment_amnt" style="color: #8B0000;"/>
+                <div class="address_format">
+                    <field name="down_payment_amnt" style="width:20%;color: #8B0000;" nolabel="1"/>
+                    <span style="width:10%;font-weight: bold; color:black;margin-left:10px;">
+                        |
+                    </span>
+                    <field name="down_payment_perct" nolabel="1"
+                           style="width:20%;font-weight: bold; color:black;margin-left:20px;"/>
+                </div>
+
+            </field>
+        </field>
+    </record>
+
+    <record id="view_sale_rent_schedule_fil" model="ir.ui.view">
+        <field name="name">sale.rent.schedule.search</field>
+        <field name="model">sale.rent.schedule</field>
+        <field name="arch" type="xml">
+            <search string="Payment Schedule">
+                <filter string="Before Today" name="today"
+                        domain="[('start_date', '&lt;=', datetime.datetime.now().strftime('%Y-%m-%d'))]"/>
+                <filter string="After Today" name="today"
+                        domain="[('start_date', '&gt;=', datetime.datetime.now().strftime('%Y-%m-%d'))]"/>
+
+            </search>
+        </field>
+    </record>
+
+
+</odoo>

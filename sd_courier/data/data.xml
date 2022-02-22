@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <record id="courier_users" model="mail.recipients">
+            <field name="name">Courier Recipients</field>
+            <field name="from_data">True</field>
+        </record>
+    </data>
+</odoo>

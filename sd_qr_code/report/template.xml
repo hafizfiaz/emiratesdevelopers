@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+<!--        <template id="external_layout_header_reservation_qr"-->
+<!--                  inherit_id="crm_extension.external_layout_header_reservation">-->
+<!--            <xpath expr="//div/div[2]/div[4]" position="replace">-->
+<!--            </xpath>-->
+<!--            <xpath expr="//div/div[2]/div[3]" position="replace">-->
+
+<!--                <div class="row">-->
+<!--                    <div class="col-3 text-center">-->
+<!--                        <img t-if="o.booking_barcode"-->
+<!--                             t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s' %('Code128',o.booking_barcode,180,35)"/>-->
+<!--                        <br/>-->
+<!--                        <div style='font-size: 10px;'>-->
+<!--                            <span t-esc="o.booking_barcode"/>-->
+<!--                        </div>-->
+
+<!--                        &lt;!&ndash;</t>&ndash;&gt;-->
+<!--                    </div>-->
+<!--                    <div class="col-9 text-right">-->
+<!--                         <img t-if="o.qr_image" t-att-src="image_data_uri(o.qr_image)" style="max-height: 80px;" />-->
+<!--                        &lt;!&ndash;</t>&ndash;&gt;-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </xpath>-->
+<!--        </template>-->
+<!--        <template id="external_layout_header_saleorder11_qr"-->
+<!--                  inherit_id="crm_extension.external_layout_header_saleorder">-->
+<!--            &lt;!&ndash;<xpath expr="//div/div[2]/div[3]" position="replace">-->
+<!--                <div class="row">-->
+<!--                    <div class="col-3 text-center">-->
+<!--                        <div class="row">-->
+<!--                            <div class="col-12">-->
+<!--                                <img t-if="o.spa_barcode" t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s' %('Code128',o.spa_barcode,180,35)"/>-->
+<!--                            </div>-->
+<!--                            <div class="col-12">-->
+<!--                                <span t-esc="o.spa_barcode"/><span>-</span><span class="page"/>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                    <div class="col-3 text-center" >-->
+<!--                        <img  t-att-src="image_data_uri(o.qr_image)" height="70" width="80"/>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </xpath>&ndash;&gt;-->
+<!--            <xpath expr="//div/div[2]/div[4]" position="replace">-->
+<!--            </xpath>-->
+<!--            <xpath expr="//div/div[2]/div[3]" position="replace">-->
+
+<!--                <div class="row">-->
+<!--                    <div class="col-3 text-center">-->
+<!--                        <img t-if="o.spa_barcode"-->
+<!--                             t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s' %('Code128',o.spa_barcode,180,35)"/>-->
+<!--                        <br/>-->
+<!--                        <div style='font-size: 10px;'>-->
+<!--                            <span t-esc="o.spa_barcode"/>-->
+<!--                            <span>-</span>-->
+<!--                            <span class="page"/>-->
+<!--                        </div>-->
+
+<!--                        &lt;!&ndash;</t>&ndash;&gt;-->
+<!--                    </div>-->
+<!--                    <div class="col-9 text-right">-->
+<!--                         <img t-if="o.qr_image" t-att-src="image_data_uri(o.qr_image)" style="max-height: 80px;" />-->
+<!--                        &lt;!&ndash;</t>&ndash;&gt;-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </xpath>-->
+<!--        </template>-->
+
+<!--        <template id="external_layout_header_receipts_multi_qr"-->
+<!--                  inherit_id="account_pdc.external_layout_header_receipts_multi">-->
+<!--            <xpath expr="//div/div[2]/div[2]" position="replace">-->
+<!--                <div class="col-9 text-right">-->
+<!--                     <img t-if="o.qr_image" t-att-src="image_data_uri(o.qr_image)" style="max-height: 80px;" />-->
+<!--                    &lt;!&ndash;</t>&ndash;&gt;-->
+<!--                </div>-->
+<!--            </xpath>-->
+<!--        </template>-->
+        <template id="report_receipt_customer_copy_qr" inherit_id="sd_receipts_report.report_receipt_customer_copy">
+            <xpath expr="//div/div[1]" position="after">
+                <div class="row">
+                    <div class="col-12 text-right">
+                        <img t-if="o.qr_image" t-att-src="image_data_uri(o.qr_image)" style="max-height: 80px;" />
+                    </div>
+                </div>
+            </xpath>
+        </template>
+        <template id="report_payment_receipt_document_qr" inherit_id="account.report_payment_receipt_document">
+            <xpath expr="//div/div[1]" position="after">
+                <div class="row">
+                    <div class="col-12 text-right">
+                        <img t-if="o.qr_image" t-att-src="image_data_uri(o.qr_image)" style="max-height: 80px;" />
+                    </div>
+                </div>
+            </xpath>
+        </template>
+<!--        <template id="report_customer_payments_multi_template_qr"-->
+<!--                  inherit_id="account_voucher_collection.report_customer_payments_multi_template">-->
+<!--            <xpath expr="//div/t[2]/div[1]" position="replace">-->
+<!--                <div class="row">-->
+<!--                    <div class="col-8 text-left">-->
+<!--                        <img t-if="o.qr_image" t-att-src="image_data_uri(o.qr_image)" style="max-height: 80px;" />-->
+<!--                    </div>-->
+<!--                    <div class="col-4 text-center">-->
+<!--                        <div>-->
+<!--                            <img t-if="o.number"-->
+<!--                                 t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s' %('Code128',o.number,300,40)"/>-->
+
+<!--                        </div>-->
+<!--                        <span t-esc="o.number"></span>-->
+<!--                        &lt;!&ndash;</t>&ndash;&gt;-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </xpath>-->
+<!--            <xpath expr="//t[2]/t[1]/div[1]/t[2]" position="replace">-->
+<!--                <div class="row">-->
+<!--                    <div class="col-8 text-left">-->
+<!--                         <img t-if="o.qr_image" t-att-src="image_data_uri(o.qr_image)" style="max-height: 80px;" />-->
+<!--                    </div>-->
+<!--                    <div class="col-4 text-center">-->
+<!--                        <div>-->
+<!--                            <img t-if="o.number"-->
+<!--                                 t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s' %('Code128',o.number,300,40)"/>-->
+
+<!--                        </div>-->
+<!--                        <span t-esc="o.number"></span>-->
+<!--                        &lt;!&ndash;</t>&ndash;&gt;-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </xpath>-->
+<!--        </template>-->
+
+<!--        <template id="report_closure_form_template_qr" inherit_id="sd_tentative_booking.report_closure_form_template">-->
+<!--            <xpath expr="//div/div[2]" position="replace">-->
+<!--                <div class="row">-->
+<!--                    <div class="col-4 text-center">-->
+<!--                        <t t-set="code" t-value="str(o.booking_number)+'-'+ str(o.property_id.name)"/>-->
+<!--                        <div>-->
+<!--                            <img t-if="o.booking_number"-->
+<!--                                 t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s' %('Code128',code,300,40)"/>-->
+<!--                        </div>-->
+<!--                        <span t-esc="code"/>-->
+<!--                        &lt;!&ndash;</t>&ndash;&gt;-->
+<!--                    </div>-->
+<!--                    <div class="col-8 text-right">-->
+<!--                        <img t-if="o.qr_code_closure" t-att-src="image_data_uri(o.qr_code_closure)" height="70" width="80"/>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </xpath>-->
+<!--        </template>-->
+    </data>
+</odoo>

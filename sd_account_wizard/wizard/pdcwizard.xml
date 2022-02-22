@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record model="ir.ui.view" id="account_pdcs_wizard_view">
+            <field name="name">account.pdcs.wizard.form</field>
+            <field name="model">account.pdcs.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Shift Receipts">
+                    <group>
+                        <field name="customer" attrs="{'invisible': [('type', '!=', 'inbound')]}"/>
+                        <field name="payment" invisible="1"/>
+                        <field name="partners" attrs="{'invisible': [('customer', '!=', True)]}"/>
+                        <field name="booking" attrs="{'invisible': [('type', '!=', 'inbound')]}"/>
+                        <field name="bookings" attrs="{'invisible': [('booking', '!=', True)]}"/>
+                        <field name="project" attrs="{'invisible': [('type', '!=', 'inbound')]}"/>
+                        <field name="projects" attrs="{'invisible': [('project', '!=', True)]}"
+                               domain="[('project','=', True)]"/>
+                        <field name="property" attrs="{'invisible': [('type', '!=', 'inbound')]}"/>
+                        <field name="property_id" attrs="{'invisible': [('property', '!=', True)]}"
+                               domain="[('parent_id','=', projects),('project','=', False)]"/>
+                        <field name="collection_type" attrs="{'invisible': [('type', '!=', 'inbound')]}"/>
+                        <field name="collection_type_id" attrs="{'invisible': [('collection_type', '!=', True)]}"/>
+                        <field name="type" invisible="1"/>
+                        <field name="note" attrs="{'invisible': [('type', '=', 'inbound')]}"/>
+                    </group>
+                    <footer>
+                        <button string="Apply" name="action_account_pdcs" type="object" class="oe_highlight"
+                                attrs="{'invisible': [('type', '!=', 'inbound')]}"/>
+                        <span attrs="{'invisible': [('type', '!=', 'inbound')]}">or</span>
+                        <button string="Cancel" class="oe_link" special="cancel"
+                                attrs="{'invisible': [('type', '!=', 'inbound')]}"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="wizard_inherit_Account" model="ir.actions.act_window">
+            <field name="name">Shift Receipts</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">account.pdcs.wizard</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="account_pdcs_wizard_view"/>
+            <field name="target">new</field>
+        </record>
+
+        <record model="ir.ui.view" id="button_inherit_shift_receipt">
+            <field name="name">account.payment.button</field>
+            <field name="model">account.payment</field>
+            <field name="inherit_id" ref="account.view_account_payment_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//div[@class='oe_button_box']" position="inside">
+                    <button name="%(sd_account_wizard.wizard_inherit_Account)d" type="action" class="oe_highlight"
+                            string="Shift Receipts" icon="fa-bars"
+                            attrs="{'invisible':['|',('state','not in',('collected','deposited','posted')),('payment_type','!=','inbound')]}"
+                            groups="sd_account_wizard.group_shift_receipts"/>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

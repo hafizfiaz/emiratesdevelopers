@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+        <!-- Account Financial Report Assets -->
+        <template id="account_reports_backend" inherit_id="web.assets_backend" active="True">
+            <xpath expr="." position="inside">
+                <script type="text/javascript" src="/accounting_reports_filters/static/src/js/account_reports.js"></script>
+            </xpath>
+        </template>
+
+    <template id="assets_financial_report" inherit_id="account_reports.assets_financial_report" active="True">
+        <xpath expr="//link[3]" position="after">
+            <link rel="stylesheet" type="text/scss" href="/accounting_reports_filter/static/src/js/account_report_print.scss"/>
+        </xpath>
+    </template>
+    <template id="search_template_extra_options_inherits" inherit_id="account_reports.search_template_extra_options">
+        <xpath expr="//div[hasclass('o_filter_menu')]" position="inside">
+
+            <a role="menuitem" class="dropdown-item js_account_report_bool_filter" t-if="options.get('amount_due_greater') != None" title="Unfold" data-filter="amount_due_greater">Amount Due Greater Than Zero</a>
+            <a role="menuitem" class="dropdown-item js_account_report_bool_filter" t-if="options.get('amount_due_less') != None" title="Unfold" data-filter="amount_due_less">Amount Due Less Than Zero</a>
+            <a role="menuitem" class="dropdown-item js_account_report_bool_filter" t-if="options.get('project_wise') != None" title="Unfold" data-filter="project_wise">Project Wise</a>
+            <a role="menuitem" class="dropdown-item js_account_report_bool_filter" t-if="options.get('property_wise') != None" title="Unfold" data-filter="property_wise">Property Wise</a>
+            <a role="menuitem" class="dropdown-item js_account_report_bool_filter" t-if="options.get('receivable_wise') != None" title="Unfold" data-filter="receivable_wise">Receivable Status Wise</a>
+            <a role="menuitem" class="dropdown-item js_account_report_bool_filter" t-if="options.get('installment') != None" title="Unfold" data-filter="installment">Installment</a>
+        </xpath>
+    </template>
+
+</odoo>

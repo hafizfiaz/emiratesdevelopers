@@ -1,0 +1,260 @@
+<?xml version="1.0"?>
+<odoo>
+    <data>
+
+        <record id="paperformat_expression_of_interest" model="report.paperformat">
+            <field name="name">Expression of Interest</field>
+            <field name="default" eval="True"/>
+            <field name="format">custom</field>
+            <field name="page_height">350</field>
+            <field name="page_width">0</field>
+            <field name="orientation">Portrait</field>
+            <field name="margin_top">20</field>
+            <field name="margin_bottom">15</field>
+            <field name="header_line" eval="False"/>
+            <field name="header_spacing">23</field>
+        </record>
+
+
+        <record id="report_expression_of_interest_form" model="ir.actions.report">
+            <field name="paperformat_id" ref="sd_sale_order_report.paperformat_expression_of_interest"/>
+        </record>
+
+        <template id="report_expression_of_interest">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-call="sd_sale_order_report.sale_order_closure">
+                        <t t-set="o" t-value="o.with_context({'lang': lang})"/>
+                        <div class="page" style="font-size: 12px;">
+                            <style>
+
+                                .table-bordered {
+                                border: 1px solid black;
+                                margin: 6px;
+                                }
+
+                                .table-bordered th,
+                                .table-bordered tr,
+                                .table-bordered td {
+                                border: 1px solid black;
+
+                                }
+
+                                .table-bordered thead th,
+                                .table-bordered thead tr,
+                                .table-bordered thead td {
+                                border-bottom-width: 1px;
+                                }
+
+                                .table {
+                                width: 100%;
+                                margin-bottom: 1rem;
+                                background-color: transparent;
+                                }
+
+                                .table th,
+                                .table td {
+                                padding: 0.75rem;
+                                vertical-align: top;
+                                border-top: 1px solid balck;
+                                }
+
+                                .table thead th {
+                                vertical-align: bottom;
+                                border-bottom: 1px solid black;
+                                }
+
+                                .table tbody + tbody {
+                                border-top: 1px solid black;
+                                }
+
+                            </style>
+                            <br/>
+                            <br/>
+                            <h4 class="text-center">
+                                <strong>EXPRESSION OF INTEREST</strong>
+                            </h4>
+                            <br/>
+                            <br/>
+                            <div class="row text-left">
+                                <div class="col-12">
+                                    <span style="font-size: 16px;">
+                                        <strong>DATE:</strong>
+                                        <span t-field="o.booking_date" t-options='{"format": "dd/MM/yyyy"}'/>
+                                    </span>
+                                </div>
+                            </div>
+                            <br/>
+
+                            <table class="table table-bordered">
+                                <tbody>
+                                    <tr>
+                                        <td style="width:25%">
+                                            <span>Client Name</span>
+                                        </td>
+                                        <td style="width:25%">
+                                            <span t-esc="o.partner_id.name"/>
+                                        </td>
+                                        <td style="width:25%">
+                                            <span>Contact Number</span>
+                                        </td>
+                                        <td style="width:25%">
+                                            <span t-esc="o.partner_id.mobile"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <span>Nationality</span>
+                                        </td>
+                                        <td>
+                                            <span t-esc="o.partner_id.nationality_id.name"/>
+                                        </td>
+                                        <td>
+                                            <span>Email ID</span>
+                                        </td>
+                                        <td>
+                                            <span t-esc="o.partner_id.email"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <span>Unit No</span>
+                                        </td>
+                                        <td>
+                                            <span t-esc="o.property_id.name"/>
+                                        </td>
+                                        <td>
+                                            <span>Unit Type</span>
+                                        </td>
+                                        <td>
+                                            <span t-esc="o.property_id.unit_type_id.name"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <span>Project</span>
+                                        </td>
+                                        <td>
+                                            <span t-esc="o.asset_project_id.name"/>
+                                        </td>
+                                        <td>
+                                            <span>Sale Price</span>
+                                        </td>
+                                        <td>
+                                            <span t-esc="'{:,.2f}'.format(o.price)"/>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+
+                            <br/>
+                            <div class="row" style="font-size: 16px;">
+                                <div class="col-12">
+                                    <span>
+                                        <strong>PAYMENT TERMS:</strong>
+                                    </span>
+                                </div>
+                            </div>
+                            <br/>
+
+                            <table class="table table-bordered">
+                                <tbody>
+                                    <tr>
+                                        <td style="width:33%">
+                                            <span>Payment Remarks</span>
+                                        </td>
+                                        <td style="width:67%" colspan="2">
+                                            <span t-esc="o.payment_schedule_id.name"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <span>Remarks</span>
+                                        </td>
+                                        <td colspan="2">
+                                            <span t-esc="o.booking_remarks"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <span>External Agent</span>
+                                        </td>
+                                        <td colspan="2">
+                                            <span t-esc="o.agent_id.name"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <span>Internal Agent</span>
+                                        </td>
+                                        <td>
+                                            <span t-esc="o.user_id.name"/>
+                                        </td>
+                                        <td style="width:37%">
+                                            <span>Signature:</span>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <br/>
+                            <br/>
+                            <p style='font-size: 14px;'>NOTE: I,
+                                    <strong>
+                                        <span t-esc="o.partner_id.name"/>
+                                    </strong>
+                                    , express my interest in unit
+                                    <strong>
+                                        <span t-esc="o.property_id.name"/>
+                                    </strong>
+                                    at
+                                    <strong>
+                                        <span t-esc="o.asset_project_id.name"/>
+                                    </strong>
+                                    and I confirm that I
+                                    have made an expression of interest in the aforementioned unit and I will make the
+                                    payments
+                                    in line with the above terms. Furthermore I confirm that if I fail to make payment
+                                    in line with
+                                    the terms of the EOI it will be deemed that this agreement is null and void and I
+                                    will <strong>forfeit</strong> the
+                                    EOI amount.
+                                </p>
+                            <br/>
+                            <br/>
+                            <br/>
+
+                            <div class="row text-center" style="font-size: 14px;">
+                                <div class="col-4">
+                                    <strong>Client</strong>
+                                </div>
+                                <div class="col-4">
+                                    <strong>CEO/DIRECTOR</strong>
+                                </div>
+                                <div class="col-4">
+                                    <strong>Sales Manager</strong>
+                                </div>
+                            </div>
+
+                            <br/>
+                            <br/>
+                            <div class="row text-center">
+                                <div class="col-4">
+                                    <strong>_________________</strong>
+                                </div>
+                                <div class="col-4">
+                                    <strong>_________________</strong>
+                                </div>
+                                <div class="col-4">
+                                    <strong>_________________</strong>
+                                </div>
+                            </div>
+
+
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </template>
+    </data>
+</odoo>

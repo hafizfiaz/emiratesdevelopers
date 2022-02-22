@@ -1,0 +1,24 @@
+<odoo>
+
+        <record id="collected_email" model="mail.template">
+            <field name="name">Collected Email</field>
+            <field name="email_from">${object.company_id and object.company_id.email or ''}</field>
+            <field name="subject">Collected Email</field>
+            <field name="email_to">${''} </field>
+            <field name="lang">${user.partner_id.lang}</field>
+            <field name="model_id" ref="account.model_account_payment"/>
+            <field name="auto_delete" eval="False"/>
+            <!--<field name="attachment_ids" eval="[(6, 0, [ref(${object.success_mail.lang})])]"/>-->
+            <field name="body_html">
+                <![CDATA[
+              <p>Dear All,<br/><br/>
+This is to notify you that <b>${object.journal_id.name}</b> receipt# <b>${object.name}</b> dated <b>${object.maturity_date.strftime('%d/%m/%Y')}</b> is cancelled by <b>${user.name}</b> on <b>${datetime.datetime.now().strftime('%d/%m/%Y')}</b>.
+<br/><br/>
+Regards,<br/>
+Samana Developers ERP<br/>
+              </p>
+            ]]>
+            </field>
+        </record>
+
+</odoo>

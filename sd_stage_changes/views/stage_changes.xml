@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+
+     <record id="task_type_search" model="ir.ui.view">
+            <field name="name">project.stage.search</field>
+            <field name="model">project.stage</field>
+            <field name="arch" type="xml">
+                <search string="Tasks Stages">
+                   <field name="name" string="Tasks Stages"/>
+                </search>
+            </field>
+        </record>
+     <record id="view_project_task_type_kanban" model="ir.ui.view">
+            <field name="name">project.stage.kanban</field>
+            <field name="model">project.stage</field>
+            <field name="arch" type="xml">
+                <kanban class="o_kanban_mobile">
+                    <field name="name"/>
+                    <field name="fold"/>
+                    <field name="description"/>
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div t-attf-class="oe_kanban_global_click">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <strong><t t-esc="record.name.value"/></strong>
+                                    </div>
+                                </div>
+                                <t t-if="record.description.value">
+                                    <hr class="mt8 mb8"/>
+                                    <t t-esc="record.description.value"/>
+                                </t>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+
+    <record id="task_type_edit" model="ir.ui.view">
+        <field name="name">project.stage.form</field>
+        <field name="model">project.stage</field>
+        <field name="arch" type="xml">
+            <form string="Task Stage">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="mail_template_id" domain="[('model_id', 'in', project_ids)]"/>
+                            <field name="rating_template_id"/>
+                            <field name="auto_validation_kanban_state"/>
+                        </group>
+                        <group>
+                            <field name="fold"/>
+                            <field name="project_ids" widget="many2many_tags"/>
+                            <field name="responsible_id" widget="many2many_tags"/>
+                            <field name="user_id" widget="many2many_tags" invisible="1"/>
+                            <field name="sequence"/>
+                        </group>
+                    </group>
+                    <group string="Stage Description and Tooltips">
+                        <p class="text-muted" colspan="2">
+                            At each stage employees can block or make task/issue ready for next stage.
+                            You can define here labels that will be displayed for the state instead
+                            of the default labels.
+                        </p>
+                        <label for="legend_normal" string=" " class="o_status oe_project_kanban_legend"
+                               title="Task in progress. Click to block or set as done."
+                               aria-label="Task in progress. Click to block or set as done." role="img"/>
+                        <field name="legend_normal" nolabel="1"/>
+                        <label for="legend_blocked" string=" " class="o_status o_status_red oe_project_kanban_legend"
+                               title="Task is blocked. Click to unblock or set as done."
+                               aria-label="Task is blocked. Click to unblock or set as done." role="img"/>
+                        <field name="legend_blocked" nolabel="1"/>
+                        <label for="legend_done" string=" " class="o_status o_status_green oe_project_kanban_legend"
+                               title="This step is done. Click to block or set in progress."
+                               aria-label="This step is done. Click to block or set in progress." role="img"/>
+                        <field name="legend_done" nolabel="1"/>
+                        <p class="text-muted" colspan="2">
+                            You can also give a tooltip about the use of the stars available in the kanban and form
+                            views.
+                        </p>
+                        <label for="legend_priority" string=" "
+                               class="fa fa-star fa-lg o_star_on oe_project_kanban_legend" aria-label="Legend priority"
+                               title="Legend priority" role="img"/>
+                        <field name="legend_priority" nolabel="1"/>
+                        <p class="text-muted" colspan="2">
+                            You can also add a description to help your coworkers understand the meaning and purpose of
+                            the stage.
+                        </p>
+                        <field name="description" placeholder="Add a description..." nolabel="1" colspan="2"/>
+                    </group>
+                      <notebook>
+                        <page name="visible_to" string="Visibilty to Groups">
+                            <field name="group_ids"/>
+                            <field name="user_ids" invisible="1"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="task_type_tree" model="ir.ui.view">
+        <field name="name">project.stage.tree</field>
+        <field name="model">project.stage</field>
+        <field name="arch" type="xml">
+            <tree string="Task Stage">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="fold"/>
+                <field name="description"/>
+            </tree>
+        </field>
+    </record>
+
+
+    <record id="stage_type_form" model="ir.actions.act_window">
+        <field name="name">Stages</field>
+        <field name="res_model">project.stage</field>
+<!--        <field name="view_type">form</field>-->
+        <field name="view_mode">tree,kanban,form</field>
+        <field name="view_id" ref="task_type_tree"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create a new stage in the task pipeline
+            </p>
+            <p>
+                Define the steps that will be used in the project from the
+                creation of the task, up to the closing of the task or issue.
+                You will use these stages in order to track the progress in
+                solving a task or an issue.
+            </p>
+        </field>
+    </record>
+
+    <menuitem id="stage_type" name="Stages" parent="sale.menu_sales_config" sequence="2"
+              action="stage_type_form"/>
+
+
+</odoo>

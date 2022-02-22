@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <record model="ir.ui.view" id="migration_script_form_view">
+            <field name="name">migration.script.form</field>
+            <field name="model">migration.script</field>
+            <field name="arch" type="xml">
+                <form string="Migration Script">
+                    <header>
+                        <button name="db_connection" string="Import Records" type="object" class="oe_highlight" attrs="{'invisible':[('query_chk','=',True)]}"/>
+                        <button name="run_query" string="Run" type="object" class="oe_highlight" attrs="{'invisible':[('query_chk','=',False)]}"/>
+                    </header>
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="name"/>
+                                <field name="query_chk"/>
+                                <field name="return_chk"/>
+                                <field name="query_text" attrs="{'invisible':[('query_chk','=',False)]}"/>
+                                <field name="result" attrs="{'invisible':[('return_chk','=',False)]}"/>
+                            </group>
+                        </group>
+                    </sheet>
+
+                </form>
+            </field>
+        </record>
+
+        <record id="action_migration_script" model="ir.actions.act_window">
+            <field name="name">Migration Script</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">migration.script</field>
+            <field name="view_mode">tree,form</field>
+            <field name="context"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Click to register a new Migration Script.
+                </p>
+            </field>
+        </record>
+
+
+        <menuitem action="action_migration_script" sequence="1"
+                  id="menu_migration_script_crm" name="Migration Script" groups="base.group_erp_manager"/>
+
+    </data>
+</odoo>

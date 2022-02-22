@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+
+    	 <!--<record id="view_account_journal_form_inherit" model="ir.ui.view">
+            <field name="name">crm.booking.form</field>
+            <field name="model">crm.booking</field>
+	        <field name="inherit_id" ref="crm_extension.crm_case_form_view_booking1"/>
+	        <field name="arch" type="xml">
+                &lt;!&ndash;<xpath expr="//notebook" position="inside">&ndash;&gt;
+                <xpath expr="//page[@name='receipts']" position="after">
+                    <page string="PDC Receipts" name="pdc_receipts">
+                        <field name="pdc_receipt_ids" context="{'default_partner_id':partner_id, 'default_booking_id':id}">
+                            <tree delete="0">
+                                <field name="date"/>
+                                <field name="number"/>
+                                <field name="partner_id"/>
+                                <field name="mobile"/>
+                                <field name="user_id"/>
+                                <field name="booking_id"/>
+                                &lt;!&ndash;<field name="shop_id" />&ndash;&gt;
+                                <field name="amount_total" widget='monetary' options="{'currency_field': 'currency_id'}"/>
+                                <field name="currency_id" invisible="1"/>
+                            </tree>
+                        </field>
+                    </page>
+                </xpath>
+            </field>
+         </record>
+-->
+    	 <!--<record id="view_order_form_inherit_booking_pdc_receipts" model="ir.ui.view">
+            <field name="name">sale.order.form</field>
+            <field name="model">sale.order</field>
+	        <field name="inherit_id" ref="crm_extension.view_order_form_inherit_booking"/>
+	        <field name="arch" type="xml">
+                <xpath expr="//page[@name='receipts']" position="after">
+                    <page string="PDC Receipts" name="pdc_receipts">
+                        <field name="pdc_receipt_ids" readonly="0" context="{'default_partner_id':partner_id, 'default_booking_id':booking_id}">
+                            <tree delete="0">
+                                <field name="date"/>
+                                <field name="number"/>
+                                <field name="partner_id"/>
+                                <field name="mobile"/>
+                                <field name="user_id"/>
+                                <field name="booking_id"/>
+                                &lt;!&ndash;<field name="shop_id" />&ndash;&gt;
+                                <field name="amount_total" widget='monetary' options="{'currency_field': 'currency_id'}"/>
+                                <field name="currency_id" invisible="1"/>
+                            </tree>
+                        </field>
+                    </page>
+                </xpath>
+            </field>
+         </record>
+-->
+    </data>
+</odoo>

@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+
+        <!--&lt;!&ndash; PDC Payment Multi&ndash;&gt;-->
+        <!--<record id="multi_pdc_payment_search_view" model="ir.ui.view">-->
+            <!--<field name="name">multi.pdc.payment.select</field>-->
+            <!--<field name="model">multi.pdc.payment</field>-->
+            <!--<field name="arch" type="xml">-->
+                <!--<search string="Search Multi PDC Payment">-->
+                    <!--<field name="name" string="Search All"-->
+                           <!--filter_domain="['|','|','|','|',('name','ilike',self),('partner_id','ilike',self)-->
+                                            <!--,('partner_id.name','ilike',self),('partner_id.email','ilike',self),-->
+                                           <!--('partner_id.mobile','ilike',self)]"/>-->
+                    <!--<field name="property_id" filter_domain="[('property_id','ilike',self)]" string="Property"/>-->
+                <!--</search>-->
+            <!--</field>-->
+        <!--</record>-->
+
+        <record id="view_account_payment_form_inherit_payment_hold" model="ir.ui.view">
+            <field name="name">view.account.payment.form.inherit.payment.hold</field>
+            <field name="model">account.payment</field>
+            <field name="inherit_id" ref="account.view_account_payment_form"/>
+            <field name="arch" type="xml">
+                <!--<feild name='payment_transaction_id' position="after">-->
+                <xpath expr='//group[2]' position="inside">
+                    <field name="hold_date" attrs="{'invisible':[('chk','=',False)]}"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="view_account_payment_tree_hold" model="ir.ui.view">
+            <field name="name">view.account.payment.tree.hold</field>
+            <field name="model">account.payment</field>
+            <field name="arch" type="xml">
+                <tree decoration-info="state == 'draft'" decoration-muted="state in ['reconciled', 'cancelled']" edit="false">
+                    <field name="date"/>
+                    <field name="create_date"/>
+                    <field name="name"/>
+                    <field name="journal_id"/>
+                    <field name="payment_method_id" invisible="1"/>
+                    <field name="maturity_date"/>
+                    <field name="check_number"/>
+                    <field name="asset_project_id"/>
+<!--                    <field name="booking_id"/>-->
+                    <field name="spa_id"/>
+                    <field name="property_id"/>
+                    <field name="partner_id" string="Customer"/>
+                    <field name="amount" sum="Amount"/>
+                    <field name="bank_deposit"/>
+                    <field name="state"/>
+                    <field name="hold_date"/>
+                    <field name="company_id" groups="base.group_multi_company" invisible="1"/>
+                    <field name="currency_id" invisible="1"/>
+                    <field name="partner_type" invisible="1"/>
+                </tree>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="account_voucher_replacement_tree_view1">
+            <field name="name">account.voucher.replacement.tree</field>
+            <field name="model">account.voucher.replacement</field>
+            <field name="arch" type="xml">
+                <tree string="Account Voucher Replacement">
+                    <field name="create_date"/>
+            		<field name="name" string="Serial"/>
+            		<field name="partner_id"/>
+            		<field name="mobile"/>
+            		<field name="voucher_pending_ids"/>
+            		<field name="request_type"/>
+            		<field name="total_charge" sum="Total Document Charge"/>
+            		<field name="state"/>
+               	</tree>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="account_voucher_replacement_form_view">
+            <field name="name">account.voucher.replacement.form</field>
+            <field name="model">account.voucher.replacement</field>
+            <field name="arch" type="xml">
+                <form string="Cheque Hold/ Withdrawal request">
+                <header>
+               		<button name="submit_to_accounts" string="Submit to Accounts" type="object" states="draft" class="oe_highlight" groups="sales_team.group_sale_manager,account.group_account_user"/>
+               		<button name="action_review" string="Review" type="object" states="under_accounts_review" class="oe_highlight" groups="account.group_account_user"/>
+               		<button name="action_verify" string="Verify" type="object" states="under_verification" class="oe_highlight" groups="account_voucher_replace.group_verify_withhold_request"/>
+               		<button name="action_approve" string="Approve" type="object" states="under_approval" class="oe_highlight" groups="account_voucher_collection.group_account_general_financial_manager,account_voucher_collection.group_ceo"/>
+               		<button name="action_approve" string="Approve" type="object" states="under_ceo_approval" class="oe_highlight" groups="account_voucher_collection.group_ceo"/>
+               		<button name="action_ceo_rejected" string="Reject" type="object" states="under_ceo_approval" class="oe_highlight" groups="account_voucher_collection.group_ceo"/>
+               		<button name="action_pdc_withdraw" string="PDC Withdraw" type="object"
+                            attrs="{'invisible':['|',('state','!=','approved'),('request_type','!=','withdraw')]}"
+                            class="oe_highlight" groups="account_voucher_collection.group_account_general_financial_manager"/>
+               		<button name="action_pdc_hold" string="PDC Hold" type="object"
+                            attrs="{'invisible':['|',('state','!=','approved'),('request_type','!=','hold')]}"
+                            class="oe_highlight" groups="account_voucher_collection.group_ceo"/>
+               		<button name="action_pdc_replaced" string="PDC Replaced" type="object"
+                            attrs="{'invisible':['|',('state','!=','approved'),('request_type','!=','replacement')]}"
+                            class="oe_highlight" groups="account_voucher_collection.group_account_general_financial_manager"/>
+               		<button name="action_reject" string="Reject" type="object" states="under_accounts_review" groups="account.group_account_user"/>
+               		<button name="action_reject" string="Reject" type="object" states="under_verification" groups="account_voucher_replace.group_verify_withhold_request"/>
+               		<button name="action_reject" string="Reject" type="object" states="under_approval" groups="account_voucher_collection.group_account_general_financial_manager,account_voucher_collection.group_ceo"/>
+               		<button name="action_cancel" string="Cancel" type="object" states="withdraw,hold,replaced" groups="base.group_erp_manager"/>
+               		<button name="action_cancel" string="Cancel" type="object" states="reject" groups="account_voucher_collection.group_account_general_financial_manager,account_voucher_collection.group_ceo"/>
+               		<button name="action_cancel" string="Cancel" type="object" states="draft" groups="sales_team.group_sale_manager,account.group_account_user"/>
+               		<button name="action_rool_back" string="Roll Back" type="object" states="reject" groups="account.group_account_user"/>
+               		<!--<button name="action_rool_back" string="Roll Back" type="object" states="reject" groups="base.group_user"/>-->
+               		<button name="action_set_to_draft" string="Set to Draft" type="object" states="cancel" groups="account.group_account_user"/>
+       				<field name="state" widget="statusbar" statusbar_visible="draft,cancel"/>
+                </header>
+                <sheet>
+                	<h1>
+                    	<field name="name" class="oe_inline" readonly="1"/>
+                    </h1>
+                    <field name="type" invisible="True"/>
+                    <group>
+                    	<group>
+			                <field name="partner_id" required="1"/>
+			                <field name="mobile" string="Mobile"/>
+		            		<!--<field name="mobile_2" invisible="True"/>-->
+		            		<field name="phone" invisible="True"/>
+		            		<field name="email"/>
+		            		<field name="request_type"/>
+		            		<!--<div> </div>-->
+                            <field name="account_remarks"/>
+                            <field name="officer_remarks"/>
+
+			             </group>
+                        <group>
+                        	<field name="asset_project_id"/>
+                        	<field name="property_id"/>
+<!--                        	<field name="booking_id"/>-->
+                        	<field name="sale_id"/>
+			                <field name="contract_creation_date" invisible="True"/>
+			                <field name="contract_signing_date" string="Sign Up Date" invisible="1"/>
+			                <field name="contract_type" invisible="True"/>
+			                <field name="product_id" invisible="1"/>
+			                <field name="total_amount_contract"/>
+			                <field name="total_received"/>
+			                <field name="unmatured_pdc_amount"/>
+			                <field name="bounced_pdc_amount"/>
+			                <field name="balance_pending"/>
+			                <field name="hold_date" attrs="{'invisible':[('request_type','!=','hold')], 'required':[('request_type','=','hold')], 'readonly':[('state','not in',['draft','cancel'])]}"/>
+			            </group>
+			            <group>
+                            <field name="pending_total" invisible="1"/>
+                            <field name="date" required="1"/>
+                            <field name="submit_by" readonly="1"/>
+                            <field name="submit_date" readonly="1"/>
+                            <field name="approval_by" readonly="1"/>
+                            <field name="approval_date" readonly="1"/>
+                            <field name="verified_by" readonly="1"/>
+                            <field name="verify_date" readonly="1"/>
+                            <field name="payment_term" readonly="1"/>
+                            <field name="company_id" widget="selection" groups="base.group_multi_company"/>
+                            <field name="image" widget='image' options='{"preview_image": "image_medium", "size": [90, 90]}' invisible="True"/>
+                        </group>
+
+
+                    </group>
+                    <notebook>
+                    	<page string="Pending PDCs">
+                    		<button name="action_refresh" string="Refresh Pending PDC" type="object"/>
+                    		<field name="voucher_pending_ids" domain="[('partner_id','=',partner_id),('chk','=', True),('payment_type','=', 'inbound'),('state','=','collected')]">
+                                <tree decoration-info="state == 'draft'" decoration-muted="state in ['reconciled', 'cancelled']" edit="false">
+                                    <field name="date"/>
+                                    <field name="create_date" invisible="1"/>
+                                    <field name="name"/>
+                                    <field name="journal_id"/>
+                                    <field name="payment_method_id" invisible="1"/>
+                                    <field name="maturity_date"/>
+                                    <field name="hold_date"/>
+                                    <field name="check_number"/>
+                                    <field name="asset_project_id" invisible="1"/>
+<!--                                    <field name="booking_id"/>-->
+                                    <field name="spa_id"/>
+                                    <field name="property_id"/>
+                                    <field name="partner_id" string="Customer"/>
+                                    <field name="amount" sum="Amount"/>
+                                    <field name="bank_deposit" invisible="1"/>
+                                    <field name="state"/>
+                                    <field name="company_id" groups="base.group_multi_company" invisible="1"/>
+                                    <field name="currency_id" invisible="1"/>
+                                    <field name="partner_type" invisible="1"/>
+                                </tree>
+                            </field>
+                    		<!--<field name="voucher_pending_ids" widget="many2many" domain="[('id','in',voucher_ids[0][2])]"/>-->
+                    		<!-- HRN END-->
+                    	</page>
+                        <page string="Receipts &amp; Payments">
+                            <field name="all_payments_and_receipts_ids"/>
+                        </page>
+                        <page string="Receipts">
+	            			<field name="receipt_ids"/>
+	            			<!--<field name="receipt_ids" context="{'default_type':'receipt','default_partner_id':partner_id,'default_sale_amount':total_amount_contract,'default_reference':name,'default_payment_term_id':payment_term,'form_view_ref': 'pdc.view_vendor_receipt_form_pdc'}"/>-->
+	            		</page>
+	            		<page string="PDC Receipts">
+	            			<field name="pdc_receipt_ids"/>
+	            			<!--<field name="pdc_receipt_ids" context="{'default_type':'receipt','default_partner_id':partner_id,'default_reference':name,'default_payment_term':payment_term}"/>-->
+	            		</page>
+                        <page string="Journal Items" attrs="{'invisible': [('move_ids','=', [])]}">
+                            <field name="move_ids"/>
+                               <!--<tree string="Journal Items">-->
+                                   <!--<field name="move_id"/>-->
+                                   <!--<field name="ref"/>-->
+                                   <!--<field name="date"/>-->
+                                   <!--<field name="statement_id"/>-->
+                                   <!--<field name="partner_id"/>-->
+                                   <!--<field name="account_id"/>-->
+                                   <!--<field name="name"/>-->
+                                   <!--<field name="debit"/>-->
+                                   <!--<field name="credit"/>-->
+                                   <!--<field name="state"/>-->
+                                   <!--<field name="reconcile_id"/>-->
+                                   <!--<field name="amount_currency" groups="base.group_multi_currency"/>-->
+                                   <!--<field name="currency_id" groups="base.group_multi_currency"/>-->
+                               <!--</tree>-->
+                            <!--</field>-->
+                        </page>
+                    </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_account_voucher_replacement" model="ir.actions.act_window">
+            <field name="name">Cheque Hold/ Withdrawal Request</field>
+            <field name="res_model">account.voucher.replacement</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" eval="False"/>
+            <field name="target">current</field>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Click to register a new Cheque Hold/ Withdrawal Request.
+              </p>
+            </field>
+        </record>
+
+        <menuitem action="action_account_voucher_replacement" sequence="4"
+            id="menu_action_account_voucher_replacement"  parent="account_voucher_collection.menu_receipts_and_payments" name="Cheque Hold/ Withdrawal Request"/>
+
+        <menuitem action="action_account_voucher_replacement" sequence="5"
+            id="menu_action_account_voucher_replacement_crm"  parent="account_voucher_collection.crm_menu_receipts" name="Cheque Hold/ Withdrawal Request"/>
+    </data>
+</odoo>
