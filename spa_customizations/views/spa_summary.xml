@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_spa_summary_view" model="ir.ui.view">
+            <field name="name">spa.summary.view.wiz</field>
+            <field name="model">spa.summary.view</field>
+            <field name="arch" type="xml">
+                <form string="SPA Summary" name="spa_summary">
+                    <sheet string="SPA Summary" name="spa_summary">
+                        <group>
+                            <group name="ttl">
+                                <field name="amount_untaxed" widget="monetary"
+                                       options="{'currency_field': 'currency_id'}" readonly="1"/>
+                                <field name="amount_tax" widget="monetary" readonly="1" options="{'currency_field': 'currency_id'}"/>
+                                <div class="oe_subtotal_footer_separator oe_inline o_td_label">
+                                    <label for="amount_total"/>
+                                </div>
+                                <field name="amount_total" nolabel="1" readonly="1" class="oe_subtotal_footer_separator"
+                                       widget="monetary"
+                                       options="{'currency_field': 'currency_id'}"/>
+                            </group>
+                            <group string="Property Balance Details" name="pd">
+                                <field name="amount_till_date" string="Installments Due" readonly="1"/>
+                                <field name="paid_installments" readonly="1"/>
+                                <field name="paid_installments_perc" readonly="1"/>
+                                <label for="installment_balance_pending" string="Balance Due Installment"
+                                       style="color: red;"/>
+                                <field name="installment_balance_pending" style="color: red;" readonly="1"
+                                       nolabel="1"/>
+                            </group>
+                            <group string="Oqood Details" name="od">
+                                <field name="oqood_fee" readonly="1"/>
+                                <field name="oqood_received" readonly="1"/>
+                                <label for="balance_due_oqood" style="color: red;"/>
+                                <field name="balance_due_oqood" style="color: red;" readonly="1" nolabel="1"/>
+                            </group>
+                            <group string="Admin Details" name="ad">
+                                <field name="admin_fee" readonly="1"/>
+                                <field name="admin_received" readonly="1"/>
+                                <label for="balance_due_admin" style="color: red;" />
+                                <field name="balance_due_admin" style="color: red;" readonly="1" nolabel="1"/>
+                            </group>
+                            <group string="Other Charges Details" name="ocd">
+                                <field name="other_charges" readonly="1"/>
+                                <field name="other_received" readonly="1"/>
+                                <!--                    <field name="balance_due_other"/>-->
+                                <label for="balance_due_other" style="color: red;"/>
+                                <field name="balance_due_other" style="color: red;" readonly="1" nolabel="1"/>
+                            </group>
+                            <group string="Receipts Break Up" name="rbu">
+                                <field name="escrow" readonly="1"/>
+                                <field name="escrow_perc" readonly="1"/>
+                                <field name="non_escrow" readonly="1"/>
+                                <field name="non_escrow_perc" readonly="1"/>
+                                <field name="total_escrow" readonly="1"/>
+                                <field name="total_escrow_perc" readonly="1"/>
+                            </group>
+                            <group string="Summary" name="summary">
+                                <field name="total_spa_value" readonly="1"/>
+                                <field name="instalmnt_bls_pend_plus_admin_oqood" readonly="1"/>
+                                <label for="matured_pdcs" style="color: #37a60c;"/>
+                                <field name="matured_pdcs" style="color: #37a60c;" nolabel="1" readonly="1"/>
+                                <field name="matured_pdcs_perc" readonly="1"/>
+                                <label for="balance_due_collection" style="color: red;"/>
+                                <field name="balance_due_collection" style="color: red;" readonly="1" nolabel="1"/>
+                                <field name="total_receipts" readonly="1"/>
+                                <field name="receipts_perc" readonly="1"/>
+                                <field name="un_matured_pdcs" readonly="1"/>
+                                <field name="deposited_pdcs" readonly="1"/>
+                                <field name="hold_pdcs" readonly="1"/>
+                                <field name="bounced_pdcs" readonly="1"/>
+                                <field name="total_unsecured_collections" readonly="1"/>
+                                <field name="unsecured_collections_perc" readonly="1"/>
+                                <field name="pending_balance" readonly="1"/>
+                                <field name="pending_balance_perc" readonly="1"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+    </data>
+</odoo>

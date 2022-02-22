@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="prop_premium_finish" model="ir.ui.view">
+            <field name="name">account.asset.asset.finish</field>
+            <field name="model">account.asset.asset</field>
+            <field name="inherit_id" ref="ow_account_asset.view_account_asset_asset_form"/>
+            <field name="arch" type="xml">
+                <field name="oqood_fee_ledger_id" position="before">
+                    <field name="premium_finish_ledger_id" attrs="{'invisible': [('project', '=', False)]}" options="{'no_create':True, 'no_create_edit':True}"/>
+                </field>
+            </field>
+        </record>
+
+<!--        <record id="view_asset_project_form" model="ir.ui.view">-->
+<!--            <field name="name">account.asset.asset.form</field>-->
+<!--            <field name="model">account.asset.asset</field>-->
+<!--            <field name="inherit_id" ref="ow_account_asset.view_account_asset_asset_form"/>-->
+<!--            <field name="arch" type="xml">-->
+<!--                <field name="method" position="after">-->
+<!--                    <field name="project"/>-->
+<!--                </field>-->
+<!--            </field>-->
+<!--        </record>-->
+    </data>
+</odoo>

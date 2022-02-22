@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record model="ir.ui.view" id="remove_schedule_view_wizard">
+            <field name="name">Remove Schedule</field>
+            <field name="model">wiz.remove.schedule</field>
+            <field name="arch" type="xml">
+                <form string="any string">
+                    <field name="name"/>
+                    <field name="booking_id" invisible="1"/>
+                    <footer>
+                        <button string="Yes" name="action_remove_schedule_lines" type="object" class="oe_highlight"/>
+                        or
+                        <button string="No" class="oe_link" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+    </data>
+</odoo>

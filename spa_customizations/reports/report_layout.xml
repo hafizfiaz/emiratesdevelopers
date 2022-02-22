@@ -1,0 +1,229 @@
+<odoo>
+<!--    <template id="reservation_external_layout">-->
+<!--        <t t-if="not o" t-set="o" t-value="doc"/>-->
+
+<!--        <t t-if="not company">-->
+<!--            &lt;!&ndash; Multicompany &ndash;&gt;-->
+<!--            <t t-if="company_id">-->
+<!--                <t t-set="company" t-value="company_id"/>-->
+<!--            </t>-->
+<!--            <t t-elif="o and 'company_id' in o">-->
+<!--                <t t-set="company" t-value="o.company_id.sudo()"/>-->
+<!--            </t>-->
+<!--            <t t-else="else">-->
+<!--                <t t-set="company" t-value="res_company"/>-->
+<!--            </t>-->
+<!--        </t>-->
+
+<!--        <t t-call="spa_customizations.external_layout_header_reservation"/>-->
+<!--        <t t-call="spa_customizations.external_layout_footer_reservation"/>-->
+<!--        <t t-if="company.external_report_layout_id" t-call="{{company.external_report_layout_id.key}}"><t t-raw="0"/></t>-->
+<!--        <t t-else="else" t-call="web.external_layout_standard"><t t-raw="0"/></t>-->
+
+<!--    </template>-->
+
+<!--    <template id="external_layout_header_reservation">-->
+<!--        <div class="header" height="5">-->
+<!--            <div style='width:100%;'>-->
+<!--                &lt;!&ndash;<br></br>&ndash;&gt;-->
+<!--                <br></br>-->
+<!--                <div class="row">-->
+<!--                    <div class="col-7">-->
+<!--                        <span style='font-size: 24px; color:#286A9D;'><b>SAMANA INTERNATIONAL</b></span>-->
+<!--                    </div>-->
+<!--                    <div class="col-5" style='font-size: 12px;'>-->
+<!--                        <p>4th Floor , Building 7-Bay Square Business Bay,<br/> Dubai - United Arab Emirates</p>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                <div class="row">-->
+<!--                    <div class="col-7">-->
+<!--                        <span style='font-size: 16px;'>REAL ESTATE DEVELOPMENT</span>-->
+<!--                    </div>-->
+<!--                    <div class="col-5" style='font-size: 12px;'>-->
+<!--                        <p>Email: <span t-field="company.email"/> Website: <span t-field="company.website"/> Phone: <span t-field="company.phone"/></p>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                <div class="row">-->
+<!--                    <div class="col-4 text-center">-->
+<!--                        <img t-if="o.booking_barcode" t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s' %('Code128',o.booking_barcode,180,35)"/>-->
+<!--                        &lt;!&ndash;</t>&ndash;&gt;-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                <div class="row">-->
+<!--                    <div class="col-4 text-center" style='font-size: 10px;'>-->
+<!--                        <span t-esc="o.booking_barcode"/>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </template>-->
+
+<!--    <template id="external_layout_footer_reservation">-->
+<!--        <div class="footer">-->
+<!--            <div class="row text-left" style="border-top: 1px solid black;">-->
+<!--                <div class="col-12">-->
+<!--                    <span class="page"/><span> | </span><span>SAMANA INTERNATIONAL</span>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </template>-->
+
+    <template id="saleorder_external_layout">
+        <t t-if="not o" t-set="o" t-value="doc"/>
+
+        <t t-if="not company">
+            <!-- Multicompany -->
+            <t t-if="company_id">
+                <t t-set="company" t-value="company_id"/>
+            </t>
+            <t t-elif="o and 'company_id' in o">
+                <t t-set="company" t-value="o.company_id.sudo()"/>
+            </t>
+            <t t-else="else">
+                <t t-set="company" t-value="res_company"/>
+            </t>
+        </t>
+        <!--<t t-set="a" t-value="0"/>-->
+            <!--<t t-if="a == 0">-->
+
+        <t t-call="spa_customizations.external_layout_header_saleorder"/>
+        <t t-call="spa_customizations.external_layout_footer_saleorder"/>
+        <t t-if="company.external_report_layout_id" t-call="{{company.external_report_layout_id.key}}"><t t-raw="0"/></t>
+        <t t-else="else" t-call="spa_customizations.saleorder_external_layout"><t t-raw="0"/></t>
+
+            <!--</t>-->
+
+
+
+    </template>
+
+    <!--class="not-first-page"-->
+    <template id="external_layout_header_saleorder">
+        <div class="header" height="5">
+            <div class="text-center" style="position: fixed;
+                    opacity: 0.05;
+                    z-index: 1000;
+                    margin-top:420px;
+                    padding-left:180px;
+                    transform: rotate(0deg);
+                    -webkit-transform: rotate(0deg);">
+                <img t-if="o.asset_project_id.image"
+                     src="/spa_customizations/static/src/img/samanadev_logo-07.png" width="500px"/>
+
+            </div>
+            <div style='width:100%;'>
+                <br></br>
+                <div class="row">
+                    <div class="col-7">
+                        <span style='font-size: 24px; color:#286A9D;'><b>SAMANA INTERNATIONAL</b></span>
+                    </div>
+                    <div class="col-5" style='font-size: 12px;'>
+                        <p>4th Floor , Building 7-Bay Square Business Bay,<br/> Dubai - United Arab Emirates</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-7">
+                        <span style='font-size: 16px;'>REAL ESTATE DEVELOPMENT</span>
+                    </div>
+                    <div class="col-5" style='font-size: 12px;'>
+                        <p>Email: <span t-field="company.email"/> Website: <span t-field="company.website"/> Phone: <span t-field="company.phone"/></p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-3 text-center">
+                        <img t-if="o.spa_barcode" t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s' %('Code128',o.spa_barcode,180,35)"/>
+                        <!--</t>-->
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-3 text-center" style='font-size: 10px;'>
+                        <span t-esc="o.spa_barcode"/><span>-</span><span class="page"/>
+                    </div>
+                </div>
+            </div>
+            <!--</div>-->
+        </div>
+    </template>
+
+    <template id="external_layout_footer_saleorder">
+        <div class="footer">
+            <!--<div class="not-first-page">-->
+
+            <div class="row" style="border-top: 1px solid black;">
+                <div class="col-6">
+                    <span class="page"/><span> | </span><span>SAMANA INTERNATIONAL</span><br/>
+                    <!--Page: <span class="page"/> / <span class="topage"/>-->
+                    <span style='font-size: 12px; color:#FF0000;'>Note: This agreement consist of total “<span class="topage"/>” pages &amp; this is page no “<span class="page"/>”</span>
+                </div>
+                <div class="col-6" style='font-size: 13px;'>
+                    <p>    Agreement is not valid without company seal</p>
+                </div>
+            </div>
+        </div>
+        <!--</div>-->
+    </template>
+
+
+    <template id="saleorder_external_layout11">
+        <t t-if="not o" t-set="o" t-value="doc"/>
+
+        <t t-if="not company">
+            <!-- Multicompany -->
+            <t t-if="company_id">
+                <t t-set="company" t-value="company_id"/>
+            </t>
+            <t t-elif="o and 'company_id' in o">
+                <t t-set="company" t-value="o.company_id.sudo()"/>
+            </t>
+            <t t-else="else">
+                <t t-set="company" t-value="res_company"/>
+            </t>
+        </t>
+        <!--<t t-set="a" t-value="0"/>-->
+            <!--<t t-if="a == 0">-->
+
+        <t t-call="spa_customizations.external_layout_header_saleorder11"/>
+        <t t-call="spa_customizations.external_layout_footer_saleorder11"/>
+        <t t-if="company.external_report_layout_id" t-call="spa_customizations.saleorder_external_layout"><t t-raw="0"/></t>
+        <t t-else="else" t-call="spa_customizations.saleorder_external_layout"><t t-raw="0"/></t>
+
+    </template>
+
+    <!--class="not-first-page"-->
+    <template id="external_layout_header_saleorder11">
+        <div class="header" height="5">
+            <div style='width:100%;'>
+                <br></br>
+                <div class="row">
+                    <div class="col-7">
+                        <span style='font-size: 24px; color:#286A9D;'><b>SAMANA INTERNATIONAL</b></span>
+                    </div>
+                    <div class="col-5" style='font-size: 12px;'>
+                        <p>4th Floor , Building 7-Bay Square Business Bay,<br/> Dubai - United Arab Emirates</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-7">
+                        <span style='font-size: 16px;'>REAL ESTATE DEVELOPMENT</span>
+                    </div>
+                    <div class="col-5" style='font-size: 12px;'>
+                        <p>Email: <span t-field="company.email"/> Website: <span t-field="company.website"/> Phone: <span t-field="company.phone"/></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <template id="external_layout_footer_saleorder11">
+        <div class="footer">
+
+            <div class="row" style="border-top: 1px solid black;">
+                <div class="col-6">
+                    <span>SAMANA INTERNATIONAL</span><br/>
+                </div>
+
+            </div>
+        </div>
+    </template>
+
+</odoo>

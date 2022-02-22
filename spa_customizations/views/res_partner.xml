@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_res_partner_filter1" model="ir.ui.view">
+            <field name="name">res.partner.select</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_res_partner_filter"/>
+            <field name="arch" type="xml">
+                <xpath expr="//search" position="replace">
+                    <search string="Search Partner">
+                        <field name="name"
+                           filter_domain="['|','|','|','|',('display_name','ilike',self),('mobile','ilike',self),
+                                                    ('phone','ilike',self),('email','ilike',self),
+                                                    ('name','ilike',self)]" string="All Search"/>
+                       <field name="parent_id" domain="[('is_company','=',True)]" operator="child_of"/>
+                       <filter name="filter_my_partners" help="My Contacts"
+                               domain="[('user_id','=',uid)]"/>
+                       <separator/>
+                       <filter string="Individuals" name="type_person" domain="[('is_company','=',False)]"/>
+                       <filter string="Companies" name="type_company" domain="[('is_company','=',True)]"/>
+                       <separator/>
+                       <filter string="Customers" name="customer" domain="[('parent_id', '=', False),'|',('customer_rank','>', 0),('customer','=',True)]"/>
+                       <filter string="Vendors" name="supplier" domain="[('parent_id', '=', False),'|',('supplier_rank','>', 0),('supplier','=',True)]"/>
+                       <filter string="Archived" name="inactive" domain="[('active','=',False)]"/>
+                       <separator/>
+                       <field name="category_id" string="Tag" filter_domain="[('category_id','ilike', self)]"/>
+                       <field name="user_id"/>
+                       <field name="phone" filter_domain="['|',('phone','ilike',self),('mobile','=',self)]"/>
+                       <group expand="0" name="group_by" string="Group By">
+                           <filter name="salesperson" string="Salesperson" domain="[]" context="{'group_by' : 'user_id'}" />
+                           <filter name="group_company" string="Company" context="{'group_by': 'parent_id'}"/>
+                           <filter name="group_country" string="Country" context="{'group_by': 'country_id'}"/>
+                       </group>
+                   </search>
+                </xpath>
+            </field>
+        </record>
+
+
+        <record id="view_partner_form_inherit1" model="ir.ui.view">
+            <field name="name">res.partner.form</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_form"/>
+            <field name="arch" type="xml">
+                <field name="website" position="before">
+                    <field name="email2" attrs="{'invisible': [('customer', '=', False)]}"/>
+                </field>
+                <field name="name" position="after">
+                    <field name="lock" invisible="1"/>
+                </field>
+                <xpath expr="//div[@class='oe_button_box']" position="inside">
+                    <button name="toggle_active" type="object" groups="base.group_erp_manager"
+                            class="oe_stat_button" icon="fa-archive">
+                        <field name="active" widget="boolean_button"
+                            options='{"terminology": "archive"}'/>
+                    </button>
+                    <button name="profile_lock" type="object" class="oe_stat_button" attrs="{'invisible':[('lock','=', False)]}" string="UnLock" icon="fa-lock" groups="sales_team.group_sale_salesman_all_leads"/>
+                    <button name="profile_lock" type="object" class="oe_stat_button" attrs="{'invisible':[('lock','=', True)]}" string="Lock" icon="fa-lock" groups="sales_team.group_sale_salesman_all_leads"/>
+                </xpath>
+                <field name="type" position="before">
+                    <field name="represented_by" attrs="{'invisible': [('company_type', '!=', 'company')]}"/>
+                    <field name="designation" attrs="{'invisible': [('company_type', '!=', 'company')]}"/>
+                    <field name="eid_no" attrs="{'invisible': [('customer', '=', False)]}"/>
+                    <field name="passport_no" attrs="{'invisible': [('customer', '=', False)]}"/>
+                    <field name="visa_no" attrs="{'invisible': [('customer', '=', False)]}"/>
+                    <field name="second_mobile_no" attrs="{'invisible': [('customer', '=', False)]}"/>
+                    <field name="passport_expiry_date" attrs="{'invisible': [('customer', '=', False)]}"/>
+                    <field name="visa_expiry_date" attrs="{'invisible': [('customer', '=', False)]}"/>
+                    <field name="home_address" attrs="{'invisible': [('customer', '=', False)]}"/>
+<!--                    <field name="nationality" attrs="{'invisible': [('customer', '=', False)]}"/>-->
+                    <field name="nationality_id" attrs="{'invisible': [('customer', '=', False)]}"/>
+                    <!--<field name="home_address" attrs="{'invisible': [('customer', '=', False)]}"/>-->
+                </field>
+
+                <xpath expr="/form/sheet/notebook/page[@name='sales_purchases']/group[@name='container_row_2']/group[@name='sale']/field[@name='user_id']" position="after">
+                    <field name="customer"/>
+                    <field name="supplier"/>
+                    <field name="agent"/>
+                    <field name="internal_user"/>
+                </xpath>
+                <xpath expr="//h1" position="after">
+                    <field name="account_id_no"/>
+                </xpath>
+                <field name="name" position="attributes">
+                    <attribute name="attrs">{'readonly':[('lock','=', True)]}</attribute>
+                </field>
+                <field name="email" position="attributes">
+                    <attribute name="attrs">{'readonly':[('lock','=', True)]}</attribute>
+                </field>
+                <field name="phone" position="attributes">
+                    <attribute name="attrs">{'readonly':[('lock','=', True)]}</attribute>
+                </field>
+                <field name="mobile" position="attributes">
+                    <attribute name="attrs">{'readonly':[('lock','=', True)]}</attribute>
+                </field>
+            </field>
+        </record>
+
+<!--        <record id="account.res_partner_view_search" model="ir.ui.view">-->
+<!--            <field name="name">res.partner.search.inherit</field>-->
+<!--            <field name="model">res.partner</field>-->
+<!--            <field name="inherit_id" ref="account.res_partner_view_search"/>-->
+<!--            <field name="arch" type="xml">-->
+<!--                <xpath expr="//filter[@name='customer']" position="replace">-->
+<!--                   <filter string="Customer Invoices" name="customer" domain="['|',('customer_rank','>', 0),('customer_rank','>', 0)]"/>-->
+<!--                   <filter string="Vendor Bills" name="supplier" domain="[('supplier_rank','>', 0)]"/>-->
+<!--                   <separator/>-->
+<!--                </xpath>-->
+<!--            </field>-->
+<!--        </record>-->
+
+        <record id="account.res_partner_action_customer" model="ir.actions.act_window">
+            <field name="name">Customers</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">res.partner</field>
+            <field name="view_mode">kanban,tree,form</field>
+            <field name="context">{'search_default_customer': 1,'res_partner_search_mode': 'customer', 'default_is_company': True, 'default_customer_rank': 1, 'default_customer': True}</field>
+            <field name="help" type="html">
+              <p class="o_view_nocontent_smiling_face">
+                Create a new customer in your address book
+              </p><p>
+                Odoo helps you easily track all activities related to a customer.
+              </p>
+            </field>
+        </record>
+
+        <record id="account.res_partner_action_supplier" model="ir.actions.act_window">
+            <field name="name">Vendors</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">res.partner</field>
+            <field name="view_mode">kanban,tree,form</field>
+            <field name="context">{'search_default_supplier': 1,'res_partner_search_mode': 'supplier', 'default_is_company': True, 'default_supplier_rank': 1, 'default_supplier': True}</field>
+            <field name="help" type="html">
+              <p class="o_view_nocontent_smiling_face">
+                Create a new supplier in your address book
+              </p><p>
+                Odoo helps you easily track all activities related to a supplier.
+              </p>
+            </field>
+        </record>
+
+    </data>
+</odoo>

@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="view_commission_type_form2" model="ir.ui.view">
+            <field name="name">commission.type.form1</field>
+            <field name="model">commission.type</field>
+            <field name="arch" type="xml">
+                <form string="Commission Type">
+                    <sheet>
+                        <div class="oe_left" style="width: 300px;">
+                            <div class="oe_title">
+                                <label class="oe_edit_only" for="name" string="Name"/>
+                                <h1>
+                                    <field name="name"/>
+                                </h1>
+                            </div>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="percentage" attrs="{'invisible':[('fixed','=',True)]}" />
+                                <field name="is_internal_user"/>
+                                <field name="is_agent"/>
+                                <field name="unit_type_ids" widget="many2many_tags"/>
+                            </group>
+                            <group>
+                                <div attrs="{'invisible':[('percentage','=',False)]}" class="o_row">
+                                    <field name="active" string="Active"/>
+                                    <label for="percentage_value"/>
+                                    <field class="oe_inline" name="percentage_value"/>
+                                    <span class="o_form_label oe_inline" >%</span>
+                                </div>
+                            </group>
+                            <group>
+                                <field name="fixed" attrs="{'invisible':[('percentage','=',True)]}" />
+                            </group>
+                            <group>
+                                <field name="amount_value" attrs="{'invisible':[('fixed','=',False)]}" />
+                            </group>
+                        </group>
+                        <group>
+                            <group>
+                                <field name="asset_project_id"/>
+                                <field name="property_id"/>
+                                <field name="payment_schedule_id"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+    <record id="commission_type_tree" model="ir.ui.view">
+        <field name="name">commission.type.tree</field>
+        <field name="model">commission.type</field>
+        <field name="arch" type="xml">
+            <tree string="Commissions Type">
+                <field name="name" />
+                <field name="percentage" />
+                <field name="fixed" />
+                <field name="percentage_value"/>
+                <field name="amount_value"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_commission_type" model="ir.actions.act_window">
+        <field name="name">Commission Type</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">commission.type</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+              <p class="o_view_nocontent_smiling_face">
+                Click to create commission type.
+            </p>
+        </field>
+    </record>
+
+
+    <menuitem
+       id="menu_invoice_commissions_type"
+       name="Commission Type"
+       parent="property_management.menu_types_main"
+       action="action_commission_type"
+       sequence="1"
+    />
+
+    </data>
+</odoo>

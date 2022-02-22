@@ -1,0 +1,772 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_spa_form_search" model="ir.ui.view">
+            <field name="name">sale.order.form</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_sales_order_filter"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='name']" position="replace">
+                    <field name="name" filter_domain="[('name','ilike',self)]" string="SPA"/>
+                    <field name="asset_project_id" filter_domain="[('asset_project_id','ilike',self)]"
+                           string="Project"/>
+                    <field name="property_id" filter_domain="[('property_id','ilike',self)]" string="Property"/>
+                    <field name="partner_id" filter_domain="[('partner_id','child_of',self)]" string="Customer Name"/>
+                    <field name="user_id"/>
+                    <field name="team_id" string="Sales Team"/>
+                    <field name="analytic_account_id"/>
+                </xpath>
+            </field>
+        </record>
+
+         <record id="view_attachment_tree_on_model" model="ir.ui.view">
+            <field name="name">ir.attachment.tree.new</field>
+            <field name="model">ir.attachment</field>
+            <field name="arch" type="xml">
+                <tree string="Attachments">
+                    <field name="name"/>
+                    <field name="res_model"/>
+                    <field name="res_id"/>
+                    <field name="datas" widget="binary"/>
+                    <field name="company_id" groups="base.group_multi_company"/>
+                    <field name="create_uid"/>
+                    <field name="create_date"/>
+                </tree>
+            </field>
+        </record>
+
+
+        <record id="view_spa_form" model="ir.ui.view">
+            <field name="name">sale.order.form</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+                <button name="action_cancel" position="replace">
+                    <button name="open_action_cancel" string="Cancel" states="spa_draft,refund_cancellation"
+                            type="object" groups="security_groups.basic_sale_person,base.group_erp_manager"/>
+                    <button name="open_action_cancel" string="Cancel" states="rejected" type="object"
+                            groups="base.group_erp_manager"/>
+                    <!--                    <attribute name="attrs">{'invisible': ['|', ('state', 'not in', ['spa_draft', 'sent','sale']),-->
+                    <!--                        ('id', '=', False)]}-->
+                    <!--                    </attribute>-->
+                </button>
+                <field name="validity_date" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </field>
+
+                <xpath expr="/form/header/button[7]" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+                <xpath expr="/form/header/button[8]" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+
+
+                <xpath expr="//header" position="inside">
+                    <field name="internal_type" invisible="1"/>
+                    <field name="approval_require" invisible="1"/>
+                    <field name="min_down_payment_perc" invisible="1"/>
+                    <button name="action_is_buy_review" string="Send For Review"
+                            attrs="{'invisible': [('state', '!=', 'tentative_booking')]}"
+                            type="object" class="oe_highlight" groups="security_groups.basic_sale_person"/>
+                    <button name="action_tentative_booking" string="Tentative Booking"
+                            attrs="{'invisible': ['|','|',('state', 'not in', ['draft']),('approval_require', '=', True),('payment_plan_creation', 'in',['custom','excel'])]}"
+                            type="object" class="oe_highlight"/>
+                    <button name="action_discount_approval" string="Submit for Approval"
+                            attrs="{'invisible': ['|',('state', 'not in', ['draft']),'&amp;',('approval_require', '!=', True),('payment_plan_creation', 'not in',['custom','excel'])]}"
+                            type="object" class="oe_highlight" groups="security_groups.basic_sale_person"/>
+                    <button name="action_discount_approved" string="Approve"
+                            attrs="{'invisible': [('state', '!=', 'under_discount_approval')]}"
+                            type="object" class="oe_highlight" groups="security_groups.group_sales_director"/>
+                    <button name="action_is_buy_reject" string="Reject"
+                            attrs="{'invisible': [('state', '!=', 'under_discount_approval')]}"
+                            type="object" class="oe_highlight" groups="security_groups.group_sales_director"/>
+                    <button name="action_is_buy_confirm_booking" string="Confirm Booking" type="object"
+                            class="oe_highlight"
+                            attrs="{'invisible': [('state', 'not in', 'review')]}"
+                            groups="security_groups.group_booking_review"/>
+                    <button name="action_is_buy_spa" string="Approved for SPA" type="object" class="oe_highlight"
+                            attrs="{'invisible': [('state', 'not in', 'confirm_spa')]}"
+                            groups="security_groups.group_booking_review,security_groups.group_sales_gm"/>
+                    <button name="action_is_buy_reject" string="Rejected" type="object" class="oe_highlight"
+                            attrs="{'invisible': [('state', 'not in', ['review','confirm_spa'])]}"
+                            groups="security_groups.group_booking_review,security_groups.group_sales_gm"/>
+
+
+                    <!--                    <button name="print_report" string="Print" type="object" class="oe_highlight"-->
+                    <!--                            attrs="{'invisible': [('is_buy', '=', False)]}"/>-->
+                    <button name="action_is_buy_canceled" string="Cancel" type="object" class="oe_highlight"
+                            attrs="{'invisible': [('state', 'not in', ['draft','booking_rejected'])]}"/>
+                    <button name="action_is_buy_canceled" string="Cancel" type="object" class="oe_highlight" attrs="{'invisible': [('state', '!=', 'tentative_booking')]}" groups="security_groups.group_sales_manager"/>
+                    <button name="action_is_buy_draft" string="draft" class="oe_highlight" attrs="{'invisible': [('state', '!=', 'tentative_booking')]}" type="object" groups="security_groups.group_sales_manager"/>
+
+                    <!--                    <button name="action_buy_create_spa" string="Create SPA" type="object" class="oe_highlight"-->
+                    <!--                                attrs="{'invisible': ['|',('state', 'not in', ['approved'])]}"/>-->
+                    <!--                    <button name="action_is_buy_canceled" string="Cancel" type="object" class="oe_highlight"-->
+                    <!--                            attrs="{'invisible': [('state', 'not in', ['approved'])]}" groups="base.group_erp_manager"/>-->
+                    <button name="action_is_buy_draft" string="draft" class="oe_highlight"
+                            attrs="{'invisible': [('state', '!=', 'booking_cancel')]}" type="object"/>
+                    <!--                    <button name="action_buy_create_spa" string="Create SPA" type="object" class="oe_highlight"-->
+                    <!--                            attrs="{'invisible': ['|',('state', 'not in', ['approved']),('sale_done', '=', True)]}"/>-->
+                    <!--                    <button name="update_booking" string="Update Booking" type="object" class="oe_highlight" groups="base.group_erp_manager"/>-->
+
+                    <!--                <button name="submit_for_final_legal_review" string="spa_draft" class="oe_highlight"-->
+                    <!--                            attrs="{'invisible': [('state', '!=', 'booking_cancel')]}" type="object"/>-->
+
+                    <button name="submit_for_legal_review" string="Submit For Legal Review" states="spa_draft"
+                            type="object" class="oe_highlight" groups="security_groups.group_sale_salesman"/>
+                    <!--                        <button name="submit_for_final_legal_review" string="Submit for Final Legal Review" states="spa_draft" type="object" class="oe_highlight"/>-->
+                    <!--                        <button name="action_rollback" string="Roll Back" states="unconfirmed_ok_for_print" type="object" class="oe_highlight" />-->
+                    <button name="action_reject" string="Reject" states="spa_draft" type="object" class="oe_highlight"/>
+
+
+                    <button name="action_legal_final_verify" string="Legal Verify" states="under_legal_review"
+                            type="object" class="oe_highlight" groups="security_groups.group_legal_consultant"/>
+                    <button name="action_reject" string="Reject" states="under_legal_review" type="object"
+                            class="oe_highlight"/>
+
+
+                    <button name="action_account_final_verify" string="Accounts Verify"
+                            states="under_accounts_verification" type="object" class="oe_highlight"
+                            groups="account.group_account_user"/>
+                    <button name="action_reject" string="Reject" states="under_accounts_verification" type="object"
+                            class="oe_highlight"/>
+<!--                    <button name="print_report_golf" string="Print SPA"-->
+<!--                            attrs="{'invisible': ['|',('project_name','not in',['Samana Golf Avenue','Samana Park Views']),('state','!=','spa_draft')]}"-->
+<!--                            type="object" class="oe_highlight"/>-->
+<!--                    <button name="print_report_saleorder_english" string="Print English SPA"-->
+<!--                            attrs="{'invisible': ['|',('project_name','in',['Samana Golf Avenue','Samana Park Views']),('state','!=','spa_draft')]}"-->
+<!--                            type="object" class="oe_highlight"/>-->
+<!--                    <button name="print_report_saleorder_english" string="Print English SPA"-->
+<!--                            attrs="{'invisible': ['|',('project_name','in',['Samana Golf Avenue','Samana Park Views']),('state','not in',['under_sd_admin_review'])]}"-->
+<!--                            type="object" class="oe_highlight" groups="sales_team.group_sale_salesman_all_leads"/>-->
+<!--                    <button name="print_report_golf" string="Print SPA"-->
+<!--                            attrs="{'invisible': ['|',('project_name','not in',['Samana Golf Avenue','Samana Park Views']),('state','not in',['under_sd_admin_review'])]}"-->
+<!--                            type="object" class="oe_highlight" groups="sales_team.group_sale_salesman_all_leads"/>-->
+<!--                    <button name="print_report_golf" string="Print SPA"-->
+<!--                            attrs="{'invisible': ['|',('project_name','not in',['Samana Golf Avenue','Samana Park Views']),('state','not in',['under_legal_review_print','under_acc_verification_print'])]}"-->
+<!--                            type="object" class="oe_highlight" groups="sales_team.group_sale_salesman_all_leads"/>-->
+<!--                    <button name="print_report_saleorder_english" string="Print English SPA"-->
+<!--                            attrs="{'invisible': ['|',('project_name','in',['Samana Golf Avenue','Samana Park Views']),('state','not in',['under_legal_review_print','under_acc_verification_print'])]}"-->
+<!--                            type="object" class="oe_highlight" groups="sales_team.group_sale_salesman_all_leads"/>-->
+<!--                    <button name="print_report_saleorder_english" string="Print English SPA"-->
+<!--                            attrs="{'invisible': ['|',('project_name','in',['Samana Golf Avenue','Samana Park Views']),('state','!=','sale')]}"-->
+<!--                            type="object" class="oe_highlight" groups="sales_team.group_sale_salesman_all_leads"/>-->
+<!--                    <button name="print_report_golf" string="Print SPA"-->
+<!--                            attrs="{'invisible': ['|',('project_name','not in',['Samana Golf Avenue','Samana Park Views']),('state','!=','sale')]}"-->
+<!--                            type="object" class="oe_highlight" groups="sales_team.group_sale_salesman_all_leads"/>-->
+                    <button name="print_report_golf" string="Print SPA"
+                            attrs="{'invisible': ['|','|',('project_name','not in',['Samana Golf Avenue','Samana Park Views']),
+                            ('internal_type', '!=', 'spa'),
+                            ('state','in',['cancel','refund_cancellation','rejected'])]}"
+                            type="object" class="oe_highlight"/>
+                    <button name="print_report_saleorder_english" string="Print English SPA"
+                            attrs="{'invisible': ['|','|',('project_name','in',['Samana Golf Avenue','Samana Park Views']),
+                            ('internal_type', '!=', 'spa'),
+                            ('state','in',['cancel','refund_cancellation','rejected'])]}"
+                            type="object" class="oe_highlight"/>
+
+                    <button name="action_confirm" string="Approve" states="under_approval" type="object"
+                            class="oe_highlight"/>
+
+                    <button name="action_refund_cancellation" string="Refund Cancellation"
+                            confirm="Are you sure you want to proceed as this will cancel Booking &amp; SPA, cancel all the remaining installments and change the status of property from sold to available ?"
+                            states="sale" type="object"/>
+
+
+                    <button name="action_draft_spa" states="rejected" type="object" string="Back to Unconfirmed SPA"/>
+                    <button name="action_draft_spa" states="cancel,refund_cancellation" type="object"
+                            string="Back to Unconfirmed SPA" groups="base.group_erp_manager"/>
+
+                </xpath>
+                <button name="preview_sale_order" position="attributes">
+                    <attribute name="groups">base.group_erp_manager</attribute>
+                </button>
+                <field name="partner_id" position="attributes">
+                    <attribute name="context">{'res_partner_search_mode': 'customer', 'show_address': 1, 'show_vat': True, 'default_customer': True}</attribute>
+<!--                    <attribute name="options">{'no_create':True, 'no_create_edit':True, 'no_open': True}</attribute>-->
+                </field>
+                <field name="state" position="replace">
+                    <field name="state" id="booking_state" widget="statusbar" statusbar_visible="draft"/>
+                </field>
+
+                <xpath expr="//tree/field[@name='product_id']" position="attributes">
+                    <attribute name="attrs">{}</attribute>
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+
+                <xpath expr="//tree/field[@name='product_template_id']" position="attributes">
+                    <attribute name="attrs">{}</attribute>
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+
+                <xpath expr="//tree/field[@name='tax_id']" position="attributes">
+                    <attribute name="domain">[]</attribute>
+                </xpath>
+
+                <field name="user_id" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                    <attribute name="options">{'no_create':True, 'no_create_edit':True, 'no_open': True}</attribute>
+                </field>
+                <field name="team_id" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                    <attribute name="options">{'no_create':True, 'no_create_edit':True, 'no_open': True}</attribute>
+                </field>
+                <field name="medium_id" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                    <attribute name="options">{'no_create':True, 'no_create_edit':True, 'no_open': True}</attribute>
+                </field>
+                <field name="source_id" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                    <attribute name="options">{'no_create':True, 'no_create_edit':True, 'no_open': True}</attribute>
+                </field>
+                <field name="payment_term_id" position="before">
+                    <field name="spa_barcode" invisible="1"/>
+<!--                    <field name="booking_number" attrs="{'invisible': [('internal_type', '!=', 'spa')]}"/>-->
+                    <field name="booking_date" required="1"/>
+                    <field name="booking_days"/>
+                    <field name="finish_type"/>
+                    <field name="premium_finish_cost" attrs="{'invisible': [('finish_type', '!=', 'premium_finish')]}"/>
+                    <field name="premium_schedule_ids" invisible="1" context="{'default_booking_id':id}"
+                           attrs="{'required': [('finish_type', '=','premium_finish')]}"/>
+
+                    <field name="joint_active"/>
+                    <field name="joint_partner_id" widget="many2many_tags" options="{'no_create':True, 'no_create_edit':True, 'no_open': True}"
+                           attrs="{'invisible': [('joint_active', '=', False)]}"/>
+                    <field name="joint_partner_dump" invisible="1"/>
+                    <field name="property_price"/>
+                    <field name="property_price_per_sqf"/>
+                    <field name="booking_remarks"/>
+                    <!--                    <newline/>-->
+                    <!--                    <separator string="Price &amp; Payment Plan" colspan="4"/>-->
+
+                </field>
+<!--                <field name="name" position="replace">-->
+<!--                    <field name="name" readonly="1" attrs="{'invisible': [('internal_type', '!=', 'spa')]}"/>-->
+<!--                    <field name="booking_number" readonly="1" attrs="{'invisible': [('internal_type', '=', 'spa')]}"/>-->
+<!--                </field>-->
+                <xpath expr="//div[@class='oe_title']" position="replace">
+                    <div class="oe_title">
+                        <h2>
+                          <span>Booking #  </span><field name="booking_number" readonly="1" style="color:#8B0000;"/><br/>
+                            <span>SPA #  </span><field name="name" readonly="1" style="color:#00063F;"/>
+                        </h2>
+                    </div>
+                </xpath>
+                <field name="payment_term_id" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </field>
+                <field name="order_line" position="attributes">
+                    <attribute name="attrs">{'readonly': [('state', '!=', 'draft')]}</attribute>
+                </field>
+                <xpath expr="//field[@name='order_line']/form" position="replace">
+                    <form></form>
+                </xpath>
+                <group name="order_details" position="after">
+                    <group string="Price &amp; Payment Plan" name="pplan">
+                        <field name="property_price" widget="monetary" options="{'currency_field': 'currency_id'}"
+                        />
+                        <field name="manual_discount" invisible="1"/>
+                        <field name="booking_discount_id"
+                               options="{'no_create':True, 'no_create_edit':True, 'no_open': True}"/>
+                        <field name="discount_value" widget="monetary" options="{'currency_field': 'currency_id'}"
+                               attrs="{'invisible': [('manual_discount', '!=', False)]}"/>
+                        <field name="manual_discount_amount" widget="monetary"
+                               options="{'currency_field': 'currency_id'}"
+                               attrs="{'invisible': [('manual_discount', '=', False)]}"/>
+                        <field name="manual_discount_perc"/>
+
+                        <label for="price" style="font-weight: bold; color:black;"/>
+                        <field name="price" nolabel="1" widget="monetary" style="font-weight: bold;; color:black;"
+                               options="{'currency_field': 'currency_id'}"/>
+                        <field name="agreed_payment_plan" required="1"/>
+                        <field name="installment_start_date"/>
+                        <field name="payment_plan_creation" required="1"
+                        />
+
+
+                        <label for="down_payment_perc" style="color: #8B0000;"
+                               attrs="{'invisible': [('payment_plan_creation', '!=','custom')]}"/>
+                        <div class="address_format">
+                            <field name="down_payment_perc" style="width:20%;color: #8B0000;" nolabel="1"
+                                   attrs="{'invisible': [('payment_plan_creation', '!=','custom')]}"/>
+                            <span style="width:10%;font-weight: bold; color:black;margin-left:10px;"
+                                  attrs="{'invisible': [('payment_plan_creation', '!=','custom')]}">
+                                |
+                            </span>
+                            <field name="down_payment" nolabel="1"
+                                   style="width:20%;font-weight: bold; color:black;margin-left:20px;"
+                                   attrs="{'invisible': [('payment_plan_creation', '!=','custom')]}"/>
+                        </div>
+
+                        <label for="each_installment_perc" style="color: #8B0000;"
+                               attrs="{'invisible': [('payment_plan_creation', '!=','custom')]}"/>
+                        <div class="address_format">
+                            <field name="each_installment_perc" style="width:20%;color: #8B0000;" nolabel="1"
+                                   attrs="{'invisible': [('payment_plan_creation', '!=','custom')], 'required': [('payment_plan_creation', '=','custom')]}"/>
+                            <span style="width:10%;font-weight: bold; color:black;margin-left:10px;"
+                                  attrs="{'invisible': [('payment_plan_creation', '!=','custom')]}">
+                                |
+                            </span>
+                            <field name="each_installment_amount" nolabel="1"
+                                   style="width:20%;font-weight: bold; color:black;margin-left:20px;"
+                                   attrs="{'invisible': [('payment_plan_creation', '!=','custom')]}"/>
+                        </div>
+
+                        <label for="no_of_installment" style="color: #8B0000;"
+                               attrs="{'invisible': [('payment_plan_creation', '!=','custom')]}"/>
+                        <div class="address_format">
+                            <field name="no_of_installment" style="width:20%;color: #8B0000;" nolabel="1" attrs="{'invisible': [('payment_plan_creation', '!=','custom')],
+                             'required': [('payment_plan_creation', '=','custom')]}"/>
+                            <span style="width:10%;font-weight: bold; color:black;margin-left:10px;"
+                                  attrs="{'invisible': [('payment_plan_creation', '!=','custom')]}">
+                                |
+                            </span>
+                            <field name="no_of_installment_amount" nolabel="1"
+                                   style="width:20%;font-weight: bold; color:black;margin-left:20px;"
+                                   attrs="{'invisible': [('payment_plan_creation', '!=','custom')]}"/>
+                        </div>
+
+                        <label for="handover_perc" style="color: #8B0000;"
+                               attrs="{'invisible': [('payment_plan_creation', '!=','custom')]}"/>
+                        <div class="address_format">
+                            <field name="handover_perc" style="width:20%;color: #8B0000;" nolabel="1"
+                                   attrs="{'invisible': [('payment_plan_creation', '!=','custom')]}"/>
+                            <span style="width:10%;font-weight: bold; color:black;margin-left:10px;"
+                                  attrs="{'invisible': [('payment_plan_creation', '!=','custom')]}">
+                                |
+                            </span>
+                            <field name="handover_amount" nolabel="1"
+                                   style="width:20%;font-weight: bold; color:black;margin-left:20px;"
+                                   attrs="{'invisible': [('payment_plan_creation', '!=','custom')]}"/>
+                        </div>
+
+                        <label for="remaining_perc" style="color: #8B0000;"
+                               attrs="{'invisible': [('payment_plan_creation', '!=','custom')]}"/>
+                        <div class="address_format">
+                            <field name="remaining_perc" style="width:20%;color: #8B0000;" nolabel="1"
+                                   attrs="{'invisible': [('payment_plan_creation', '!=','custom')]}"/>
+                            <span style="width:10%;font-weight: bold; color:black;margin-left:10px;"
+                                  attrs="{'invisible': [('payment_plan_creation', '!=','custom')]}">
+                                |
+                            </span>
+                            <field name="remaining_amount" nolabel="1"
+                                   style="width:20%;font-weight: bold; color:black;margin-left:20px;"
+                                   attrs="{'invisible': [('payment_plan_creation', '!=','custom')]}"/>
+                        </div>
+
+                        <label for="remaining_no_of_installment" style="color: #8B0000;"
+                               attrs="{'invisible': [('payment_plan_creation', '!=','custom')]}"/>
+                        <div class="address_format">
+                            <field name="remaining_no_of_installment" style="width:20%;color: #8B0000;" nolabel="1"
+                                   attrs="{'invisible': [('payment_plan_creation', '!=','custom')]}"/>
+                            <span style="width:10%;font-weight: bold; color:black;margin-left:10px;"
+                                  attrs="{'invisible': [('payment_plan_creation', '!=','custom')]}">
+                                |
+                            </span>
+                            <field name="remaining_installments_amount" nolabel="1"
+                                   style="width:20%;font-weight: bold; color:black;margin-left:20px;"
+                                   attrs="{'invisible': [('payment_plan_creation', '!=','custom')]}"/>
+                        </div>
+                        <field name="installment_interval" attrs="{
+                             'invisible': [('payment_plan_creation', '!=','custom')],
+                             'required': [('payment_plan_creation', '=','custom')]}"/>
+                        <field name="installment_days_interval" attrs="{
+                             'invisible': ['|',('payment_plan_creation', '!=','custom'),('installment_interval', '!=','custom_days')],
+                             'required': [('installment_interval', '=','custom_days')]}"/>
+                        <field name="payment_schedule_id"
+                               options="{'no_create':True, 'no_create_edit':True, 'no_open': True}" attrs="{'required': [('payment_plan_creation', '=','standard')],
+                                                                              'invisible': [('payment_plan_creation', '!=','standard')]}"/>
+                        <field name="property_price_after_dp" invisible="1"/>
+                    </group>
+                    <group string="Payment Detail" name="payment_details">
+                        <field name="price"/>
+                        <field name="vat_id" options="{'no_create':True, 'no_create_edit':True, 'no_open': True}"/>
+                        <field name="vat_amount"/>
+                        <field name="property_inc_vat_amount"/>
+                        <field name="net_receipts"/>
+                        <!--                        <newline/>-->
+                        <!--                        <newline/>-->
+                        <separator name="marketing_details" string="Marketing Details"/>
+                        <field name="user_id" domain="[('share', '=', False)]" widget="many2one_avatar_user"
+                               required="1"/>
+                        <field name="team_id" kanban_view_ref="527" options="{'no_create': True}"/>
+                        <!--                        <field name="demand" attrs="{'readonly': [('state', 'in',['cancel','approved'])]}"/>-->
+                        <field name="medium_id" attrs="{'readonly': [('state', 'in',['cancel','approved'])]}"
+                               required="1"/>
+                        <field name="source_id" attrs="{'readonly': [('state', 'in',['cancel','approved'])]}"
+                               required="1"/>
+                    </group>
+                </group>
+
+                <xpath expr="//div[@class='oe_button_box']" position="inside">
+                    <field name="sale_payment_schedule_ids" invisible="1"/>
+                    <button name="create_payment_schedule"
+                            attrs="{'invisible': ['|',('sale_payment_schedule_ids','!=',[]),('payment_plan_creation','not in',['standard','custom'])]}"
+                            string="Create Schedule" class="oe_stat_button" icon="fa-list icon" type="object"/>
+                    <button name="view_payment_schedule"
+                            attrs="{'invisible': [('sale_payment_schedule_ids','=',[])]}"
+                            string="Payment Plan" class="oe_stat_button" icon="fa-list icon" type="object"/>
+                     <button class="oe_stat_button" name="get_related_attachments"
+                            string="Related Attachments" type="object"
+                            icon="fa-paperclip"/>
+                    <button name="action_spa_view_summary"
+                            attrs="{'invisible': [('internal_type', '!=', 'spa')]}"
+                            string="SPA Summary" class="oe_stat_button" icon="fa-list icon" type="object"/>
+                    <button name="action_view_reciepts"
+                            string="Receipts" class="oe_stat_button" icon="fa-list icon" type="object"/>
+                    <button name="action_view_payments"
+                            string="Payments" class="oe_stat_button" icon="fa-list icon" type="object"/>
+                    <button name="action_view_invoices"
+                            string="Invoices" class="oe_stat_button" icon="fa-list icon" type="object"/>
+                    <button name="action_view_pdc_receipts"
+                            string="PDC Receipts" class="oe_stat_button" icon="fa-list icon" type="object"/>
+                    <button name="action_view_premium" attrs="{'invisible': [('finish_type', '!=','premium_finish')]}"
+                            string="Premium Finish Schedule" class="oe_stat_button" icon="fa-list icon" type="object"/>
+                     <button name="action_schedule_view_summary"
+                            attrs="{'invisible': [('internal_type', '!=', 'spa')]}"
+                            string="View SPA Schedule" class="oe_stat_button" icon="fa-list icon" type="object"/>
+                </xpath>
+
+                <!--                    <group></group>-->
+                <!--                    <group>-->
+                <!--                        <div>-->
+                <!--                            <button name="create_payment_schedule"-->
+                <!--                                    attrs="{'invisible': ['payment_plan_creation','not in',['standard','custom'])]}"-->
+                <!--                                    string="Create Payment Schedule" width="200px" class="oe_highlight" type="object"/>-->
+                <!--                        </div>-->
+                <!--                    </group>-->
+                <page name="order_lines" position="after">
+                    <page string="Payment Schedule" name="payment_schedule">
+
+                        <group>
+                            <group name="import">
+                                <field name="schedule_total" invisible="0"/>
+                                <newline/>
+                                <field name="file"
+                                       attrs="{'invisible': ['|',('sale_payment_schedule_ids','!=',[]),('payment_plan_creation','!=','excel')]}"/>
+                                <field name="import_done" invisible="1"/>
+                                <field name="schedule_total" invisible="1"/>
+                                <field name="invoiced_schedule_check" invisible="1"/>
+                            </group>
+                            <group name="import">
+                                <button name="import_srs" string="Import" class="oe_highlight" type="object"
+                                        attrs="{'invisible': ['|',('sale_payment_schedule_ids','!=',[]),('payment_plan_creation','!=','excel')]}"/>
+
+                                <button name="download_template" string="Download Template" class="oe_highlight"
+                                        type="object"
+                                        attrs="{'invisible': ['|',('sale_payment_schedule_ids','!=',[]),('payment_plan_creation','!=','excel')]}"/>
+                                <button name="action_remove_schedule" string="Remove Schedule" class="oe_highlight"
+                                        type="object"
+                                        attrs="{'invisible': ['|',('sale_payment_schedule_ids','=',[]),('invoiced_schedule_check','=',True)]}"/>
+                            </group>
+                        </group>
+                        <!--                        <separator string="Payment Schedule Details" colspan="4"/>-->
+                        <!--                        <field name="sale_payment_schedule_ids" nolabel="1">-->
+                        <!--                            <tree string="Payment Schedule" editable="bottom" default_order="start_date asc">-->
+                        <!--                                <field name="sequence" readonly="1"/>-->
+                        <!--                                <field name="start_date"/>-->
+                        <!--                                <field name="amount_without_vat" sum="Amount without VAT"/>-->
+                        <!--                                <field name="vat_id"/>-->
+                        <!--                                <field name="vat_amount" sum="VAT Amount"/>-->
+                        <!--                                <field name="amount" sum="Installment Amount Including Vat"/>-->
+                        <!--                                <field name="installment_inc_vat_amount" invisible="1"/>-->
+                        <!--                                <field name="pen_amt"/>-->
+                        <!--                                <field name="calculation"/>-->
+                        <!--                                <field name="value"/>-->
+                        <!--                                <field name="note"/>-->
+                        <!--                                <field name="inv" invisible="1"/>-->
+                        <!--                                <field name="company_id" invisible="1"/>-->
+                        <!--                                <field name="currency_id" invisible="1"/>-->
+                        <!--                                <field name="is_readonly" invisible="1"/>-->
+                        <!--                            </tree>-->
+                        <!--                        </field>-->
+                    </page>
+                    <page name="spa_schedules_eng" string="SPA Schedules English" invisible="1">
+                        <separator string="Schedule A"/>
+                        <field name="schedule_a_eng" widget="html"/>
+                        <separator string="Schedule B"/>
+                        <field name="schedule_b_eng" widget="html"/>
+                        <separator string="Schedule C"/>
+                        <field name="schedule_c_eng" widget="html"/>
+                        <separator string="Schedule D"/>
+                        <field name="schedule_d_eng" widget="html"/>
+                        <separator string="Schedule E"/>
+                        <field name="schedule_e_eng" widget="html"/>
+                        <separator string="Schedule F"/>
+                        <field name="schedule_f_eng" widget="html"/>
+                        <separator string="Schedule G"/>
+                        <field name="schedule_g_eng" widget="html"/>
+                        <separator string="Schedule H"/>
+                        <field name="schedule_h_eng" widget="html"/>
+                        <separator string="Schedule I"/>
+                        <field name="schedule_i_eng" widget="html"/>
+                    </page>
+                    <page name="spa_schedules" string="SPA Schedules" invisible="1">
+                        <separator string="Schedule A"/>
+                        <field name="schedule_a" widget="html"/>
+                        <separator string="Schedule B"/>
+                        <field name="schedule_b" widget="html"/>
+                        <separator string="Schedule C"/>
+                        <field name="schedule_c" widget="html"/>
+                        <separator string="Schedule D"/>
+                        <field name="schedule_d" widget="html"/>
+                        <separator string="Schedule E"/>
+                        <field name="schedule_e" widget="html"/>
+                        <separator string="Schedule F"/>
+                        <field name="schedule_f" widget="html"/>
+                        <separator string="Schedule G"/>
+                        <field name="schedule_g" widget="html"/>
+                        <separator string="Schedule H"/>
+                        <field name="schedule_h" widget="html"/>
+                        <separator string="Schedule I"/>
+                        <field name="schedule_i" widget="html"/>
+                    </page>
+                    <!--                    <page name="invoice_tab" string="Invoices">-->
+                    <!--                        <field name="all_invoice_ids"/>-->
+                    <!--                    </page>-->
+
+                    <page string="Others Charges" name="charges_tab">
+                        <separator string="Others Charges"/>
+                        <field name="other_charges_inv_ids" widget="one2many"
+                               domain="[('partner_id','=',partner_id),('move_type','=','out_invoice')]"
+                               context="{'form_view_ref': 'account.view_move_form'}">
+                            <tree decoration-info="state == 'draft'" delete="true" decoration-muted="state == 'cancel'"
+                                  string="Invoice">
+                                <field name="partner_id" string="Customer"/>
+                                <field name="name" decoration-bf="1"/>
+                                <field name="invoice_source_email" invisible="1"/>
+                                <field name="invoice_date" string="Invoice Date"/>
+                                <field name="invoice_origin" string="Source Document"/>
+                                <field name="ref"/>
+                                <field name="company_id" groups="base.group_multi_company"
+                                       options="{'no_create': True}"/>
+                                <field name="amount_untaxed_signed" string="Tax Excluded" sum="Total"/>
+                                <field name="amount_tax_signed" string="Tax" sum="Total"/>
+                                <field name="amount_total_signed" string="Total" sum="Total" decoration-bf="1"/>
+                                <field name="amount_residual_signed" string="Amount Due" sum="Amount Due"/>
+                                <field name="currency_id" invisible="1"/>
+                                <field name="company_currency_id" invisible="1"/>
+                                <field name="state" widget="badge" decoration-success="state == 'posted'"
+                                       decoration-info="state == 'draft'" optional="show"/>
+                                <field name="payment_state" widget="badge"
+                                       decoration-danger="payment_state == 'not_paid'"
+                                       decoration-warning="payment_state in ('partial', 'in_payment')"
+                                       decoration-success="payment_state in ('paid', 'reversed')"/>
+                                <field name="move_type" invisible="context.get('default_move_type', True)"/>
+                            </tree>
+                        </field>
+                        <separator string="Add JVs"/>
+                        <field name="add_charges_ids" domain="[('partner_id','=',partner_id)]">
+                            <tree create="true" delete="true" string="Journal Entries">
+                                <field name="date"/>
+                                <field name="name"/>
+                                <field name="partner_id" optional="show"/>
+                                <field name="ref" optional="show"/>
+                                <field name="journal_id"/>
+                                <field name="company_id" groups="base.group_multi_company" optional="show"/>
+                                <field name="amount_total_signed" sum="Total Amount" string="Total" decoration-bf="1"/>
+                                <field name="state" widget="badge" decoration-info="state == 'draft'"
+                                       decoration-success="state == 'posted'"/>
+                                <field name="currency_id" invisible="1"/>
+                            </tree>
+                        </field>
+                        <separator string="Less JVs"/>
+                        <field name="less_charges_ids" domain="[('partner_id','=',partner_id)]">
+                            <tree create="true" delete="true" string="Journal Entries">
+                                <field name="date"/>
+                                <field name="name"/>
+                                <field name="partner_id" optional="show"/>
+                                <field name="ref" optional="show"/>
+                                <field name="journal_id"/>
+                                <field name="company_id" groups="base.group_multi_company" optional="show"/>
+                                <field name="amount_total_signed" sum="Total Amount" string="Total" decoration-bf="1"/>
+                                <field name="state" widget="badge" decoration-info="state == 'draft'"
+                                       decoration-success="state == 'posted'"/>
+                                <field name="currency_id" invisible="1"/>
+                            </tree>
+                        </field>
+                    </page>
+                </page>
+                <group name="sale_total" position="replace">
+                    <group class="oe_subtotal_footer oe_right" colspan="2" name="sale_total">
+                        <field name="amount_untaxed" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                        <field name="amount_tax" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                        <div class="oe_subtotal_footer_separator oe_inline o_td_label">
+                            <label for="amount_total"/>
+                        </div>
+                        <field name="amount_total" nolabel="1" class="oe_subtotal_footer_separator" widget="monetary"
+                               options="{'currency_field': 'currency_id'}"/>
+                        <separator string="Property Balance Details" invisible="1"/>
+                        <!--                    <field name="property_price"/>-->
+                        <field name="amount_till_date" string="Installments Due" invisible="1"/>
+                        <field name="paid_installments" invisible="1"/>
+                        <field name="paid_installments_perc" invisible="1"/>
+                        <!--                    <field name="installment_balance_pending" string="Balance Due Installment"/>-->
+                        <label for="installment_balance_pending" string="Balance Due Installment" style="color: red;"
+                               invisible="1"/>
+                        <field name="installment_balance_pending" style="color: red;" readonly="True" nolabel="1"
+                               invisible="1"/>
+
+                        <separator string="Oqood Details" invisible="1"/>
+                        <field name="oqood_fee"/>
+                        <field name="project_name" invisible="1"/>
+                        <field name="oqood_received"/>
+                        <!--                    <field name="balance_due_oqood"/>-->
+                        <label for="balance_due_oqood" style="color: red;" invisible="1"/>
+                        <field name="balance_due_oqood" style="color: red;" readonly="True" nolabel="1" invisible="1"/>
+
+                        <separator string="Admin Details" invisible="1"/>
+                        <field name="admin_fee" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                        <field name="admin_received"/>
+                        <!--                    <field name="balance_due_admin"/>-->
+                        <label for="balance_due_admin" style="color: red;" invisible="1"/>
+                        <field name="balance_due_admin" style="color: red;" readonly="True" nolabel="1" invisible="1"/>
+
+                        <separator string="Other Charges Details" invisible="1"/>
+                        <field name="other_charges" invisible="1"/>
+                        <field name="other_received" invisible="1"/>
+                        <!--                    <field name="balance_due_other"/>-->
+                        <label for="balance_due_other" style="color: red;" invisible="1"/>
+                        <field name="balance_due_other" style="color: red;" readonly="True" nolabel="1" invisible="1"/>
+
+                        <separator string="Receipts Break Up" invisible="1"/>
+                        <field name="escrow" invisible="1"/>
+                        <field name="escrow_perc" invisible="1"/>
+                        <field name="non_escrow" invisible="1"/>
+                        <field name="non_escrow_perc" invisible="1"/>
+                        <field name="total_escrow" invisible="1"/>
+                        <field name="total_escrow_perc" invisible="1"/>
+
+                        <separator string="Summary" invisible="1"/>
+                        <field name="total_spa_value" invisible="1"/>
+                        <field name="instalmnt_bls_pend_plus_admin_oqood" invisible="1"/>
+                        <!--                    <field name="matured_pdcs"/>-->
+                        <label for="matured_pdcs" style="color: #37a60c;" invisible="1"/>
+                        <field name="matured_pdcs" style="color: #37a60c;" nolabel="1" invisible="1"/>
+                        <field name="matured_pdcs_perc" invisible="1"/>
+                        <label for="balance_due_collection" style="color: red;" invisible="1"/>
+                        <field name="balance_due_collection" style="color: red;" readonly="True" nolabel="1"
+                               invisible="1"/>
+                        <field name="total_receipts" invisible="1"/>
+                        <field name="receipts_perc" invisible="1"/>
+                        <field name="un_matured_pdcs" invisible="1"/>
+                        <field name="deposited_pdcs" invisible="1"/>
+                        <field name="hold_pdcs" invisible="1"/>
+                        <field name="bounced_pdcs" invisible="1"/>
+                        <field name="total_unsecured_collections" invisible="1"/>
+                        <field name="unsecured_collections_perc" invisible="1"/>
+                        <field name="pending_balance" invisible="1"/>
+                        <field name="pending_balance_perc" invisible="1"/>
+                        <!--                    <field name="total_payments"/>-->
+                        <!--                    <field name="amount_till_date"/>-->
+
+                    </group>
+
+                </group>
+
+
+            </field>
+        </record>
+
+        <record id="view_spa_form_quote" model="ir.ui.view">
+            <field name="name">sale.order.form.quote</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale_management.sale_order_form_quote"/>
+            <field name="arch" type="xml">
+                <page name="optional_products" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </page>
+                <field name="sale_order_template_id" position="before">
+                    <field name="asset_project_id"
+                           options="{'no_create':True, 'no_create_edit':True, 'no_open': True}"/>
+                    <field name="property_id" options="{'no_create':True, 'no_create_edit':True, 'no_open': True}"/>
+                    <field name="sale_term_id" invisible="1"/>
+                    <field name="sale_type"/>
+                    <field name="rental_returns"/>
+                    <field name="receivable_status_id"
+                           options="{'no_create':True, 'no_create_edit':True, 'no_open': True}"
+                           attrs="{'invisible': [('internal_type', '!=', 'spa')]}"/>
+                    <field name="oqood_status" options="{'no_create':True, 'no_create_edit':True, 'no_open': True}"
+                           attrs="{'invisible': [('internal_type', '!=', 'spa')]}"/>
+                    <field name="admin_status" options="{'no_create':True, 'no_create_edit':True, 'no_open': True}"
+                           attrs="{'invisible': [('internal_type', '!=', 'spa')]}"/>
+                    <field name="inventory_status" options="{'no_create':True, 'no_create_edit':True, 'no_open': True}"
+                           attrs="{'invisible': [('internal_type', '!=', 'spa')]}"/>
+                    <field name="spa_wo_amendment" attrs="{'invisible': [('internal_type', '!=', 'spa')]}"/>
+                    <field name="tas_inflows" attrs="{'invisible': [('internal_type', '!=', 'spa')]}"/>
+
+                </field>
+            </field>
+        </record>
+        <record id="spa_form_order_line_edit" model="ir.ui.view">
+            <field name="name">sale.order.form</field>
+            <field name="model">sale.order</field>
+            <field name="groups_id" eval="[(6, 0, [ref('base.group_erp_manager')])]"/>
+            <field name="inherit_id" ref="spa_customizations.view_spa_form"/>
+            <field name="arch" type="xml">
+                <field name="order_line" position="attributes">
+                    <attribute name="attrs">{}</attribute>
+                </field>
+            </field>
+        </record>
+
+        <record id="lead_inherit_property" model="ir.ui.view">
+            <field name="name">crm.lead.form.property</field>
+            <field name="model">crm.lead</field>
+            <field name="inherit_id" ref="property_management.crm_lead_form_inherit_property"/>
+            <field name="arch" type="xml">
+                <field name="property_id" position="replace">
+                    <field name="asset_project_id"/>
+                    <field name="property_id"/>
+                </field>
+            </field>
+        </record>
+
+        <record id="crm_case_form_view_oppor_rent" model="ir.ui.view">
+            <field name="name">crm.lead.oppor.renting.crm</field>
+            <field name="model">crm.lead</field>
+            <field name="priority">20</field>
+            <field name="inherit_id" ref="sale_renting_crm.crm_case_form_view_oppor"/>
+            <field name="arch" type="xml">
+                <xpath expr="//button[@name='action_rental_quotations_new']" position="attributes">
+                    <attribute name="attrs">{}</attribute>
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="crm_case_form_view_oppor_quot" model="ir.ui.view">
+            <field name="name">crm.lead.oppor.quot.crm</field>
+            <field name="model">crm.lead</field>
+            <field name="inherit_id" ref="crm.crm_lead_view_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//button[@name='action_sale_quotations_new']" position="attributes">
+                    <attribute name="string">Create Booking</attribute>
+                </xpath>
+                <xpath expr="//page[@name='lead']/group/group/field[@name='medium_id']" position="attributes">
+                    <attribute name="options">{'no_create':True, 'no_create_edit':True, 'no_open': True}</attribute>
+                </xpath>
+                <xpath expr="//page[@name='lead']/group/group/field[@name='source_id']" position="attributes">
+                    <attribute name="options">{'no_create':True, 'no_create_edit':True, 'no_open': True}</attribute>
+                </xpath>
+
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="crm.crm_lead_action_pipeline">
+            <field name="name">Leads</field>
+            <field name="res_model">crm.lead</field>
+            <field name="view_mode">tree,kanban,graph,pivot,form,calendar,activity</field>
+            <field name="domain">[('type','=','opportunity')]</field>
+            <field name="context">{
+                'default_type': 'opportunity',
+                'search_default_assigned_to_me': 1
+                }
+            </field>
+            <field name="search_view_id" ref="crm.view_crm_case_opportunities_filter"/>
+        </record>
+
+
+    </data>
+</odoo>

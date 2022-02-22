@@ -1,0 +1,22 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_oqood_status,oqood.status all,model_oqood_status,,1,1,1,1
+access_admin_status,admin.status all,model_admin_status,,1,1,1,1
+access_receivable_status,receivable.status all,model_receivable_status,,1,1,1,1
+access_inventory_status,inventory.status all,model_inventory_status,,1,1,1,1
+access_payment_schedule,payment.schedule all,model_payment_schedule,,1,1,1,1
+access_payment_schedule_criteria,payment.schedule.criteria all,model_payment_schedule_criteria,,1,1,1,1
+access_booking_discount,booking.discount all,model_booking_discount,,1,1,1,1
+access_sale_rent_schedule,sale.rent.schedule all,model_sale_rent_schedule,,1,1,1,1
+access_commission_type,commission.type all,model_commission_type,,1,1,1,1
+access_wiz_remove_schedule,wiz.remove.schedule all,model_wiz_remove_schedule,,1,1,1,1
+access_is_buy_review,is.buy.review all,model_is_buy_review,,1,1,1,1
+access_submit_legal_review,submit.legal.review all,model_submit_legal_review,,1,1,1,1
+access_spa_legal_review,spa.legal.review all,model_spa_legal_review,,1,1,1,1
+access_spa_account_review,spa.account.review all,model_spa_account_review,,1,1,1,1
+access_spa_gm_review,spa.gm.review all,model_spa_gm_review,,1,1,1,1
+access_invoice_type,invoice.type all,model_invoice_type,,1,1,1,1
+access_dld_payment_plan,dld.payment.plan all,model_dld_payment_plan,,1,1,1,1
+access_spa_summary_view,spa.summary.view all,model_spa_summary_view,,1,1,1,1
+access_spa_schedule_view,spa.schedule.view all,model_spa_schedule_view,,1,1,1,1
+access_cancel_spa_wiz,cancel.spa.wiz all,model_cancel_spa_wiz,,1,1,1,1
+access_premium_finish_ps,premium.finish.ps all,model_premium_finish_ps,,1,1,1,1

@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <record id="sale_rent_form" model="ir.ui.view">
+        <field name="name">sale.rent.schedule.form</field>
+        <field name="model">sale.rent.schedule</field>
+        <field name="arch" type="xml">
+            <form string="Rent Schedule">
+                <header>
+                    <button name="action_default" string="Default" type="object"/>
+                    <button name="action_cancel" string="Cancel" type="object"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="sequence"/>
+                            <field name="partner_id"/>
+                            <field name="property_id"/>
+                            <field name="booking_id"/>
+                            <field name="sale_id"/>
+                            <field name="installment_status"/>
+                            <field name="sale_type"/>
+<!--                            <field name="cheque_detail"/>-->
+                            <field name="start_date"/>
+                            <field name="company_id" invisible="1"/>
+                            <field name="currency_id" invisible="1"/>
+<!--                            <field name="tag_ids" widget="many2many_tags"/>-->
+<!--                            <field name="nationality_id"/>-->
+                            <field name="receivable_status_id" widget="selection"/>
+                        </group>
+                        <group>
+<!--                            <field name="calculation"/>-->
+<!--                            <div attrs="{'invisible':[('calculation','=', 'balance')]}" class="o_row">-->
+<!--                                <label for="value" attrs="{'invisible':[('calculation','=', 'balance')]}"/>-->
+<!--                                <field name="value" class="oe_inline"/>-->
+<!--                                <span class="o_form_label oe_inline" attrs="{'invisible':[('calculation','!=','percent')]}">%</span>-->
+<!--                            </div>-->
+                            <field name="amount"/>
+                            <field name="receipt_total"/>
+                            <field name="receipt_date"/>
+                            <field name="delay_days"/>
+                            <field name="surcharge" readonly="1"/>
+                            <field name="pen_amt"/>
+                            <field name="move_check"/>
+                            <field name="paid"/>
+                            <field name="is_readonly" invisible="1"/>
+                            <field name="invc_id" invisible="1"/>
+                            <field name="inv" invisible="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Invoices" name="invoices">
+                            <field name="invoice_ids" widget="many2many"/>
+                        </page>
+                    </notebook>
+<!--                    <notebook>-->
+<!--                        <page string="Receipts" name="receipts">-->
+<!--                            <field name="receipts_ids" widget="many2many" domain="[('state','in',['posted'])]"/>-->
+<!--                        </page>-->
+<!--                    </notebook>-->
+                    <newline/>
+                    <separator string="Notes" colspan="4"/>
+                    <field name="note" colspan="4" nolabel="1"/>
+
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="activity_ids" widget="mail_activity"/>
+                    <field name="message_ids" widget="mail_thread" options="{'post_refresh': 'recipients'}"/>
+                </div>
+            </form>
+        </field>
+    </record>
+    <!--Tenancy Rent Schedule Tree view-->
+    <record id="sale_rent_tree_field" model="ir.ui.view">
+        <field name="name">sale.rent.schedule.tree</field>
+        <field name="model">sale.rent.schedule</field>
+        <field name="arch" type="xml">
+                <tree string="Payment Schedule" editable="bottom" default_order="start_date asc">
+
+                <field name="state_spa" invisible="1"/>
+                <field name="sequence" attrs="{'readonly':[('state_spa','=','sale')]}"/>
+                <field name="create_date" attrs="{'readonly':[('state_spa','=','sale')]}"/>
+                <field name="start_date" attrs="{'readonly':[('state_spa','=','sale')]}"/>
+                <field name="property_id" attrs="{'readonly':[('state_spa','=','sale')]}"/>
+                <field name="asset_property_id" attrs="{'readonly':[('state_spa','=','sale')]}"/>
+                <field name="amount_without_vat" sum="Amount without VAT" attrs="{'readonly':[('state_spa','=','sale')]}"/>
+                <field name="vat_id" attrs="{'readonly':[('state_spa','=','sale')]}"/>
+                <field name="vat_amount" sum="VAT Amount" attrs="{'readonly':[('state_spa','=','sale')]}"/>
+                <field name="amount" sum="Installment Amount Including Vat" attrs="{'readonly':[('state_spa','=','sale')]}"/>
+                <field name="installment_status" attrs="{'readonly':[('state_spa','=','sale')]}"/>
+                <field name="receipt_total" attrs="{'readonly':[('state_spa','=','sale')]}"/>
+                <field name="pen_amt" attrs="{'readonly':[('state_spa','=','sale')]}"/>
+                <field name="delay_days" attrs="{'readonly':[('state_spa','=','sale')]}"/>
+                <field name="value" optional="show" attrs="{'readonly':[('state_spa','=','sale')]}"/>
+                <field name="state" attrs="{'readonly':[('state_spa','=','sale')]}"/>
+                <field name="sale_id" invisible="1"/>
+                <field name="inv" invisible="1"/>
+                <field name="company_id" invisible="1"/>
+                <field name="currency_id" invisible="1"/>
+                <field name="is_readonly" invisible="1"/>
+                <button name="create_invoice" attrs="{'invisible':[('inv','=',True)]}"
+                        class="fa fa-check" type="object" context="{'asset':1,'is_tenancy':1}"/>
+                <button name="open_invoice" attrs="{'invisible':[('inv','=',False)]}"
+                        class="fa fa-arrow-circle-o-right" type="object" context="{'openinvoice':1}"/>
+            </tree>
+        </field>
+    </record>
+    <!--Tenancy Rent Schedule Tree view-->
+    <record id="sale_rent_tree" model="ir.ui.view">
+        <field name="name">sale.rent.schedule.tree</field>
+        <field name="model">sale.rent.schedule</field>
+        <field name="arch" type="xml">
+            <tree string="Rent Schedule">
+                <field name="create_date"/>
+                <field name="start_date"/>
+                <field name="partner_id"/>
+                <field name="property_id"/>
+                <field name="asset_property_id"/>
+                <field name="amount_without_vat" sum="Amount without VAT"/>
+                <field name="vat_id"/>
+                <field name="vat_amount" sum="VAT Amount"/>
+                <field name="amount" sum="Installment Amount Including Vat"/>
+                <field name="installment_status"/>
+                <field name="receipt_total"/>
+                <field name="pen_amt"/>
+                <field name="delay_days"/>
+                <field name="value" optional="show"/>
+                <field name="state"/>
+                <field name="sale_id" invisible="1"/>
+                <field name="inv" invisible="1"/>
+                <field name="company_id" invisible="1"/>
+                <field name="currency_id" invisible="1"/>
+                <field name="is_readonly" invisible="1"/>
+                <button name="create_invoice" attrs="{'invisible':[('inv','=',True)]}"
+                        class="fa fa-check" type="object" context="{'asset':1,'is_tenancy':1}"/>
+                <button name="open_invoice" attrs="{'invisible':[('inv','=',False)]}"
+                        class="fa fa-arrow-circle-o-right" type="object" context="{'openinvoice':1}"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Action for Tenancy Rent Schedule view-->
+    <record id="action_sale_rent_schedule" model="ir.actions.act_window">
+        <field name="name">Payment Schedule</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="view_id" ref="sale_rent_tree"/>
+        <field name="res_model">sale.rent.schedule</field>
+        <field name="view_mode">tree,form,pivot</field>
+    </record>
+
+    <menuitem
+            id="menu_sale_rent"
+            name="Payment Schedule"
+            parent="crm.crm_menu_config"
+            action="action_sale_rent_schedule"/>
+</odoo>
