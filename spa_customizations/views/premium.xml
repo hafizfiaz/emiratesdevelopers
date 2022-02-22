@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="premium_finish_field_tree" model="ir.ui.view">
+            <field name="name">Premium Finish Payment Schedule Tree</field>
+            <field name="model">premium.finish.ps</field>
+            <field name="arch" type="xml">
+                <tree name="premium_schedule" editable="bottom">
+                    <field name="name" />
+                    <field name="date"/>
+                    <field name="sale_id" invisible="1"/>
+                    <field name="amount"/>
+                    <field name="inv"/>
+                    <button name="create_invoice" attrs="{'invisible':[('inv','=',True)]}"
+                            class="fa fa-check" type="object" groups="base.group_erp_manager"/>
+                    <button name="open_invoice" attrs="{'invisible':[('inv','=',False)]}"
+                            class="fa fa-arrow-circle-o-right" type="object" groups="base.group_erp_manager"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="premium_finish_payment_schedule_tree" model="ir.ui.view">
+            <field name="name">Premium Finish Payment Schedule Tree</field>
+            <field name="model">premium.finish.ps</field>
+            <field name="arch" type="xml">
+                <tree string="Premium Finish Payment Schedule">
+                    <field name="name"/>
+                    <field name="date"/>
+                    <field name="amount"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="premium_finish_payment_schedule_form" model="ir.ui.view">
+            <field name="name">Premium Finish Payment Schedule form</field>
+            <field name="model">premium.finish.ps</field>
+            <field name="arch" type="xml">
+
+                <form string="Premium Finish Payment Schedule">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="name"/>
+                                <field name="date"/>
+                                <field name="amount"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <record id="action_premium_finish_payment_schedule" model="ir.actions.act_window">
+            <field name="name">Premium Finish Payment Schedule</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">premium.finish.ps</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="spa_customizations.premium_finish_payment_schedule_tree"/>
+            <field name="context"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Premium Finish Payment Schedule !
+                </p>
+            </field>
+        </record>
+        <menuitem id="menu_premium_finish_payment_schedule" name="Premium Finish Payment Schedule" parent="crm.crm_menu_config" sequence="2"
+                  action="action_premium_finish_payment_schedule"/>
+
+
+    </data>
+</odoo>

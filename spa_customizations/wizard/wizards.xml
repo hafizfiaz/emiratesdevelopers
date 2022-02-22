@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record model="ir.ui.view" id="cancel_spa_wizard_view">
+            <field name="name">cancel.spa.wiz.form</field>
+            <field name="model">cancel.spa.wiz</field>
+            <field name="arch" type="xml">
+                <form string="any string">
+                    <group>
+                        <group string="Do you want to cancel...">
+<!--					        <field name="booking"/>-->
+					        <field name="sale_order_id" invisible="1"/>
+                        </group>
+                    </group>
+                    <footer>
+                        <button string="Apply" name="action_cancel" type="object" class="oe_highlight"/>
+                        or
+                        <button string="Cancel" class="oe_link" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="is_buy_review_wizard">
+            <field name="name">Buy Review</field>
+            <field name="model">is.buy.review</field>
+            <field name="arch" type="xml">
+                <form string="any string">
+                    <field name="name"/>
+                    <field name="booking_id" invisible="1"/>
+
+                    <footer>
+                        <button string="Apply" name="action_is_buy_review" type="object" class="oe_highlight"/>
+                        or
+                        <button string="Cancel" class="oe_link" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="submit_legal_review_wizard">
+            <field name="name">Submit for Legal Review</field>
+            <field name="model">submit.legal.review</field>
+            <field name="arch" type="xml">
+                <form string="any string">
+
+                    <field name="name"/>
+                    <field name="sale_id" invisible="1"/>
+
+                    <footer>
+                        <button string="Apply" name="action_apply" type="object" class="oe_highlight"/>
+                        or
+                        <button string="Cancel" class="oe_link" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+
+        <record model="ir.ui.view" id="view_legal_review_wizard">
+            <field name="name">Legal Review</field>
+            <field name="model">spa.legal.review</field>
+            <field name="arch" type="xml">
+                <form string="Legal string">
+                    <group>
+                        <field name="file"/>
+                        <field name="remarks"/>
+                        <field name="sale_id" invisible="1"/>
+                    </group>
+                    <footer>
+                        <button string="Apply" name="action_legal_verify" type="object" class="oe_highlight"/>
+                        or
+                        <button string="Cancel" class="oe_link" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="view_account_review_wizard">
+            <field name="name">Account Review</field>
+            <field name="model">spa.account.review</field>
+            <field name="arch" type="xml">
+                <form string="Account string">
+                    <group>
+                        <field name="remarks"/>
+                        <field name="sale_id" invisible="1"/>
+                    </group>
+                    <footer>
+                        <button string="Apply" name="action_account_verify" type="object" class="oe_highlight"/>
+                        or
+                        <button string="Cancel" class="oe_link" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="view_gm_review_wizard">
+            <field name="name">GM Review</field>
+            <field name="model">spa.gm.review</field>
+            <field name="arch" type="xml">
+                <form string="GM string">
+                    <group>
+                        <field name="remarks"/>
+                        <field name="sale_id" invisible="1"/>
+                    </group>
+                    <footer>
+                        <button string="Apply" name="action_gm_verify" type="object" class="oe_highlight"/>
+                        or
+                        <button string="Cancel" class="oe_link" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+
+    </data>
+</odoo>
