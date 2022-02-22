@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <report id="report_fgr_customer_penalty"
+                string="FGR Statement"
+                model="fgr.payment.request"
+                report_type="qweb-pdf"
+                file="sd_fgr_payment_report.report_fgr_penalty_template"
+                name="sd_fgr_payment_report.report_fgr_penalty_template"
+                />
+        <report id="report_fgr_payment_form"
+                string="FGR Payment"
+                model="fgr.payment.request"
+                report_type="qweb-pdf"
+                file="sd_fgr_payment_report.report_fgr_payment_template"
+                name="sd_fgr_payment_report.report_fgr_payment_template"
+                />
+    </data>
+</odoo>

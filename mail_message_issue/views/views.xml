@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_move_line_form_inherit2" model="ir.ui.view">
+            <field name="name">account.move.line.form</field>
+            <field name="model">account.move.line</field>
+	        <field name="inherit_id" ref="account.view_move_line_form"/>
+	        <field name="arch" type="xml">
+				<field name="analytic_tag_ids" position="after">
+					<field name="asset_project_id"/>
+					<field name="property_id"/>
+					<field name="nationality_id"/>
+					<field name="sale_type"/>
+					<field name="related_spa_id"/>
+					<field name="spa_status"/>
+					<field name="receivable_status_id"/>
+					<field name="type_id"/>
+				</field>
+			</field>
+		 </record>
+    </data>
+</odoo>

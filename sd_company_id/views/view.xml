@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <record id="company_id_handover" model="ir.ui.view">
+        <field name="name">handover.clearance.inherit</field>
+        <field name="model">handover.clearance</field>
+        <field name="inherit_id" ref="handover_clearance.handover_clearance"/>
+        <field name="arch" type="xml">
+            <field name="total_spa_customer" position="after">
+                <field name="company_id" invisible="1"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="company_account_clearance" model="ir.ui.view">
+        <field name="name">account.clearance.inherit</field>
+        <field name="model">account.clearance</field>
+        <field name="inherit_id" ref="sd_account_clearance.account_clearance_from"/>
+        <field name="arch" type="xml">
+            <field name="total_spa_customer" position="after">
+                <field name="company_id" invisible="1"/>
+            </field>
+        </field>
+    </record>
+    <record id="company_oqood_reg" model="ir.ui.view">
+        <field name="name">oqood.reg.inherit</field>
+        <field name="model">oqood.reg</field>
+        <field name="inherit_id" ref="sd_oqood_reg.oqood_reg"/>
+        <field name="arch" type="xml">
+            <field name="total_spa_customer" position="after">
+                <field name="company_id" invisible="1"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="company_termination_process" model="ir.ui.view">
+        <field name="name">termination.process.inherit</field>
+        <field name="model">termination.process</field>
+        <field name="inherit_id" ref="termination_process.termination_process"/>
+        <field name="arch" type="xml">
+            <field name="total_spa_customer" position="after">
+                <field name="company_id" invisible="1"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="company_refund_eoi" model="ir.ui.view">
+        <field name="name">refund.eoi.inherit</field>
+        <field name="model">refund.eoi</field>
+        <field name="inherit_id" ref="sd_refund_eoi.refund_eoi_clearance"/>
+        <field name="arch" type="xml">
+            <field name="partner_id" position="after">
+                <field name="company_id" invisible="1"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="company_early_settlement" model="ir.ui.view">
+        <field name="name">early.settlement.inherit</field>
+        <field name="model">early.settlement</field>
+        <field name="inherit_id" ref="sd_early_settlement.early_settlement"/>
+        <field name="arch" type="xml">
+            <field name="partner_id" position="after">
+                <field name="company_id" invisible="1"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="company_id_spa" model="ir.ui.view">
+        <field name="name">sale.order.inherit</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="spa_customizations.view_spa_form"/>
+        <field name="arch" type="xml">
+            <field name="partner_id" position="after">
+                <field name="company_id" invisible="1"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="company_account_payment" model="ir.ui.view">
+        <field name="name">account.payment.inherit</field>
+        <field name="model">account.payment</field>
+        <field name="inherit_id" ref="account_pdc.view_account_payment_form_pdc"/>
+        <field name="arch" type="xml">
+            <field name="mobile" position="before">
+                <field name="company_id" invisible="1"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="company_account_type" model="ir.ui.view">
+        <field name="name">account.account.type.inherit</field>
+        <field name="model">account.account.type</field>
+        <field name="inherit_id" ref="account.view_account_type_form"/>
+        <field name="arch" type="xml">
+            <field name="type" position="before">
+                <field name="company_id" invisible="1"/>
+            </field>
+        </field>
+    </record>
+    <record id="company_payment_line" model="ir.ui.view">
+        <field name="name">account.payment.line.inherit</field>
+        <field name="model">account.payment.term.line</field>
+        <field name="inherit_id" ref="account.view_payment_term_line_form"/>
+        <field name="arch" type="xml">
+            <field name="value" position="after">
+                <field name="company_id" invisible="1"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="company_sms_send" model="ir.ui.view">
+        <field name="name">partner.sms.send.inherit</field>
+        <field name="model">partner.sms.send</field>
+        <field name="inherit_id" ref="bi_sms_client_generic.view_partner_sms_send"/>
+        <field name="arch" type="xml">
+            <field name="mobile_to" position="after">
+                <field name="company_id" invisible="1"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="company_commission_type" model="ir.ui.view">
+        <field name="name">commission.type.inherit</field>
+        <field name="model">commission.type</field>
+        <field name="inherit_id" ref="spa_customizations.view_commission_type_form2"/>
+        <field name="arch" type="xml">
+            <field name="is_agent" position="after">
+                <field name="company_id" invisible="1"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="company_booking_discount" model="ir.ui.view">
+        <field name="name">booking.discount.inherit</field>
+        <field name="model">booking.discount</field>
+        <field name="inherit_id" ref="spa_customizations.view_booking_discount_form"/>
+        <field name="arch" type="xml">
+            <field name="property_id" position="after">
+                <field name="company_id" invisible="1"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="company_project_costing" model="ir.ui.view">
+        <field name="name">project.costing.inherit</field>
+        <field name="model">project.costing</field>
+        <field name="inherit_id" ref="sd_project_costing.project_costing_view"/>
+        <field name="arch" type="xml">
+            <field name="project" position="before">
+                <field name="company_id" invisible="1"/>
+            </field>
+        </field>
+    </record>
+    <record id="company_payment_certificate" model="ir.ui.view">
+        <field name="name">payment.certificate.inherit</field>
+        <field name="model">payment.certificate</field>
+        <field name="inherit_id" ref="sd_payment_certificate.payment_certificate_view"/>
+        <field name="arch" type="xml">
+            <field name="contractor" position="after">
+                <field name="company_id" invisible="1"/>
+            </field>
+        </field>
+    </record>
+    <record id="company_consume_material_line" model="ir.ui.view">
+        <field name="name">consume.material.line.inherit</field>
+        <field name="model">consume.material.line</field>
+        <field name="inherit_id" ref="sd_payment_certificate.consume_material_line_view"/>
+        <field name="arch" type="xml">
+            <field name="project_costing" position="before">
+                <field name="company_id"/>
+            </field>
+        </field>
+    </record>
+    <record id="company_planned_boq" model="ir.ui.view">
+        <field name="name">planned.boq.inherit</field>
+        <field name="model">planned.boq</field>
+        <field name="inherit_id" ref="sd_payment_certificate.planned_boq_view"/>
+        <field name="arch" type="xml">
+            <field name="name" position="before">
+                <field name="company_id" invisible="1"/>
+            </field>
+        </field>
+    </record>
+    <record id="company_approval_approval" model="ir.ui.view">
+        <field name="name">approval.approval.inherit</field>
+        <field name="model">approval.approval</field>
+        <field name="inherit_id" ref="custom_approvals.view_approvals_form"/>
+        <field name="arch" type="xml">
+            <field name="create_date" position="after">
+                <field name="company_id" invisible="1"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="company_hr_appraisal" model="ir.ui.view">
+        <field name="name">hr.appraisal.goal.inherit</field>
+        <field name="model">hr.appraisal.goal</field>
+        <field name="inherit_id" ref="hr_appraisal.hr_appraisal_goal_view_form"/>
+        <field name="arch" type="xml">
+            <field name="deadline" position="after">
+                <field name="company_id" invisible="1"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="company_approval_type" model="ir.ui.view">
+        <field name="name">approval.type.inherit</field>
+        <field name="model">approval.type</field>
+        <field name="inherit_id" ref="custom_approvals.view_approval_types_form"/>
+        <field name="arch" type="xml">
+            <field name="name" position="after">
+                <field name="company_id" invisible="1"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="company_sd_courier" model="ir.ui.view">
+        <field name="name">courier.courier.inherit</field>
+        <field name="model">courier.courier</field>
+        <field name="inherit_id" ref="sd_courier.courier_courier_form_view"/>
+        <field name="arch" type="xml">
+            <field name="name" position="after">
+                <field name="company_id" invisible="1"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="company_calendar" model="ir.ui.view">
+        <field name="name">calendar.event.inherit</field>
+        <field name="model">calendar.event</field>
+        <field name="inherit_id" ref="calendar.view_calendar_event_form"/>
+        <field name="arch" type="xml">
+            <field name="active" position="after">
+                <field name="company_id" invisible="1"/>
+            </field>
+        </field>
+    </record>
+
+</odoo>

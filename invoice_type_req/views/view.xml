@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+<!--    <record id="payment_count_field" model="ir.ui.view">-->
+<!--        <field name="name">account.payment.inherit</field>-->
+<!--        <field name="model">account.payment</field>-->
+<!--        <field name="inherit_id" ref="account_pdc.view_account_payment_form_pdc"/>-->
+<!--        <field name="arch" type="xml">-->
+<!--            <field name="mobile" position="after">-->
+<!--                <field name="count" invisible="1"/>-->
+<!--            </field>-->
+<!--        </field>-->
+<!--    </record>-->
+<!--
+SELECT
+account_move_line.id,account_move_line.name,account_move.move_type,
+account_move_line.asset_project_id,account_asset_asset.name,
+account_move_line.debit,account_move_line.credit,account_move_line.price_unit
+FROM account_move_line,account_account,account_move,account_asset_asset
+WHERE account_move_line.name ~ 'Oqood'
+and account_move.move_type = 'out_invoice'
+and account_account.name ~ 'ADMIN'
+and account_account.id =account_move_line.account_id
+and account_move.id =account_move_line.move_id
+and account_asset_asset.id =account_move_line.asset_project_id
+
+-->
+
+
+</odoo>

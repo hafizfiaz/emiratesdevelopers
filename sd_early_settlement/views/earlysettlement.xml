@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="early_settlementt" model="ir.ui.view">
+        <field name="name">early.settlement.tree</field>
+        <field name="model">early.settlement</field>
+        <field name="arch" type="xml">
+            <tree string="Early Settlement">
+                <field name="spa"/>
+                <field name="partner_id"/>
+                <field name="total_spa"/>
+                <field name="realized_collection"/>
+            </tree>
+        </field>
+    </record>
+    <record id="view_early_settlementt" model="ir.ui.view">
+        <field name="name">early.settlement.search</field>
+        <field name="model">early.settlement</field>
+        <field name="arch" type="xml">
+            <search string="Early Settlement">
+                 <field name="name" string="Name"
+                           filter_domain="[('name','ilike',self)]"/>
+                    <field name="spa" filter_domain="[('spa','ilike',self)]" string="SPA"/>
+                    <field name="project" filter_domain="[('project','ilike',self)]"
+                           string="Project"/>
+                    <field name="property" filter_domain="[('property','ilike',self)]" string="Property"/>
+                    <field name="partner_id" filter_domain="[('partner_id','child_of',self)]" string="Customer Name"/>
+            </search>
+        </field>
+    </record>
+    <record id="early_settlement_button_inherit" model="ir.ui.view">
+        <field name="name">sale.order.form</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//div[@name='button_box']" position="inside">
+                <button name="early_settlement"
+                        type="object" icon="fa-bars" string="Early Settlement" class="oe_stat_button">
+                </button>
+
+            </xpath>
+        </field>
+    </record>
+
+        <record id="button_inherit" model="ir.ui.view">
+            <field name="name">button.inherit</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//div[@name='button_box']" position="inside">
+                                <button name="early_settlement"
+                                        type="object" icon="fa-archive" string="Early Settlement" class="oe_stat_button">
+                                </button>
+
+                </xpath>
+            </field>
+        </record>
+
+    <record id="early_settlement" model="ir.ui.view">
+        <field name="name">Early Settlement</field>
+        <field name="model">early.settlement</field>
+        <field name="arch" type="xml">
+
+            <form string="Early Settlement Request">
+                <header>
+                    <button name="action_draft" string="Back to Draft" type="object" class="oe_highlight"
+                            states="cancel,rejected"/>
+                    <button name="submit" string="Submit to Accounts" type="object" class="oe_highlight"
+                            states="draft"/>
+                    <button name="verify" string="Verify" type="object" class="oe_highlight"
+                            states="under_accounts_approval"/>
+                    <button name="review" string="Review" type="object" class="oe_highlight"
+                            states="under_sales"/>
+                    <button name="approve" string="Approve" type="object" class="oe_highlight"
+                            states="under_approval"/>
+                    <button name="action_reject" string="Reject" type="object"
+                            states="under_accounts_approval,under_sales,under_approval"/>
+                    <button name="action_cancel" string="Cancel" type="object" states="draft,rejected,approved"/>
+                    <field name='state' widget='statusbar'/>
+                </header>
+                <sheet>
+
+                    <h3>Early Settlement Request</h3>
+                    <div class="oe_title">
+                        <h3>
+                            <field name="sequence" nolabel="1"/>
+                        </h3>
+                    </div>
+                    <group>
+                        <group>
+
+                            <separator string="SPA Details"/>
+                            <field name="spa"/>
+<!--                            <field name="booking_id"/>-->
+                            <field name="project"/>
+                            <field name="property" domain="[('parent_id','=', project)]"/>
+                            <field name="partner_id"/>
+                            <field name="total_spa" widget="monetary"/>
+                            <label for="total_collection" style="font-weight: bold; color: black;"/>
+                            <div class="address_format">
+                                <field name="total_collection" style="font-weight: bold; width:40%;color: black;"
+                                       nolabel="1"/>
+                                <span style="width:10%;font-weight: bold; color:black;margin-left:10px;">
+                                    |
+                                </span>
+                                <field name="total_collection_perc" nolabel="1"
+                                       style="width:20%;font-weight: bold; color:black;margin-left:20px;"/>
+                                <span style="font-weight: bold; color:black">%%</span>
+                            </div>
+
+                            <label for="realized_collection" style="color: #32a84e;"/>
+                            <div class="address_format">
+                                <field name="realized_collection" style="font-weight: bold; width:40%;color: #32a84e;"
+                                       nolabel="1"/>
+                                <span style="width:10%;font-weight: bold; color:#32a84e;margin-left:10px;">
+                                    |
+                                </span>
+                                <field name="realized_collection_perc" nolabel="1"
+                                       style="width:20%;font-weight: bold; color: #32a84e;margin-left:20px;"/>
+                                <span style="font-weight: bold; color:#32a84e">%%</span>
+
+                            </div>
+                        </group>
+                        <group>
+                            <separator string="Discount Details"/>
+                            <field name="name" invisible="1"/>
+
+                            <field name="discount"/>
+                            <field name="eligible_discount"/>
+                            <field name="early_settlement_amount"/>
+                            <field name="discount_amount"/>
+                            <field name="amount_collect"/>
+                            <field name="officer_remarks"/>
+                            <label for="note" style="font-weight: bold; color:#e82525;"/>
+                            <field name="note" style="color:#e82525" nolabel="1"/>
+                            <field name="entry_journal"/>
+                            <field name="dr_entry_journal"/>
+                            <field name="cr_entry_journal"/>
+                            <field name="journal_entry_id" readonly="1"/>
+
+                        </group>
+                        <group>
+
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Journal Items">
+                            <field name="journal_item_ids">
+                                <tree>
+                                    <field name="date"/>
+                                    <field name="move_id" required="0"/>
+                                    <field name="journal_id" options="{&quot;no_open&quot;:True}"/>
+                                    <field name="name"/>
+                                    <field name="ref"/>
+                                    <field name="statement_id" invisible="1"/>
+                                    <field name="partner_id"/>
+                                    <field name="account_id"/>
+                                    <field name="analytic_account_id"/>
+<!--                                    <field name="analytic_tag_ids" widget="many2many_tags"/>-->
+                                    <field name="reconciled" invisible="1"/>
+                                    <field name="full_reconcile_id"/>
+                                    <field name="debit" sum="Total Debit"/>
+                                    <field name="credit" sum="Total Credit"/>
+                                    <field name="amount_currency" readonly="True"/>
+                                    <field name="currency_id" readonly="True" invisible="1"/>
+                                    <field name="date_maturity"/>
+                                    <field name="company_currency_id" invisible="1"/>
+                                    <field name="company_id" invisible="1"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+        <record id="early_settlement_1" model="ir.ui.view">
+            <field name="name">Early Settlement 1</field>
+            <field name="model">early.settlement</field>
+            <field name="groups_id" eval="[(6, 0, [ref('base.group_erp_manager')])]"/>
+            <field name="inherit_id" ref="sd_early_settlement.early_settlement"/>
+            <field name="arch" type="xml">
+                <field name='discount' position="attributes">
+                    <attribute name="readonly">0</attribute>
+                </field>
+            </field>
+        </record>
+
+    <record id="action_early_settlement" model="ir.actions.act_window">
+        <field name="name">Early Settlement</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">early.settlement</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Early Settlement Request Form!
+            </p>
+        </field>
+    </record>
+    <menuitem id="early_settlement_form" name="Early Settlement" parent="crm.crm_menu_sales" sequence="6"
+              action="action_early_settlement"/>
+        <menuitem id="early_settlement_form_accounting" name="Early Settlement" parent="account.menu_finance_receivables"
+                  sequence="4"
+                  action="action_early_settlement"/>
+</odoo>

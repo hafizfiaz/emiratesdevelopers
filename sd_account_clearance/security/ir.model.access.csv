@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_account_clearance,account.clearance,model_account_clearance,,1,1,1,1
+access_clearance_type,clearance.type,model_clearance_type,,1,1,1,1
+
+

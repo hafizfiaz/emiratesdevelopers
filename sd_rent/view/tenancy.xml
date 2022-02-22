@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+<!--        <record id="tenancy_inherit_type" model="ir.ui.view">-->
+<!--            <field name="name">tenancy.form</field>-->
+<!--            <field name="model">account.analytic.account</field>-->
+<!--            <field name="inherit_id" ref="crm_extension.property_analytic_view_form_inherit1"/>-->
+<!--            <field name="arch" type="xml">-->
+<!--                <field name="rent_type_id" position="attributes">-->
+<!--                    <attribute name="required">1</attribute>-->
+<!--                    <attribute name="invisible">0</attribute>-->
+<!--                </field>-->
+<!--            </field>-->
+<!--        </record>-->
+
+        <record id="property_analytic_view_form_inherit1" model="ir.ui.view">
+            <field name="name">account.analytic.account.form</field>
+            <field name="model">account.analytic.account</field>
+            <field name="inherit_id" ref="property_management.property_analytic_view_form"/>
+            <field name="arch" type="xml">
+                <field name="rent_type_id" position="attributes">
+                    <attribute name="required">1</attribute>
+                    <attribute name="invisible">0</attribute>
+                </field>
+            </field>
+        </record>
+
+        <record id="tenancy_tree_inherit1" model="ir.ui.view">
+            <field name="name">property.analytic.view.tree</field>
+            <field name="model">account.analytic.account</field>
+            <field name="inherit_id" ref="property_management.property_analytic_view_tree"/>
+            <field name="arch" type="xml">
+                <field name="property_id" position="before">
+                    <field name="asset_project_id"/>
+                </field>
+            </field>
+        </record>
+
+        <record id="tenancy_inherit1" model="ir.ui.view">
+            <field name="name">tenancy.form</field>
+            <field name="model">account.analytic.account</field>
+            <field name="inherit_id" ref="property_management.property_analytic_view_form"/>
+            <field name="arch" type="xml">
+                <page name="history" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </page>
+                <field name="manager_id" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </field>
+                <field name="multi_prop" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </field>
+                <field name="amount_return" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </field>
+                <field name="deposit_return" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </field>
+<!--                <field name="deposit_scheme_type" position="attributes">-->
+<!--                    <attribute name="invisible">1</attribute>-->
+<!--                </field>-->
+                <!--<field name="tenant_id" position="replace">-->
+                <!--<field name="tenant_partner_id"/>-->
+                <!--</field>-->
+                <field name="deposit_received" position="after">
+                <field name="accounting_ledger_id" required="1"/>
+                </field>
+                <field name="property_id" position="replace">
+                    <field name="property_id" placeholder="Property Name"
+                           domain="[('state','=','draft'),('parent_id','=', asset_project_id)]"
+                           attrs="{'readonly':[('state','!=','draft')],'readonly':[('multi_prop','=',True)], 'required':[('multi_prop','=', False)]}"/>
+                </field>
+                <field name="property_id" position="before">
+                    <field name="asset_project_id" required="1"/>
+                </field>
+                <field name="contact_id" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </field>
+                <xpath expr="//page[@name='rent_schedule']/field/tree/field[@name='start_date']" position="after">
+                    <field name="asset_project_id"/>
+                    <field name="property_id"/>
+                </xpath>
+                <xpath expr="//page[@name='rent_schedule']/field/tree/field[@name='move_check']" position="after">
+                    <field name="state"/>
+                </xpath>
+<!--                <xpath expr="//notebook[last()]" position="inside">-->
+<!--                    <page string="Receipts" name="receipts">-->
+<!--                    <field name="receipt_ids" widget="many2many" readonly="0" domain="[('payment_type','=','inbound'),('collection_type_id.name','=','Rental Receipts'),('property_id','=',property_id),('asset_project_id','=',asset_project_id)]"-->
+<!--                           context="{'default_payment_type':'inbound', 'default_asset_project_id':asset_project_id,'default_property_id':property_id,'default_property_id':property_id}">-->
+<!--                        <tree delete="0">-->
+<!--                            <field name="payment_date"/>-->
+<!--                            <field name="name"/>-->
+<!--                            <field name="payment_type" invisible="1"/>-->
+<!--                            <field name="partner_id" string="customer"/>-->
+<!--                            <field name="journal_id" string="Payment Method"/>-->
+<!--                            <field name="asset_project_id"/>-->
+<!--                            <field name="property_id" />-->
+<!--                            <field name="amount" sum="Payment Amount"/>-->
+<!--                            <field name="collection_type_id"/>-->
+<!--                            <field name="state" />-->
+<!--                        </tree>-->
+<!--                    </field>-->
+
+<!--                    </page>-->
+<!--                    <page string="PDC Receipts" name="pdc_receipts">-->
+<!--&lt;!&ndash;                        <field name="pdc_receipt_ids" widget="many2many" domain="[('collection_type_id.name','=','Rental Receipts'),('property_id','=',property_id),('asset_project_id','=',asset_project_id)]"&ndash;&gt;-->
+<!--                        <field name="pdc_receipt_ids" widget="many2many" domain="[('collection_type_id.name','=','Rental Receipts'),('property_id','=',property_id),('asset_project_id','=',asset_project_id)]"-->
+<!--                        context="{'default_asset_project_id':asset_project_id,'default_property_id':property_id,'default_property_id':property_id}">-->
+<!--                            <tree delete="0">-->
+<!--                                <field name="date"/>-->
+<!--                                <field name="number"/>-->
+<!--                                <field name="partner_id"/>-->
+<!--                                <field name="mobile"/>-->
+<!--                                <field name="user_id"/>-->
+<!--                                &lt;!&ndash;<field name="shop_id" />&ndash;&gt;-->
+<!--                                <field name="amount_total" widget='monetary' options="{'currency_field': 'currency_id'}"/>-->
+<!--                                <field name="currency_id" invisible="1"/>-->
+<!--                            </tree>-->
+<!--                        </field>-->
+<!--                    </page>-->
+<!--                </xpath>-->
+            </field>
+        </record>
+
+<!--        <record id="tenancy_commission" model="ir.ui.view">-->
+<!--            <field name="name">inherited.view.analytic.form</field>-->
+<!--            <field name="model">account.analytic.account</field>-->
+<!--            <field name="inherit_id" ref="property_commission.inherited_view_analytic_form_id"/>-->
+<!--            <field name="arch" type="xml">-->
+<!--                <button name="create_commission" position="attributes">-->
+<!--                    <attribute name="invisible">1</attribute>-->
+<!--                </button>-->
+<!--                <group name="commission_information" position="attributes">-->
+<!--                    <attribute name="invisible">1</attribute>-->
+<!--                </group>-->
+<!--            </field>-->
+<!--        </record>-->
+
+<!--        <record id="analytic_recurring_inherited" model="ir.ui.view">-->
+<!--            <field name="name">inherited.analytic.form</field>-->
+<!--            <field name="model">account.analytic.account</field>-->
+<!--            <field name="inherit_id" ref="property_recurring_maintenance.analytic_form_inherited_view"/>-->
+<!--            <field name="arch" type="xml">-->
+<!--                <field name="main_cost" position="attributes">-->
+<!--                    <attribute name="invisible">1</attribute>-->
+<!--                </field>-->
+<!--                <page name="maint_rent" position="attributes">-->
+<!--                    <attribute name="invisible">1</attribute>-->
+<!--                </page>-->
+<!--            </field>-->
+<!--        </record>-->
+
+<!--        <record id="tenancy_penalty_inherit" model="ir.ui.view">-->
+<!--            <field name="name">property.tenancyp.view.inherit</field>-->
+<!--            <field name="model">account.analytic.account</field>-->
+<!--            <field name="inherit_id" ref="property_penalty.property_tenancy_penalty_view_inherit"/>-->
+<!--            <field name="arch" type="xml">-->
+<!--                <field name="penalty_amount" position="attributes">-->
+<!--                    <attribute name="invisible">1</attribute>-->
+<!--                </field>-->
+<!--                <group name="penalty" position="attributes">-->
+<!--                    <attribute name="invisible">1</attribute>-->
+<!--                </group>-->
+<!--                <separator name="penalty" position="attributes">-->
+<!--                    <attribute name="invisible">1</attribute>-->
+<!--                </separator>-->
+
+<!--            </field>-->
+<!--        </record>-->
+
+        <record id="view_project_tenancy" model="ir.ui.view">
+            <field name="name">account.asset.asset.form.tenancy</field>
+            <field name="model">account.asset.asset</field>
+            <field name="inherit_id" ref="ow_account_asset.view_account_asset_asset_form"/>
+            <field name="arch" type="xml">
+                <field name="method_end" position="after">
+                    <field name="rental_journal_id" attrs="{'invisible': [('project', '=', False)]}"/>
+                </field>
+            </field>
+        </record>
+
+        <!--<record id="view_receipt_rental" model="ir.ui.view">-->
+            <!--<field name="name">account.payment.rental</field>-->
+            <!--<field name="model">account.payment</field>-->
+            <!--<field name="inherit_id" ref="sd_fields_readonly.view_payment_form2_inherit_pdc"/>-->
+            <!--<field name="arch" type="xml">-->
+                <!--<field name='spa_id' position="after">-->
+                    <!--<field name="rental_id"/>-->
+                <!--</field>-->
+            <!--</field>-->
+        <!--</record>-->
+
+        <!--<record id="ow_account_asset.view_account_asset_asset_form" model="ir.ui.view">-->
+        <!--<field name="name">account.asset.asset.form</field>-->
+        <!--<field name="model">account.asset.asset</field>-->
+        <!--<field name="arch" type="xml">-->
+        <!--<field name="current_tenant_id" position="before">-->
+        <!--<field name="current_tenant_partner_id" invisible="1"/>-->
+        <!--</field>-->
+
+        <!--</field>-->
+        <!--</record>-->
+
+        <!--<menuitem id="crm_menu_rents_booking"-->
+        <!--name="Rent Bookings"-->
+        <!--parent="crm_extension.crm_menu_booking"-->
+        <!--groups="crm_extension.group_rent_process"-->
+        <!--action="crm_extension.crm_lead_booking_rent"-->
+        <!--sequence="3"/>-->
+
+    </data>
+</odoo>

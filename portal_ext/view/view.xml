@@ -1,0 +1,1132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <template id="sale_order_portal_content_new" name="Sales Order Portal Content">
+            <!-- Intro -->
+            <div id="introduction" t-attf-class="pb-2 pt-3 #{'card-header bg-white' if report_type == 'html' else ''}">
+                <h2 class="my-0">
+                    <t t-esc="sale_order.type_name"/>
+                    <em t-esc="sale_order.name"/>
+                </h2>
+            </div>
+
+            <div t-attf-class="#{'card-body' if report_type == 'html' else ''}">
+                <!-- Informations -->
+                <div id="informations">
+                    <div t-if="sale_order.transaction_ids and not invoices and sale_order.state in ('sent', 'sale') and portal_confirmation == 'pay' and not success and not error"
+                         t-att-data-order-id="sale_order.id">
+                        <t t-if="sale_order.transaction_ids">
+                            <t t-call="payment.payment_confirmation_status">
+                                <t t-set="payment_tx_id" t-value="sale_order.get_portal_last_transaction()"/>
+                                <t t-set="reference" t-value="sale_order.reference"/>
+                            </t>
+                        </t>
+                    </div>
+
+                    <!--                    ==========================================================-->
+                    <h4 class="text-center">
+                        <strong>INITIAL SALE AGREEMENT</strong>
+                    </h4>
+                    <br/>
+                    <div class="row">
+                        <div class="col-3">
+                            <strong>PROJECT NAME:</strong>
+                        </div>
+                        <div class="col-4">
+                            <b>
+                                <span t-esc="sale_order.asset_project_id.name"/>
+                            </b>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-3">
+                            <strong>PREAMBLE</strong>
+                        </div>
+                        <div class="col-4">
+                        </div>
+
+                    </div>
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr style="font-size:18px;">
+                                <th colspan="2" width="33%">
+                                    <span>Date:</span>
+                                    <span t-field="sale_order.booking_date"
+                                          t-options="{&quot;format&quot;: &quot;dd/MM/yyyy&quot;}"/>
+                                </th>
+                                <th colspan="2" width="33%">
+                                    <!--                                            <span t-raw="sale_order.arabic_booking_date"/>-->
+                                </th>
+                                <th colspan="2" width="34%" class="text-right">
+                                    <strong>
+                                        <span>التاريخ:</span>
+                                    </strong>
+                                </th>
+                            </tr>
+                            <tr>
+                                <th colspan="3">
+
+                                    <strong>
+                                        <span>
+                                            1. SELLER’S DETAILS
+                                        </span>
+                                    </strong>
+                                </th>
+                                <th colspan="3" class="text-right">
+
+                                    <strong>
+                                        <span>١. تفاصيل البائع</span>
+                                    </strong>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td colspan="3">
+                                    <span>
+                                        <b>Samana International Real Estate Development,</b>
+                                        a DED License No. 794387, <b>Address</b> – 4th Floor, Building 7-Bay
+                                        Square, Business Bay, Emirate of Dubai,
+                                        United Arab Emirates.
+                                    </span>
+                                </td>
+                                <td colspan="3">
+                                    <!--                                            <span t-raw="o.arabic_seller_detail"/>-->
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <table class="table table-bordered">
+                        <tbody>
+
+                            <tr>
+                                <th>
+                                    <span>2. APPLICANT DETAILS</span>
+                                </th>
+                                <th class="text-center">
+                                    <span>PURCHASER</span>
+                                </th>
+                                <th class="text-center">
+                                    <span>المشترى</span>
+                                </th>
+                                <th class="text-right">
+                                    <span>٢. التفاصيل المقدمة</span>
+                                </th>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span>Buyer Name</span>
+                                </td>
+                                <td class="text-center">
+                                    <t t-if="sale_order.partner_id">
+                                        <span t-esc="sale_order.partner_id.name"/>
+                                    </t>
+                                    <t t-if="not sale_order.partner_id">
+                                        <span t-esc="sale_order.contact_name"/>
+                                    </t>
+                                </td>
+                                <td class="text-center">
+                                    <!--                                            <span t-raw="o.arabic_buyer_name"/>-->
+                                </td>
+                                <td class="text-right">
+                                    <span>اسم المشترى</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span>Address</span>
+                                </td>
+                                <td class="text-center">
+                                    <t t-if="sale_order.partner_id">
+                                        <span t-esc="sale_order.partner_id.street"/>
+                                        <br/>
+                                        <span t-esc="sale_order.partner_id.street2"/>
+                                        <br/>
+                                        <span t-esc="sale_order.partner_id.city"/>
+                                    </t>
+                                    <t t-if="not sale_order.partner_id">
+                                        <span t-esc="sale_order.street"/>
+                                        <br/>
+                                        <span t-esc="sale_order.street2"/>
+                                        <br/>
+                                        <span t-esc="sale_order.city"/>
+                                    </t>
+                                </td>
+                                <td class="text-center">
+                                    <!--                                            <span t-raw="o.arabic_buyer_address"/>-->
+                                </td>
+                                <td class="text-right">
+                                    <span>العنوان</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span>P.O. Box</span>
+                                </td>
+                                <td class="text-center">
+                                    <t t-if="sale_order.partner_id">
+                                        <span t-esc="sale_order.partner_id.zip"/>
+                                    </t>
+                                    <t t-if="not sale_order.partner_id">
+                                        <span t-esc="sale_order.zip"/>
+                                    </t>
+                                </td>
+                                <td class="text-center">
+                                    <!--                                            <span t-raw="o.arabic_buyer_pobox"/>-->
+                                </td>
+                                <td class="text-right">
+                                    <span>رقم صندوق البريد ص ب</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span>Emirate</span>
+                                </td>
+                                <td class="text-center">
+                                    <t t-if="sale_order.partner_id">
+                                        <span t-esc="sale_order.partner_id.state_id.name"/>
+                                    </t>
+                                    <t t-if="not sale_order.partner_id">
+                                        <span t-esc="sale_order.state_id.name"/>
+                                    </t>
+                                </td>
+                                <td class="text-center">
+                                    <!--                                            <span t-raw="o.arabic_buyer_emirate"/>-->
+                                </td>
+                                <td class="text-right">
+                                    <span>أمارة</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span>Phone/Mobile</span>
+                                </td>
+                                <td class="text-center">
+                                    <t t-if="sale_order.partner_id">
+                                        <span t-esc="sale_order.partner_id.phone"/>
+                                        <span>/</span>
+                                        <span t-esc="sale_order.partner_id.mobile"/>
+                                    </t>
+                                    <t t-if="not sale_order.partner_id">
+                                        <span t-esc="sale_order.phone"/>
+                                        <span>/</span>
+                                        <span t-esc="sale_order.mobile"/>
+                                    </t>
+                                </td>
+                                <td class="text-center">
+                                    <!--                                            <span t-raw="o.arabic_buyer_phone"/>-->
+                                    <span>/</span>
+                                    <!--                                            <span t-raw="o.arabic_buyer_mobile"/>-->
+                                </td>
+                                <td class="text-right">
+                                    <span>رقم الهاتف / المحمول</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span>Email</span>
+                                </td>
+                                <td class="text-center">
+                                    <t t-if="sale_order.partner_id">
+                                        <span t-esc="sale_order.partner_id.email"/>
+                                    </t>
+                                    <t t-if="not sale_order.partner_id">
+                                        <span t-esc="sale_order.email_from"/>
+                                    </t>
+                                </td>
+                                <td class="text-center">
+                                    <!--                                            <span t-raw="o.arabic_buyer_email"/>-->
+                                </td>
+                                <td class="text-right">
+                                    <span>البريد الألكترونى</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span>Country</span>
+                                </td>
+                                <td class="text-center">
+                                    <t t-if="sale_order.partner_id">
+                                        <span t-esc="sale_order.partner_id.country_id.name"/>
+                                    </t>
+                                    <t t-if="not sale_order.partner_id">
+                                        <span t-esc="sale_order.country_id.name"/>
+                                    </t>
+                                </td>
+                                <td class="text-center">
+                                    <!--                                            <span t-raw="o.arabic_buyer_country"/>-->
+                                </td>
+                                <td class="text-right">
+                                    <span>الدولة</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span>Nationality</span>
+                                </td>
+                                <td class="text-center">
+                                    <t t-if="sale_order.partner_id">
+                                        <span t-esc="sale_order.partner_id.nationality_id.name"/>
+                                    </t>
+                                </td>
+                                <td class="text-center">
+                                    <!--                                            <span t-raw="o.arabic_buyer_nationality"/>-->
+                                </td>
+                                <td class="text-right">
+                                    <span>الجنسية</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span>Passport No. / Exp. Date</span>
+                                </td>
+                                <td class="text-center">
+                                    <t t-if="sale_order.partner_id">
+                                        <span t-esc="sale_order.partner_id.passport_no"/>
+                                        <span>/</span>
+                                        <span t-field="sale_order.partner_id.passport_expiry_date"
+                                              t-options="{&quot;format&quot;: &quot;dd/MM/yyyy&quot;}"/>
+                                    </t>
+                                </td>
+                                <td class="text-center">
+                                    <!--                                            <span t-raw="o.arabic_buyer_passort_no"/>-->
+                                    <span>/</span>
+                                    <!--                                            <span t-raw="o.arabic_buyer_passport_exp"/>-->
+                                </td>
+                                <td class="text-right">
+                                    <span>رقم جواز السفر . تاريخ الأنتهاء</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span>EID No.</span>
+                                </td>
+                                <td class="text-center">
+                                    <t t-if="sale_order.partner_id">
+                                        <span t-esc="sale_order.partner_id.eid_no"/>
+                                    </t>
+                                </td>
+                                <td class="text-center">
+                                    <!--                                            <span t-raw="o.arabic_buyer_eid"/>-->
+                                </td>
+                                <td class="text-right">
+                                    <span>رقم الهوية</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span>Visa No. / Visa Exp. Date</span>
+                                </td>
+                                <td class="text-center">
+                                    <t t-if="sale_order.partner_id">
+                                        <span t-esc="sale_order.partner_id.visa_no"/>
+                                        <span>/</span>
+                                        <span t-field="sale_order.partner_id.visa_expiry_date"
+                                              t-options="{&quot;format&quot;: &quot;dd/MM/yyyy&quot;}"/>
+                                    </t>
+                                </td>
+                                <td class="text-center">
+                                    <!--                                            <span t-raw="o.arabic_buyer_visa_no"/>-->
+                                    <span>/</span>
+                                    <!--                                            <span t-raw="o.arabic_buyer_visa_exp"/>-->
+                                </td>
+                                <td class="text-right">
+                                    <span>رقم الآقامة / تاريخ الأنتهاء</span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <t t-foreach="sale_order.joint_partner_id" t-as="jp">
+                        <table class="table table-bordered" style="border: 1px solid;">
+
+                            <tbody>
+                                <tr>
+                                    <th>
+                                        <span>APPLICANT DETAILS</span>
+                                    </th>
+                                    <th class="text-center">
+                                        <span>JOINT PURCHASER</span>
+                                    </th>
+                                    <th class="text-center">
+                                        <span>المشترى المشترك</span>
+                                    </th>
+                                    <th class="text-right">
+                                        <span>٣. التفاصيل المقدمة</span>
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span>Buyer Name</span>
+                                    </td>
+                                    <td class="text-center">
+                                        <span t-esc="jp.name"/>
+                                    </td>
+                                    <td class="text-center">
+                                        <!--                                                <span t-raw="o.arabic_joint_pur_name"/>-->
+                                    </td>
+                                    <td class="text-right">
+                                        <span>اسم المشترى</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span>Address</span>
+                                    </td>
+                                    <td class="text-center">
+                                        <span t-esc="jp.street"/>
+                                        <br/>
+                                        <span t-esc="jp.street2"/>
+                                        <br/>
+                                        <span t-esc="jp.city"/>
+                                    </td>
+                                    <td class="text-center">
+                                        <!--                                                <span t-raw="o.arabic_joint_pur_address"/>-->
+                                    </td>
+                                    <td class="text-right">
+                                        <span>العنوان</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span>P.O. Box</span>
+                                    </td>
+                                    <td class="text-center">
+                                        <span t-esc="jp.zip"/>
+                                    </td>
+                                    <td class="text-center">
+                                        <!--                                                <span t-raw="o.arabic_joint_pur_pobox"/>-->
+                                    </td>
+                                    <td class="text-right">
+                                        <span>رقم صندوق البريد ص ب</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span>Emirate</span>
+                                    </td>
+                                    <td class="text-center">
+                                        <span t-esc="jp.state_id.name"/>
+                                    </td>
+                                    <td class="text-center">
+                                        <!--                                                <span t-raw="o.arabic_joint_pur_emirate"/>-->
+                                    </td>
+                                    <td class="text-right">
+                                        <span>أمارة</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span>Phone/Mobile</span>
+                                    </td>
+                                    <td class="text-center">
+                                        <span t-esc="jp.phone"/>
+                                        <span>/</span>
+                                        <span t-esc="jp.mobile"/>
+                                    </td>
+                                    <td class="text-center">
+                                        <!--                                                <span t-raw="o.arabic_joint_pur_phone"/>-->
+                                        <span>/</span>
+                                        <!--                                                <span t-raw="o.arabic_joint_pur_mobile"/>-->
+                                    </td>
+                                    <td class="text-right">
+                                        <span>رقم الهاتف / المحمول</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span>Email</span>
+                                    </td>
+                                    <td class="text-center">
+                                        <span t-esc="jp.email"/>
+                                    </td>
+                                    <td class="text-center">
+                                        <!--                                                <span t-raw="o.arabic_joint_pur_email"/>-->
+                                    </td>
+                                    <td class="text-right">
+                                        <span>البريد الألكترونى</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span>Country</span>
+                                    </td>
+                                    <td class="text-center">
+                                        <span t-esc="jp.country_id.name"/>
+                                    </td>
+                                    <td class="text-center">
+                                        <!--                                                <span t-raw="o.arabic_joint_pur_country"/>-->
+                                    </td>
+                                    <td class="text-right">
+                                        <span>الدولة</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span>Nationality</span>
+                                    </td>
+                                    <td class="text-center">
+                                        <span t-esc="jp.nationality_id.name"/>
+                                    </td>
+                                    <td class="text-center">
+                                        <!--                                                <span t-raw="o.arabic_joint_pur_nationality"/>-->
+                                    </td>
+                                    <td class="text-right">
+                                        <span>الجنسية</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span>Passport No. / Exp. Date</span>
+                                    </td>
+                                    <td class="text-center">
+                                        <span t-esc="jp.passport_no"/>
+                                        <span>/</span>
+                                        <span t-field="jp.passport_expiry_date"
+                                              t-options="{&quot;format&quot;: &quot;dd/MM/yyyy&quot;}"/>
+                                    </td>
+                                    <td class="text-center">
+                                        <!--                                                <span t-raw="o.arabic_joint_pur_passort_no"/>-->
+                                        <span>/</span>
+                                        <!--                                                <span t-raw="o.arabic_joint_pur_passport_exp"/>-->
+                                    </td>
+                                    <td class="text-right">
+                                        <span>رقم جواز السفر . تاريخ الأنتهاء</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span>EID / Trade License No.</span>
+                                    </td>
+                                    <td class="text-center">
+                                        <span t-esc="jp.eid_no"/>
+                                    </td>
+                                    <td class="text-center">
+                                        <!--                                                <span t-raw="o.arabic_joint_pur_eid"/>-->
+                                        <span>/</span>
+                                        <!--                                                <span t-raw="o.arabic_joint_pur_trade_license"/>-->
+                                    </td>
+                                    <td class="text-right">
+                                        <span>رقم الهوية / رقم الرخصة التجارية</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span>Visa No. / Visa Exp. Date</span>
+                                    </td>
+                                    <td class="text-center">
+                                        <span t-esc="jp.visa_no"/>
+                                        <span>/</span>
+                                        <span t-field="jp.visa_expiry_date"
+                                              t-options="{&quot;format&quot;: &quot;dd/MM/yyyy&quot;}"/>
+                                    </td>
+                                    <td class="text-center">
+                                        <!--                                                <span t-raw="o.arabic_joint_pur_visa_no"/>-->
+                                        <span>/</span>
+                                        <!--                                                <span t-raw="o.arabic_joint_pur_visa_exp"/>-->
+                                    </td>
+                                    <td class="text-right">
+                                        <span>رقم الآقامة / تاريخ الأنتهاء</span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </t>
+                    <table class="table table-bordered" style="border: 1px solid;">
+                        <tbody>
+                            <tr>
+                                <td colspan="2" width="50%">
+                                    <span><b>3. PURCHASE DETAILS:</b>The Seller has agreed to sell and the
+                                        purchaser has agreed to purchase the Property as set out below
+                                    </span>
+                                </td>
+                                <td colspan="2" class="text-right" width="50%">
+                                    <span><b>٣. تفاصيل الشراء :</b>وافق البائع على المبيع كما وافق المشترى على
+                                        الشراء كما هو موضح أدناه
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span>Building / Project :</span>
+                                </td>
+                                <td class="text-center">
+                                    <span t-esc="sale_order.asset_project_id.name"/>
+                                </td>
+                                <td class="text-center">
+                                    <!--                                            <span t-raw="o.asset_project_id.arabic_project"/>-->
+                                </td>
+                                <td class="text-right">
+                                    <span>المبنى</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span>Unit No.</span>
+                                </td>
+                                <td class="text-center">
+                                    <span t-esc="sale_order.property_id.name"/>
+                                </td>
+                                <td class="text-center">
+                                    <!--                                            <span t-raw="o.arabic_unit_no"/>-->
+                                </td>
+                                <td class="text-right">
+                                    <span>رقم الوحدة</span>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    <span>Parking</span>
+                                </td>
+                                <td class="text-center">
+                                    <span t-if="sale_order.property_id.parking" t-esc="sale_order.property_id.parking"/>
+                                    <span t-if="not sale_order.property_id.parking">No Parking</span>
+                                </td>
+                                <td class="text-center">
+                                    <!--                                            <span t-raw="o.arabic_parking_no"/>-->
+                                </td>
+                                <td class="text-right">
+                                    <span>وقوف السيارات رقم:</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Area (Sq. ft.):</td>
+                                <td class="text-center">
+                                    <span t-esc="sale_order.property_id.gfa_feet"/>
+                                </td>
+                                <td class="text-center">
+                                    <!--                                            <span t-raw="o.arabic_area"/>-->
+                                </td>
+                                <td class="text-right">
+                                    <span>المساحة (قدم .مربع ) :</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span>Type</span>
+                                </td>
+                                <td class="text-center">
+                                    <span t-esc="sale_order.property_id.unit_type_id.name"/>
+                                </td>
+                                <td class="text-center">
+                                    <!--                                            <span t-raw="o.arabic_type"/>-->
+                                </td>
+                                <td class="text-right">
+                                    <span>النوع</span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <table class="table table-bordered" style="border: 1px solid;">
+
+                        <tbody>
+                            <tr>
+                                <th colspan="2" width="50%">
+                                    <span>4. TOTAL PURCHASE PRICE</span>
+                                </th>
+                                <th colspan="2" width="50%" class="text-right">
+                                    <span>(٤. اجمالى سعر الشراء ( بالكلمات</span>
+                                </th>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span>Total (In words)</span>
+                                </td>
+                                <td class="text-center">
+                                    <span t-if="sale_order.company_id"
+                                          t-esc="sale_order.company_id.currency_id.amount_to_text(sale_order.price)"/>
+                                </td>
+                                <td class="text-center">
+                                    <!--                                            <span t-raw="o.arabic_total_pur_price"/>-->
+                                </td>
+                                <td class="text-right">
+                                    <span>الأجمالى :( بالكلمات )</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span>Total: (AED)</span>
+                                </td>
+                                <td class="text-center">
+                                    <span t-esc="sale_order.price"
+                                          t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: sale_order.currency_id}"/>
+                                </td>
+                                <td class="text-center">
+                                    <!--                                            <span t-raw="o.arabic_total_pur_price"/>-->
+                                </td>
+                                <td class="text-right">
+                                    <span>الأجمالى :( الدرهم )</span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <table class="table table-bordered" style="border: 1px solid black !important;">
+
+                        <tbody>
+                            <tr>
+                                <th colspan="2" width="50%">
+                                    <span>5. DOWN PAYMENT DETAILS : (AED)</span>
+                                </th>
+                                <th colspan="2" width="50%" class="text-right">
+                                    <span>(٥. تفاصيل الدفعة المقدمة (الدرهم</span>
+                                </th>
+                            </tr>
+                            <tr>
+                                <td width="33%">
+                                    <span>Cheque No. :</span>
+                                </td>
+                                <td class="text-center">
+                                    <t t-if="sale_order.receipt_ids">
+                                        <span t-esc="sale_order.receipt_ids[-1].check_number"/>
+                                    </t>
+                                </td>
+                                <td class="text-center">
+                                    <t t-if="sale_order.receipt_ids">
+                                        <span t-esc="sale_order.receipt_ids[-1].check_number"/>
+                                    </t>
+                                </td>
+                                <td class="text-right">
+                                    <span>شيك رقم :</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span>Cheque Date :</span>
+                                </td>
+                                <td class="text-center">
+                                    <t t-if="sale_order.receipt_ids">
+                                        <span t-field="sale_order.receipt_ids[-1].maturity_date"
+                                              t-options="{&quot;format&quot;: &quot;dd/MM/yyyy&quot;}"/>
+                                    </t>
+                                </td>
+                                <td class="text-center">
+                                    <t t-if="sale_order.receipt_ids">
+                                        <span t-field="sale_order.receipt_ids[-1].maturity_date"
+                                              t-options="{&quot;format&quot;: &quot;dd/MM/yyyy&quot;}"/>
+                                    </t>
+                                </td>
+                                <td class="text-right">
+                                    <span>تاريخ الشيك :</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span>Amount :</span>
+                                </td>
+                                <td class="text-center">
+                                    <t t-if="sale_order.receipt_ids">
+                                        <span t-esc="sale_order.receipt_ids[-1].amount"/>
+                                    </t>
+                                </td>
+                                <td class="text-center">
+                                    <t t-if="sale_order.receipt_ids">
+                                        <span t-esc="sale_order.receipt_ids[-1].amount"/>
+                                    </t>
+                                </td>
+                                <td class="text-right">
+                                    <span>المبلغ :</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span>Bank:</span>
+                                </td>
+                                <td class="text-center">
+                                    <t t-if="sale_order.receipt_ids">
+                                        <span t-esc="sale_order.receipt_ids[-1].bank_issued_check.name"/>
+                                    </t>
+                                </td>
+                                <td class="text-center">
+                                    <t t-if="sale_order.receipt_ids">
+                                        <span t-esc="o.receipt_ids[-1].bank_issued_check.name"/>
+                                    </t>
+                                </td>
+                                <td class="text-right">
+                                    <span>بنك :</span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <table class="table table-bordered" style="border: 1px solid;">
+                        <thead>
+                            <tr>
+                                <th width="33%">
+                                    <span>6. PAYMENT SCHEDULE</span>
+                                </th>
+                                <th class="text-center">
+                                    <span>As Per Schedule A</span>
+                                </th>
+                                <th class="text-center">
+                                    <span>حسب الجدول أ</span>
+                                </th>
+                                <th class="text-right">
+                                    <span>٦. الجدول الزمنى للمدفوعات</span>
+                                </th>
+                            </tr>
+                        </thead>
+                    </table>
+
+                    <table class="table table-bordered" style="border: 1px solid;">
+                        <tbody>
+                            <tr>
+                                <td colspan="2" width="50%">
+                                    <strong>
+                                        <span>ALL PAYMENTS SHOULD BE MADE TO</span>
+                                    </strong>
+                                </td>
+                                <td colspan="2" width="50%" class="text-right">
+                                    <span>6يجب تسديد جميع المدفوعات فى الحساب التالى</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span>Bank Name</span>
+                                </td>
+                                <td class="text-center">
+                                    <!--                                            <span t-esc="sale_order.all_payment_bank_id.bank_id.name"/>-->
+                                </td>
+                                <td class="text-center">
+                                    <!--                                            <span t-raw="sale_order.all_payment_bank_id.bank_account_id.arabic_bank_name"/>-->
+                                </td>
+                                <td class="text-right">
+                                    <span>اسم البنك</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span>Swift Code</span>
+                                </td>
+                                <td class="text-center">
+                                    <!--                                            <span t-esc="sale_order.all_payment_bank_id.bank_id.bic"/>-->
+                                </td>
+                                <td class="text-center">
+                                    <!--                                            <span t-raw="sale_order.all_payment_bank_id.bank_account_id.arabic_swift_code"/>-->
+                                </td>
+                                <td class="text-right">
+                                    <span>سوفت كود</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span>Credit Account</span>
+                                </td>
+                                <td class="text-center">
+                                    <!--                                            <span t-esc="sale_order.all_payment_bank_id.bank_account_id.acc_holder_name"/>-->
+                                </td>
+                                <td class="text-center">
+                                    <!--                                            <span t-raw="sale_order.all_payment_bank_id.bank_account_id.arabic_credit_account"/>-->
+                                </td>
+                                <td class="text-right">
+                                    <span>رقم البطاقة</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span>Account No.</span>
+                                </td>
+                                <td class="text-center">
+                                    <!--                                            <span t-esc="sale_order.all_payment_bank_id.bank_acc_number"/>-->
+                                </td>
+                                <td class="text-center">
+                                    <!--                                            <span t-raw="sale_order.all_payment_bank_id.bank_account_id.arabic_account_no"/>-->
+                                </td>
+                                <td class="text-right">
+                                    <span>رقم الحساب</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span>IBAN No</span>
+                                </td>
+                                <td class="text-center">
+                                    <!--                                            <span t-esc="sale_order.all_payment_bank_id.bank_account_id.iban"/>-->
+                                </td>
+                                <td class="text-center">
+                                    <!--                                            <span t-raw="sale_order.all_payment_bank_id.bank_account_id.arabic_iban"/>-->
+                                </td>
+                                <td class="text-right">
+                                    <span>رقم الحساب العالمي</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2" width="50%">
+                                    <span>Important: Please quote your name, customer number and unit details
+                                        while making direct remittance. Please fax/email a copy of the transfer
+                                        instruction within three (3) days from initiating the transfer. All due
+                                        payments shall be paid free of exchange, encumbrance and/or any bank
+                                        charges and without any deduction or set-off.
+                                    </span>
+                                </td>
+                                <td colspan="2" width="50%" class="text-right" style='font-size: 18px;'>
+                                    <span>هام: يرجى ذكر اسمك ورقم العميل وتفاصيل الوحدة أثناء إجراء التحويل
+                                        المباشر. يرجى إرسال نسخة من تعليمات التحويل بالفاكس / البريد الإلكتروني
+                                        في غضون ثلاثة (3) أيام من بدء التحويل. تُدفع جميع المدفوعات المستحقة
+                                        بدون رسوم صرف و / أو رهن و / أو أي رسوم بنكية وبدون أي خصم أو مقاصة.
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <strong>
+                                        <span>7. Anticipated Completion Date</span>
+                                    </strong>
+                                </td>
+                                <td class="text-center">
+                                    <span t-field="sale_order.asset_project_id.completion_date"
+                                          t-options="{&quot;format&quot;: &quot;dd/MM/yyyy&quot;}"/>
+                                </td>
+                                <td class="text-center">
+                                    <span t-field="sale_order.asset_project_id.completion_date"
+                                          t-options="{&quot;format&quot;: &quot;dd/MM/yyyy&quot;}"/>
+                                </td>
+                                <td class="text-right">
+                                    <span>٧. تاريخ الانتهاء المتوقع</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <strong>
+                                        <span>8.Estimated Service Charges</span>
+                                    </strong>
+                                </td>
+                                <td class="text-center">
+                                    <span t-esc="sale_order.asset_project_id.estimated_charge"/>
+                                </td>
+                                <td class="text-center">
+                                    <span t-esc="sale_order.asset_project_id.estimated_charge"/>
+
+                                </td>
+                                <td class="text-right">
+                                    <strong>
+                                        <span>٨. رسوم الخدمة المقدرة</span>
+                                    </strong>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <!--                            <span t-raw="sale_order.gethtmlval(sale_order.booking_terms_copy)"/>-->
+
+                    <br/>
+                    <br/>
+
+                    <div class="row">
+                        <div class="col-4">
+                            <span>Purchaser’s Signature</span>
+                        </div>
+                        <div class="col-4" style="border-bottom: 1px solid;">
+                            <span/>
+                        </div>
+                        <div class="col-2 text-right">
+                            <span>توقيع المشترى</span>
+                        </div>
+                        <div class="col-2">
+                        </div>
+                    </div>
+                    <br></br>
+                    <br></br>
+                    <div class="row">
+                        <div class="col-4">
+                            <span>Seller’s Signature</span>
+                        </div>
+                        <div class="col-4" style="border-bottom: 1px solid;">
+                            <span/>
+                        </div>
+                        <div class="col-2 text-right">
+                            <span>توقيع البائع</span>
+                        </div>
+                        <div class="col-2">
+                        </div>
+                    </div>
+
+                    <br/>
+                    <br/>
+
+
+                    <div style="page-break-before: always;">
+                        <div class="row">
+                            <div class="col-12 text-center">
+                                <b>
+                                    <span>SCHEDULE A</span>
+                                </b>
+                            </div>
+                        </div>
+                        <br/>
+                        <br/>
+                        <br/>
+                        <div class="row">
+                            <div class="col-6">
+                                <strong>SCHEDULE OF PAYMENT &amp; UNITS PRICE</strong>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-3">
+                                <strong>Unit Number</strong>
+                            </div>
+                            <div class="col-7">:
+                                <span t-esc="sale_order.property_id.name"/>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-3">
+                                <strong>Name of Purchaser</strong>
+                            </div>
+                            <div class="col-7">:
+                                <span t-esc="sale_order.partner_id.name"/>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-3">
+                                <strong>Total Sale Price (AED)</strong>
+                            </div>
+                            <div class="col-7">:
+                                <span t-esc="sale_order.price"
+                                      t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: sale_order.currency_id}"/>
+                            </div>
+                        </div>
+                    </div>
+                    <br/>
+                    <br/>
+                    <table class="table table-bordered" style="border: 1px solid;">
+                        <thead>
+                            <tr>
+                                <th class="text-center">Installment Serial Number</th>
+                                <th class="text-center">(%)</th>
+                                <th class="text-center">Payment Date</th>
+                                <th class="text-center">Amount (AED)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="sale_order.sale_payment_schedule_ids.sorted(key=lambda x: x.start_date, reverse=False)"
+                                t-as="spa">
+
+                                <t t-if="spa.state_spa != 'cancel'">
+                                    <tr>
+                                        <td class="text-center">
+                                            <span t-esc="spa.sequence"/>
+                                        </td>
+                                        <td class="text-center">
+                                            <span t-esc="'{:,.2f}'.format(spa.value)"/>
+                                        </td>
+                                        <td class="text-center">
+                                            <span t-esc="datetime.datetime.strftime(spa.start_date,'%d-%m-%Y')"/>
+                                        </td>
+                                        <td class="text-center">
+                                            <span t-esc="spa.amount"
+                                                  t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: sale_order.currency_id}"/>
+                                        </td>
+                                    </tr>
+                                </t>
+                            </t>
+                        </tbody>
+                    </table>
+                    <br/>
+                    <br/>
+                    <br/>
+                    <br/>
+                    <br/>
+
+                    <div class="row" t-if="sale_order.signature">
+                        <div class="text-center" style="width:25%;">
+                            <b>
+                                <span class="text-center"></span>
+                            </b>
+                        </div>
+                        <div style="width:12%;">
+                            <span></span>
+                        </div>
+                        <div class="text-center" style="width:25%;">
+<!--                             <section t-if="sale_order.signature" id="signature" name="Signature">-->
+<!--                                <div class="row mt-4" name="signature">-->
+<!--                                    <div t-attf-class="#{'col-3' if report_type != 'html' else 'col-sm-7 col-md-4'} ml-auto text-center">-->
+<!--                                        <h5>Signature</h5>-->
+                                        <img t-att-src="image_data_uri(sale_order.signature)"
+                                             style="max-height: 6rem; max-width: 100%;"/>
+<!--                                        <p t-field="sale_order.signed_by"/>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </section>-->
+                        </div>
+                        <div style="width:13%;">
+                            <span></span>
+                            <!--<b><span t-esc="sale_order.number"/></b>-->
+                        </div>
+                        <div t-if="sale_order.joint_partner_id" class="text-center"
+                             style="width:25%;">
+                            <b>
+                                <span class="text-center"></span>
+                            </b>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="text-center" style="width:25%; border-top: 1px solid;">
+                            <b>
+                                <span class="text-center">SELLER</span>
+                            </b>
+                        </div>
+                        <div style="width:12%;">
+                            <span></span>
+                        </div>
+                        <div class="text-center" style="width:25%; border-top: 1px solid;">
+                            <b>
+                                <span class="text-center">SOLE/FIRST PURCHASER</span>
+                            </b>
+                        </div>
+                        <div style="width:13%;">
+                            <span></span>
+                            <!--<b><span t-esc="sale_order.number"/></b>-->
+                        </div>
+                        <div t-if="sale_order.joint_partner_id" class="text-center"
+                             style="width:25%; border-top: 1px solid;">
+                            <b>
+                                <span class="text-center">JOINT PURCHASER</span>
+                            </b>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="text-center" style="width:25%;">
+                            <span t-esc="sale_order.company_id.name"/>
+                        </div>
+                        <div style="width:12%;">
+                            <span></span>
+                        </div>
+                        <div class="text-center" style="width:25%;">
+                            <span t-esc="sale_order.partner_id.name"/>
+                        </div>
+                        <div style="width:13%;">
+                            <span></span>
+                        </div>
+                        <div class="text-center" style="width:25%;">
+                            <t t-foreach="sale_order.joint_partner_id" t-as="j">
+                                <span t-esc="j.name"/>
+                                <span>,</span>
+                            </t>
+                        </div>
+                    </div>
+                </div>
+                <!--                    ==============================================================-->
+
+
+            </div>
+        </template>
+
+
+        <template id="so_portal_template_inherit" name="Sales Order Portal Template inherit"
+                  inherit_id="sale.sale_order_portal_template"
+                  primary="True">
+            <xpath expr="//div[@id='portal_sale_content']" position="replace">
+                <!-- main content -->
+                <div t-attf-class="card #{'pb-5' if report_type == 'html' else ''}" id="portal_sale_content_new">
+                    <div t-call="portal_ext.sale_order_portal_content_new"/>
+                </div>
+            </xpath>
+        </template>
+
+    </data>
+</odoo>

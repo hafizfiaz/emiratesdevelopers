@@ -1,0 +1,13 @@
+<odoo>
+    <data>
+        <record id="seq_approval_approval" model="ir.sequence">
+            <field name="name">Approval Sequence</field>
+            <field name="code">approval.approval</field>
+            <field name="prefix">BA</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+            <field name="number_next">1133</field>
+        </record>
+
+    </data>
+</odoo>

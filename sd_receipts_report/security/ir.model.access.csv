@@ -1,0 +1,10 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_hospital_patient,hospital.patient,model_hospital_patient,,1,1,1,1
+access_hospital_sales,hospital.sales,model_hospital_sales,,1,1,1,1
+access_hospital_booking,hospital.booking,model_hospital_booking,,1,1,1,1
+access_hospital_payment,hospital.payment,model_hospital_payment,,1,1,1,1
+access_hospital_commission,hospital.commission,model_hospital_commission,,1,1,1,1
+access_comm_form,comm.form,model_comm_form,,1,1,1,1
+access_sale_rent_schedule,sale_rent.schedule,model_sale_rent_schedule,,1,1,1,1
+access_payment_form,payment.form,model_payment_form,,1,1,1,1
+access_payment_criteria,payment.criteria,model_payment_criteria,,1,1,1,1

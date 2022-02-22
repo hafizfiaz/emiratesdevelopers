@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_tas_flow,tas.flow,model_tas_flow,,1,1,1,1
+access_tas_wizard,tas.wizard,model_tas_wizard,,1,1,1,1

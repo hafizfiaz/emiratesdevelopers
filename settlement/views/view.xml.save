@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record id="view_bank_reconciliation_tree" model="ir.ui.view">
+            <field name="name">bank.reconciliation.tree</field>
+            <field name="model">bank.reconciliation</field>
+            <field name="arch" type="xml">
+                <tree string="Bank Reconciliation" default_order="create_date desc">
+                    <field name="create_date"/>
+                    <field name="bank_id" string="Bank Name"/>
+                    <field name="bank_ledger_balance" string="Bank Balance"/>
+                    <field name="bank_statement_balance" string="Bank Statement Balance"/>
+                    <field name="difference_a_b"/>
+                    <field name="create_uid"/>
+                    <field name="write_uid" string="Last Update by"/>
+                    <field name="write_date" string="Last Update Date"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_bank_reconciliation_form" model="ir.ui.view">
+            <field name="name">bank.reconciliation.form</field>
+            <field name="model">bank.reconciliation</field>
+            <field name="arch" type="xml">
+                <form string="Bank Reconciliation">
+                    <header>
+                        <button name="action_draft" type="object" string="Back To Draft" states="cancel"
+                                class="oe_highlight"/>
+                        <!--<button name="compute_calculations" type="object" string="Compute" states="draft"-->
+                                <!--class="oe_highlight"/>-->
+                        <button name="action_done" type="object" string="Done" states="draft"
+                                class="oe_highlight"/>
+                        <button name="action_cancel" type="object" string="Cancel" states="draft,done"/>
+                        <field name="state" widget="statusbar"
+                               statusbar_visible="draft,done,cancel"/>
+                    </header>
+                    <sheet>
+                        <!--<div class="oe_title">-->
+                            <!--<label for="name" class="oe_edit_only"/>-->
+                            <!--<h1>-->
+                                <!--<field name="name" readonly="1"/>-->
+                            <!--</h1>-->
+                        <!--</div>-->
+                        <group>
+                            <group string="Reconciliation Account Detail">
+                                <field name="type"/>
+                                <field name="bank_id" attrs="{'invisible': [('type','!=','bank')]}"/>
+                                <field name="account_ledger_id"/>
+                                <field name="company_id" invisible="1"/>
+                                <field name="reconciliation_date"/>
+                                <field name="bank_ledger_balance"/>
+                            </group>
+                            <group string="Bank Statement Detail">
+                                <field name="bank_account_no"/>
+                                <field name="bank_statement_date"/>
+                                <field name="bank_statement_balance"/>
+                                <field name="difference_of_balance"/>
+                            </group>
+                            <group string="Reconciliation Detail">
+                                <field name="a_bank_ledger_balance"/>
+                                <field name="unpresented_pdc_balance"/>
+                                <field name="journal_items_debit" />
+                                <field name="add_misc_item_balance"/>
+                                <field name="uncleared_pdc_balance"/>
+                                <field name="journal_items_credit"/>
+                                <field name="less_misc_item_balance"/>
+                                <field name="b_bank_statment_balance_rec"/>
+                                <field name="difference_a_b"/>
+                            </group>
+                        </group>
+
+                        <notebook>
+                            <page string="Add PDCs Issued - Un Presented">
+                                <field name="pdc_unpresented_payment_ids" attrs="{'readonly': ['|', ('state','=','done'), ('account_ledger_id','=',False)]}"/>
+<!--                                    <tree colors="blue:state == 'draft';gray:state == 'cancel';red:audit" string="Voucher Entries" default_order="date desc">-->
+<!--                                        <field name="date"/>-->
+<!--                                        <field name="create_date"/>-->
+<!--                                        <field name="number"/>-->
+<!--                                        <field name="reference"/>-->
+<!--                                        <field name="partner_id"/>-->
+<!--                                        &lt;!&ndash;<field name="mobile"/>&ndash;&gt;-->
+<!--                                        <field name="journal_id" groups="account.group_account_user"/>-->
+<!--&lt;!&ndash;                                        <field name="check_number"/>&ndash;&gt;-->
+<!--&lt;!&ndash;                                        <field name="maturity_date"/>&ndash;&gt;-->
+<!--                                        <field name="period_id" invisible="context.get('visible', True)"/>-->
+<!--                                        <field name="type" invisible="context.get('visible', True)"/>-->
+<!--                                        <field name="amount"/>-->
+<!--&lt;!&ndash;                                        <field name="product_id"/>&ndash;&gt;-->
+<!--&lt;!&ndash;                                        <field name="bank_deposit"/>&ndash;&gt;-->
+<!--&lt;!&ndash;                                        <field name="audit" invisible="1"/>&ndash;&gt;-->
+<!--                                        <field name="create_uid"/>-->
+<!--                                        <field name="write_uid" string="Validate By"/>-->
+<!--                                        <field name="state"/>-->
+<!--                                    </tree>-->
+<!--                                </field>-->
+                                <group class="oe_subtotal_footer oe_right">
+                                    <field name="total_unpresented_amount"/>
+                                </group>
+                            </page>
+                             <!--domain="[('journal_id.type', 'in', ['pdc']), ('type','=','receipt')" -->
+                            <page string="Less PDCs Receipts- Un Cleared">
+                                <field name="pdc_receipts_payment_ids" attrs="{'readonly': ['|', ('state','=','done'), ('account_ledger_id','=',False)]}"/>
+<!--                                    <tree colors="blue:state == 'draft';gray:state == 'cancel';red:audit" string="Voucher Entries" default_order="date desc">-->
+<!--                                        <field name="date"/>-->
+<!--                                        <field name="create_date"/>-->
+<!--                                        <field name="number"/>-->
+<!--                                        <field name="reference"/>-->
+<!--                                        <field name="partner_id"/>-->
+<!--                                        &lt;!&ndash;<field name="mobile"/>&ndash;&gt;-->
+<!--                                        <field name="journal_id" groups="account.group_account_user"/>-->
+<!--&lt;!&ndash;                                        <field name="check_number"/>&ndash;&gt;-->
+<!--&lt;!&ndash;                                        <field name="maturity_date"/>&ndash;&gt;-->
+<!--                                        <field name="period_id" invisible="context.get('visible', True)"/>-->
+<!--                                        <field name="type" invisible="context.get('visible', True)"/>-->
+<!--                                        <field name="amount"/>-->
+<!--&lt;!&ndash;                                        <field name="product_id"/>&ndash;&gt;-->
+<!--&lt;!&ndash;                                        <field name="bank_deposit"/>&ndash;&gt;-->
+<!--&lt;!&ndash;                                        <field name="audit" invisible="1"/>&ndash;&gt;-->
+<!--                                        <field name="create_uid"/>-->
+<!--                                        <field name="write_uid" string="Validate By"/>-->
+<!--                                        <field name="state"/>-->
+<!--                                    </tree>-->
+
+                                <group class="oe_subtotal_footer oe_right">
+                                    <field name="total_receipts_amount"/>
+                                </group>
+                            </page>
+                            <page string="Journal Items">
+                            <field name="move_line_ids" attrs="{'readonly': ['|', ('state','=','done'), ('account_ledger_id','=',False)]}">
+                                    <tree create='1'>
+                                        <field name="date"/>
+                                        <field name="move_id" required="0" groups="account.group_account_user"/>
+                                        <field name="journal_id"/>
+                                        <field name="name"/>
+                                        <field name="ref"/>
+                                        <field name="statement_id" invisible="1"/>
+                                        <field name="partner_id"/>
+                                        <field name="account_id" domain="[('company_id', '=', company_id)]" groups="account.group_account_user"/>
+                                        <field name="analytic_account_id" groups="account.group_account_user"/>
+                                        <field name="analytic_tag_ids" widget="many2many_tags" groups="analytic.group_analytic_tags"/>
+                                        <field name="reconciled" invisible="1"/>
+                                        <field name="full_reconcile_id"/>
+                                        <field name="debit" sum="Total Debit"/>
+                                        <field name="credit" sum="Total Credit"/>
+                                        <field name="amount_currency" readonly="True" groups="base.group_multi_currency"/>
+                                        <field name="currency_id" readonly="True" invisible="1"/>
+                                        <field name="date_maturity"/>
+                                        <field name="company_currency_id" invisible="1"/>
+                                        <field name="company_id" invisible="1"/>
+                                    </tree>
+                                </field>                            </page>
+                            <page string="Misc Items Add/Less">
+                                <separator string="Misc Items Add"/>
+                                <field name="misc_items_add_ids" context="{'default_calculation_type': 'add'}">
+                                    <tree editable="bottom">
+                                        <field name="name"/>
+                                        <field name="calculation_type" readonly="1"/>
+                                        <field name="amount"/>
+                                        <field name="remarks"/>
+                                    </tree>
+                                </field>
+                                <separator string="Misc Items Less"/>
+                                <field name="misc_items_less_ids" context="{'default_calculation_type': 'less'}">
+                                    <tree editable="bottom">
+                                        <field name="name"/>
+                                        <field name="calculation_type" readonly="1"/>
+                                        <field name="amount"/>
+                                        <field name="remarks"/>
+                                    </tree>
+                                </field>
+                             </page>
+
+                        </notebook>
+
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+
+                </form>
+            </field>
+        </record>
+
+
+        <record model="ir.actions.act_window" id="action_bank_reconciliation_action">
+            <field name="name">Reconciliation Statement</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">bank.reconciliation</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <!--<menuitem name="Bank reconciliation"-->
+                  <!--id="menu_bank_reconciliation_main"-->
+                  <!--parent="base.menu_sales"-->
+                  <!--sequence="50"/>-->
+        <menuitem action="action_bank_reconciliation_action"
+                  name="Reconciliation Statement"
+                  id="menu_bank_reconciliation_action"
+                  parent="account.menu_finance_entries"
+                  sequence="101"/>
+
+
+    </data>
+</openerp>

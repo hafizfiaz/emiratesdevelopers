@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="receivable_summary_report_view" model="ir.ui.view">
+            <field name="name">Receivable Summary Report</field>
+            <field name="model">receivable.summary.wizard</field>
+            <field name="arch" type="xml">
+                <form>
+                    <group>
+                        <group>
+<!--                            <field name="start_date"/>-->
+<!--                            <field name="end_date"/>-->
+                        </group>
+                        <group>
+                        </group>
+                    </group>
+                    <footer>
+                        <button name="check_report" string="Export XLSX" type="object" class="oe_highlight"/>
+                        or
+                        <button string="Cancel" class="oe_link" special="cancel" />
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+
+        <record id="action_receivable_summary_report" model="ir.actions.act_window">
+            <field name="name">Receivable Summary Report</field>
+            <field name="res_model">receivable.summary.wizard</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="receivable_summary_report_view"/>
+            <field name="target">new</field>
+        </record>
+
+
+        <menuitem id="receivable_summary_report_menu" name="Receivable Summary Report" groups="base.group_erp_manager"
+                  action="action_receivable_summary_report" parent="account.menu_finance_reports" sequence="2"/>
+
+
+    </data>
+</odoo>

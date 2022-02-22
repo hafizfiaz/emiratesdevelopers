@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="email_pdc_hold_withdraw" model="mail.template">
+            <field name="name">PDC Hold/ Withdraw request email</field>
+            <field name="email_from">${object.company_id and object.company_id.email or ''}</field>
+            <field name="subject">PDC Hold/ Withdraw Request ${object.name}</field>
+            <field name="partner_to">${object.partner_id.id}</field>
+            <field name="lang">${user.partner_id.lang}</field>
+            <field name="model_id" ref="account_voucher_replace.model_account_voucher_replacement"/>
+            <field name="auto_delete" eval="False"/>
+            <!--<field name="attachment_ids" eval="[(6, 0, [ref(${object.success_mail.lang})])]"/>-->
+            <field name="body_html">
+               <![CDATA[
+        <p>Dear Concerned,<br/><br/>
+        The customer  <b>${object.partner_id.name}</b>, buyer of unit # <b>${object.property_id.name}</b> of Project <b>${object.asset_project_id.name}</b>, has requested for <b>${object.get_req_type(object.request_type)}</b> for following PDCs:<br/><br/>
+
+<div style="display:table; border-collapse: collapse; width:100%; line-height: 2; text-align: center;">
+    <div style="display:table-header-group;">
+        <div style="display:table-row; border: 1px solid #000;">
+            <div style="display:table-cell; border: 1px solid #000; font-weight:bold; text-align: center;">Customer Name</div>
+            <div style="display:table-cell; border: 1px solid #000; font-weight:bold; text-align: center;">Payment Date</div>
+            <div style="display:table-cell; border: 1px solid #000; font-weight:bold; text-align: center;">Memo</div>
+            <div style="display:table-cell; border: 1px solid #000; font-weight:bold; text-align: center;">Cheque #</div>
+            <div style="display:table-cell; border: 1px solid #000; font-weight:bold; text-align: center;">Maturity Date</div>
+            <div style="display:table-cell; border: 1px solid #000; font-weight:bold; text-align: center;">Payment Amount</div>
+        </div>
+    </div>
+    <div style="display:table-row-group;">
+        % for line in object.voucher_pending_ids:
+        <div style="display:table-row; border: 1px solid #000;">
+            <div style="display:table-cell; border: 1px solid #000;">${line.partner_id.name}</div>
+            <div style="display:table-cell; border: 1px solid #000;">${line.date.strftime('%Y/%m/%d')}</div>
+            <div style="display:table-cell; border: 1px solid #000;">${line.name}</div>
+            <div style="display:table-cell; border: 1px solid #000;">${line.check_number}</div>
+            <div style="display:table-cell; border: 1px solid #000;">${line.maturity_date.strftime('%Y/%m/%d')}</div>
+            <div style="display:table-cell; border: 1px solid #000;">${line.amount}</div>
+        </div>
+        % endfor
+    </div>
+    <div style="display:table-row-group;">
+        <div style="display:table-row; border: 1px solid #000;">
+            <div style="display:table-cell; border: 1px solid #000; font-weight:bold;">Total</div>
+            <div style="display:table-cell; border: 1px solid #000;"></div>
+            <div style="display:table-cell; border: 1px solid #000;"></div>
+            <div style="display:table-cell; border: 1px solid #000;"></div>
+            <div style="display:table-cell; border: 1px solid #000;"></div>
+            <div style="display:table-cell; border: 1px solid #000; font-weight:bold;">${object.pending_total}</div>
+        </div>
+    </div>
+</div>
+<br/>
+<br/>
+        You are requested to kindly review the request:<br/>
+        To review pls <a href="${object.get_url(object)}">Click Here</a>
+        <br/>
+        <br/>
+        <br/>
+
+
+        Thanks & Regards
+        <br/>
+        <br/>
+        Samana International Real Estate Development
+        <br/><br/>
+        <p style="color: #8b0000;">*Please do not reply on this email as this is system generated.</p>
+        <br/>
+        </p>
+        ]]>
+            </field>
+        </record>
+
+    </data>
+</odoo>

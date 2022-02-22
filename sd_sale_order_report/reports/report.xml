@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <report id="report_sale_customer_penalty"
+                string="Customer Statement With Penalty"
+                model="sale.order"
+                report_type="qweb-pdf"
+                file="sd_sale_order_report.report_sale_penalty_template"
+                name="sd_sale_order_report.report_sale_penalty_template"
+        />
+        <report id="report_closure_form"
+                string="Closure Form"
+                model="sale.order"
+                report_type="qweb-pdf"
+                file="sd_sale_order_report.report_closure_form_template"
+                name="sd_sale_order_report.report_closure_form_template"
+        />
+        <report id="report_expression_of_interest_form"
+                string="Expression of Interest"
+                model="sale.order"
+                report_type="qweb-pdf"
+                file="sd_sale_order_report.report_expression_of_interest"
+                name="sd_sale_order_report.report_expression_of_interest"
+        />
+        <report id="report_agent_expression_of_interest_form"
+                string="Agent Expression of Interest"
+                model="sale.order"
+                report_type="qweb-pdf"
+                file="sd_sale_order_report.report_agent_expression_of_interest"
+                name="sd_sale_order_report.report_agent_expression_of_interest"
+        />
+        <report id="report_reservation_form"
+                string="Reservation Form"
+                model="sale.order"
+                report_type="qweb-pdf"
+                file="sd_sale_order_report.reservation_form"
+                name="sd_sale_order_report.reservation_form"
+        />
+    </data>
+</odoo>

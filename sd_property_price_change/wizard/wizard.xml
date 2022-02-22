@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record model="ir.ui.view" id="property_price_wizard_view">
+            <field name="name">property.price.wizard.form</field>
+            <field name="model">property.price.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Property Price Wiz">
+                    <group>
+                        <group>
+                            <field name="asset_project_id"/>
+                            <field name="property_id"/>
+                        </group>
+                        <group>
+                            <field name="value"/>
+                            <field name="new_value"/>
+                        </group>
+                    </group>
+                    <footer>
+                        <button string="Apply" name="action_apply" type="object" class="oe_highlight"/>
+                        or
+                        <button string="Cancel" class="oe_link" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="property_price_wizard_action" model="ir.actions.act_window">
+            <field name="name">Change Property Price</field>
+            <field name="res_model">property.price.wizard</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="property_price_wizard_view"/>
+            <field name="target">new</field>
+        </record>
+
+        <menuitem
+                id="menu_property_price_wizard"
+                parent="sd_web_status_ext.menu_crm_properties1"
+                name="Change Property Price"
+                groups="security_groups.group_sales_manager"
+                action="property_price_wizard_action"
+                sequence="3"/>
+
+
+    </data>
+</odoo>

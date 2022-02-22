@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_costing_contractor,costing.contractor,model_costing_contractor,,1,1,1,1
+access_costing_contractor_lines,costing.contractor.lines,model_costing_contractor_lines,,1,1,1,1
+

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="ir_cron_sales" model="ir.cron">
+        <field name="name">Defining Sales</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">days</field>
+        <field name="numbercall">1</field>
+<!--        <field name="" eval="False"/>-->
+        <field name="model_id" ref="model_hospital_sales"/>
+        <field name="code">model.testing_crone_sales()</field>
+        <field name="state">code</field>
+    </record>
+    </data>
+</odoo>

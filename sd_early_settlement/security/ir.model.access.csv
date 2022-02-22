@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_early_settlement,early.settlement,model_early_settlement,,1,1,1,1
+access_discount_type,discount.type,model_discount_type,,1,1,1,1
+
+

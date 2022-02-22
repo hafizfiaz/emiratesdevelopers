@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="Account_clearance_tree" model="ir.ui.view">
+        <field name="name">account.clearance.tree</field>
+        <field name="model">account.clearance</field>
+        <field name="arch" type="xml">
+            <tree string="Account Clearance">
+                <field name="create_date"/>
+                <field name="partner_id"/>
+                <field name="project"/>
+                <field name="property"/>
+                <field name="spa"/>
+                <field name="spa_status"/>
+<!--                <field name="booking_id"/>-->
+<!--                <field name="booking_status"/>-->
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+     <record id="account_clearance_search_view" model="ir.ui.view">
+            <field name="name">account.clearance.select</field>
+            <field name="model">account.clearance</field>
+            <field name="arch" type="xml">
+                <search string="Account Clearance">
+                    <field name="name" string="Name"
+                           filter_domain="[('name','ilike',self)]"/>
+                    <field name="spa" filter_domain="[('spa','ilike',self)]" string="SPA"/>
+                    <field name="project" filter_domain="[('project','ilike',self)]"
+                           string="Project"/>
+                    <field name="property" filter_domain="[('property','ilike',self)]" string="Property"/>
+                    <field name="partner_id" filter_domain="[('partner_id','child_of',self)]" string="Customer Name"/>
+                </search>
+            </field>
+        </record>
+
+    <record id="account_clearance_from" model="ir.ui.view">
+        <field name="name">Accounts Clearance</field>
+        <field name="model">account.clearance</field>
+        <field name="arch" type="xml">
+
+            <form string="Account Clearance">
+
+                <header>
+                    <button name="action_draft" string="Back to Draft" type="object" class="oe_highlight"
+                            states="cancel"/>
+                    <button name="submit" string="Submit to Accounts" type="object" class="oe_highlight"
+                            states="draft"/>
+                    <button name="verify" string="Verify" type="object" class="oe_highlight"
+                            states="under_accounts_verification"/>
+                    <button name="review" string="Review" type="object" class="oe_highlight" states="under_review"/>
+                    <button name="approve" string="Approve" type="object" class="oe_highlight" states="under_approval"/>
+                    <button name="action_reject" string="Reject" type="object"
+                            states="under_accounts_verification,under_review,under_approval,approved"/>
+                    <button name="action_cancel" string="Cancel" type="object" states="draft,rejected"/>
+                    <field name='state' widget='statusbar'/>
+                </header>
+                <sheet>
+
+                    <h3>ACCOUNTS CLEARANCE REQUEST FORM</h3>
+                    <div class="oe_title">
+                        <h3>
+                            <field name="sequence" nolabel="1"/>
+                        </h3>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="subject"/>
+                            <field name="clearance_type"/>
+                            <field name="create_uid" readonly="1"/>
+                            <field name="create_date" readonly="1"/>
+                            <field name="total_spa_customer"/>
+<!--                            <field name="total_bookings"/>-->
+                        </group>
+                        <group>
+                            <separator string="Customer Details"/>
+                            <field name="name" invisible="1"/>
+                            <field name="partner_id"/>
+                            <field name="mobile"/>
+                            <field name="email"/>
+<!--                            <field name="nationality"/>-->
+                            <field name="address"/>
+
+                        </group>
+                        <group>
+
+                            <separator string="SPA Details"/>
+                            <field name="project" domain="[('project','=', True)]"/>
+                            <field name="property" domain="[('parent_id','=', project)]"/>
+                            <field name="spa"/>
+                            <field name="spa_status"/>
+<!--                            <field name="booking_id" domain="[('is_buy_state','!=', 'cancel')]"/>-->
+<!--                            <field name="booking_status"/>-->
+                            <field name="total_spa" widget="monetary"/>
+
+                            <label for="total_due_amount"/>
+                            <div class="address_format">
+                                <field name="total_due_amount" style="width:40%;" nolabel="1"/>
+                                <span style="width:10%;margin-left:10px;">
+                                    |
+                                </span>
+                                <field name="total_due_amount_perc" nolabel="1"
+                                       style="width:20%; color:black;margin-left:20px;"/>
+                                <span style="color:black;">%%</span>
+                            </div>
+
+                            <label for="realized_collection" style="color: #32a84e;"/>
+                            <div class="address_format">
+                                <field name="realized_collection" style="font-weight: bold; width:40%;color: #32a84e;"
+                                       nolabel="1"/>
+                                <span style="width:10%;font-weight: bold; color:#32a84e;margin-left:10px;">
+                                    |
+                                </span>
+                                <field name="realized_collection_perc" nolabel="1"
+                                       style="width:20%;font-weight: bold; color: #32a84e;margin-left:20px;"/>
+                                <span style="font-weight: bold; color:#32a84e;">%%</span>
+
+                            </div>
+
+                            <label for="due_balance_collections" style="font-weight: bold; color: #eb0707;"/>
+                            <div class="address_format">
+                                <field name="due_balance_collections"
+                                       style="font-weight: bold; width:40%;color: #eb0707;" nolabel="1"/>
+                                <span style="width:10%;font-weight: bold; color: #eb0707;margin-left:10px;">
+                                    |
+                                </span>
+                                <field name="due_balance_perc" nolabel="1"
+                                       style="width:20%;font-weight: bold; color:#eb0707;margin-left:20px;"/>
+                                <span style="font-weight: bold; color:#eb0707;">%%</span>
+                            </div>
+                            <label for="total_collection" style="font-weight: bold; color: black;"/>
+                            <div class="address_format">
+                                <field name="total_collection" style="font-weight: bold; width:40%;color: black;"
+                                       nolabel="1"/>
+                                <span style="width:10%;font-weight: bold; color:black;margin-left:10px;">
+                                    |
+                                </span>
+                                <field name="total_collection_perc" nolabel="1"
+                                       style="width:20%;font-weight: bold; color:black;margin-left:20px;"/>
+                                <span style="font-weight: bold; color:black;">%%</span>
+                            </div>
+                            <label for="pending_collections" style="font-weight: bold; color:black;"/>
+                            <div class="address_format">
+                                <field name="pending_collections" style="font-weight: bold; width:40%;color: black;"
+                                       nolabel="1"/>
+                                <span style="width:10%;font-weight: bold; color:black;margin-left:10px;">
+                                    |
+                                </span>
+                                <field name="pending_collections_perc" nolabel="1"
+                                       style="width:20%;font-weight: bold; color:black;margin-left:20px;"/>
+                                <span style="font-weight: bold; color:black;">%%</span>
+                            </div>
+                        </group>
+                        <group>
+                            <separator string="Accounts Remarks"/>
+                            <field name="due_amount_to_clear"/>
+                            <field name="account_remarks"/>
+                            <separator string="Receipts Break Up"/>
+                            <br/>
+
+                            <label for="escrow"/>
+                            <div class="address_format">
+                                <field name="escrow" style="width:40%;" nolabel="1"/>
+                                <span style="width:10%;margin-left:10px;">
+                                    |
+                                </span>
+                                <field name="escrow_perc" nolabel="1"
+                                       style="width:20%; color:black;margin-left:20px;"/>
+                                <span style="font-weight: bold; color:black;">%%</span>
+                            </div>
+                            <label for="non_escrow"/>
+                            <div class="address_format">
+                                <field name="non_escrow" style="width:40%;" nolabel="1"/>
+                                <span style="width:10%;margin-left:10px;">
+                                    |
+                                </span>
+                                <field name="non_escrow_perc" nolabel="1"
+                                       style="width:20%; color:black;margin-left:20px;"/>
+                                <span style="font-weight: bold; color:black;">%%</span>
+                            </div>
+                            <label for="total_escrow" style="font-weight: bold; color:black;"/>
+                            <div class="address_format">
+                                <field name="total_escrow" style="font-weight: bold; width:40%;color: black;"
+                                       nolabel="1"/>
+                                <span style="width:10%;font-weight: bold; color:black;margin-left:10px;">
+                                    |
+                                </span>
+                                <field name="total_escrow_perc" nolabel="1"
+                                       style="font-weight: bold; width:20%; color:black;margin-left:20px;"/>
+                                <span style="font-weight: bold; color:black;">%%</span>
+                            </div>
+                        </group>
+                    </group>
+
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+    <record id="action_accounts_sttlment" model="ir.actions.act_window">
+        <field name="name">Accounts Clearance</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">account.clearance</field>
+<!--        <field name="view_type">form</field>-->
+        <field name="view_mode">tree,form</field>
+        <field name="context"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Accounts Clearance Request Form!
+            </p>
+        </field>
+    </record>
+    <menuitem id="account_clearance_form_menu" name="Account Clearance" parent="crm.crm_menu_sales" sequence="6"
+              action="action_accounts_sttlment"/>
+    <menuitem id="account_clearance_form_accounting" name="Account Clearance" parent="account.menu_finance_receivables"
+              sequence="4"
+              action="action_accounts_sttlment"/>
+</odoo>

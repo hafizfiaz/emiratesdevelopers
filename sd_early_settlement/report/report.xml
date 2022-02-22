@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <report
+          id="report_early_settlment"
+            string="Early Settlement Form"
+            model="early.settlement"
+            report_type="qweb-pdf"
+            file="sd_early_settlement.report_early_settlement1"
+            name="sd_early_settlement.report_early_settlement1"/>
+</odoo>

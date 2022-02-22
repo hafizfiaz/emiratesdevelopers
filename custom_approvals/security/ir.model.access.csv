@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_approval_approval_admin,approval.approval,custom_approvals.model_approval_approval,base.group_erp_manager,1,1,1,1
+access_approval_approval_employee,approval.approval,custom_approvals.model_approval_approval,base.group_user,1,1,1,0
+access_approval_type_admin,approval.type,custom_approvals.model_approval_type,base.group_erp_manager,1,1,1,1
+access_approval_type_employee,approval.type,custom_approvals.model_approval_type,base.group_user,1,0,0,0

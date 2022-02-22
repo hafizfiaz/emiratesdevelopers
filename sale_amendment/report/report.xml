@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <report
+            id="report_sale_amendment"
+            string="Sale Amendment"
+            model="sale.amendment"
+            report_type="qweb-pdf"
+            file="sale_amendment.sale_report_amendment"
+            name="sale_amendment.sale_report_amendment"
+        />
+        <report id="report_rml_sale_order_with_tax_amendment" model="sale.amendment" report_type="pdf" name="rml.sale.order.with.tax.amendment" file="sale_amendment/report/sale_order_with_tax_amendment.rml" string="Sale order With Tax Amendment" attachment_use="False"/>
+    </data>
+</openerp>

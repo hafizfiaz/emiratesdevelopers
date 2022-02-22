@@ -1,6 +1,6 @@
 # See LICENSE file for full copyright and licensing details
 {
-    'name': 'Property Management Systems',
+    'name': 'Property Management System',
     'version': '14.0.1.0.1',
     'category': 'Real Estate',
     'summary': """
