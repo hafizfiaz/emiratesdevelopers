@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_convert_pdcs_wizard,convert.pdcs.wizard,model_convert_pdcs_wizard,,1,1,1,1
+access_collections_team,collections.team,model_collections_team,,1,1,1,1
