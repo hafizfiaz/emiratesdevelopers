@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <report id="report_account_move_action"
+                string="Journal Entry"
+                model="account.move"
+                report_type="qweb-pdf"
+                file="account_pdc.report_account_move_template"
+                name="account_pdc.report_account_move_template"
+                />
+
+
+        <template id="report_account_move_template">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-call="account_pdc.account_move_external_layout">
+                         <!--<div class="header" style="height:4px">-->
+                         <!--</div>-->
+                        <t t-set="o" t-value="o.with_context({'lang': lang})"/>
+                        <!--<div class="page" style='font-size: 13px; line-height:25px;'>-->
+                         <style>
+                             .page {
+                                  direction: ltr;
+                                  width: 98%;
+                                  height: 865px;
+                                  margin: auto;
+                                  position: relative;
+                                  overflow: visible;
+                                  border: 9px solid transparent;
+                                  background-clip: content-box;
+                                  border-image: url(images/shadow.png) 9 9 repeat;
+                                  background-color: white;
+                                }
+                        </style>
+                        <div class="page" style="font-size:14px;">
+                            <br></br>
+                            <br></br>
+                            <h5 class="text-center">
+                                <u><strong>JOURNAL VOUCHER</strong></u>
+                            </h5>
+                            <br></br>
+                            <br></br>
+                            <div class="row">
+                                <div class="col-2">
+                                    <strong>VOUCHER NO :</strong>
+                                </div>
+                                <div class="col-6">
+                                    <span t-esc="o.name"/>
+                                </div>
+                                <div class="col-2">
+                                    <strong>DATE :</strong>
+                                </div>
+                                <div class="col-2">
+                                    <span t-esc="o.date"/>
+                                </div>
+                            </div>
+                            <br></br>
+                            <div class="row">
+                                <div class="col-2">
+                                    <strong>NARRATION :</strong>
+                                </div>
+                                <div class="col-6">
+                                    <span t-esc="o.ref"/>
+                                </div>
+                                <div class="col-4">
+                                    <span> </span>
+                                </div>
+                            </div>
+                            <br></br>
+                            <br></br>
+                            <br></br>
+                            <br></br>
+
+                            <table class="table table-bordered" >
+                                <!--<thead>-->
+                                    <!--<tr>-->
+                                        <!--<th class="text-center">Partner</th>-->
+                                        <!--<th class="text-center">Account Name</th>-->
+                                        <!--<th class="text-center">Debit</th>-->
+                                        <!--<th class="text-center">Credit</th>-->
+                                        <!--<th class="text-center">Remarks</th>-->
+                                    <!--</tr>-->
+                                <!--</thead>-->
+                                <tbody>
+                                    <tr>
+                                        <th class="text-left" style="font-size:16px;">Partner</th>
+                                        <th class="text-center" style="font-size:16px;">Account Name</th>
+                                        <th class="text-center" style="font-size:16px;">Debit</th>
+                                        <th class="text-center" style="font-size:16px;">Credit</th>
+                                        <th class="text-center" style="font-size:16px;">Remarks</th>
+                                    </tr>
+                                    <t t-set="total_debit" t-value="0.0"/>
+                                    <t t-set="total_credit" t-value="0.0"/>
+                                    <tr t-foreach="o.line_ids" t-as="i">
+                                        <td class="text-left">
+                                            <span t-esc="i.partner_id.name"/>
+                                        </td>
+                                        <td class="text-left">
+                                            <span t-esc="i.account_id.name"/>
+                                        </td>
+                                        <td class="text-right">
+                                            <t t-set="total_debit" t-value="total_debit+i.debit"/>
+                                            <span t-esc="'{:,.2f}'.format(i.debit)"/>
+                                        </td>
+                                        <td class="text-right">
+                                            <t t-set="total_credit" t-value="total_credit+i.credit"/>
+                                            <span t-esc="'{:,.2f}'.format(i.credit)"/>
+                                        </td>
+                                        <td class="text-center">
+                                            <span t-esc="i.remarks"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th class="text-left" style="font-size:16px;">Total</th>
+                                        <td class="text-center"> </td>
+                                        <td class="text-right">
+                                            <span t-esc="'{:,.2f}'.format(total_debit)"/>
+                                        </td>
+                                        <td class="text-right">
+                                            <span t-esc="'{:,.2f}'.format(total_credit)"/>
+                                        </td>
+                                        <td class="text-center"> </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <br></br>
+                            <br></br>
+                            <br></br>
+                            <div class="row" style="font-size:12px; margin-left:4px;">
+                                <div class="col-2">
+                                    <span>Printed by</span>
+                                </div>
+                                <div class="col-10">
+                                    <span t-esc="user.name"/>
+                                </div>
+                            </div>
+                            <br></br>
+                            <div class="row" style="font-size:12px; margin-left:4px;">
+                                <div class="col-2">
+                                    <span>Print Date</span>
+                                </div>
+                                <div class="col-10">
+                                    <!--<span t-esc="context_timestamp(datetime.datetime.now()).strftime('%Y-%m-%d)"/>-->
+                                    <span t-esc="time.strftime('%Y-%m-%d')"/> <span t-esc="time.strftime('%H:%M:%S')"/>
+                                </div>
+                            </div>
+                            <br></br>
+<!--                            <div class="row" style="font-size:12px; margin-left:4px;">-->
+<!--                                <div class="col-2">-->
+<!--                                    <span>Print Time</span>-->
+<!--                                </div>-->
+<!--                                <div class="col-10">-->
+<!--                                    <span t-esc="time.strftime('%H:%M:%S')"/>-->
+<!--                                </div>-->
+<!--                            </div>-->
+                            <br></br>
+                            <br></br>
+                            <div class="row" style="font-size:18px;">
+                                <div class="col-4 text-center">
+                                    <strong style="border-top:1px solid black;">Authorized By</strong>
+                                </div>
+                                <div class="col-4 text-center">
+                                    <strong style="border-top:1px solid black;">Checked By</strong>
+                                </div>
+                                <div class="col-4 text-center">
+
+                                    <strong style="border-top:1px solid black;">Prepared By</strong>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </template>
+    </data>
+</odoo>

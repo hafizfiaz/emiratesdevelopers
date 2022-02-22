@@ -1,0 +1,496 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <record id="view_users_form_confirmation_limit" model="ir.ui.view">
+            <field name="name">user.confirmation.limit</field>
+            <field name="model">res.users</field>
+            <field name="inherit_id" ref="base.view_users_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//group[@name='messaging']" position="after">
+                    <group string="Receipt Confirmation Limit" name="receipt_confirmation">
+                        <field name="receipt_confirmation_limit"/>
+                    </group>
+                </xpath>
+                <xpath expr="//notebook" position="inside">
+                    <page string="Confirmed Receipts" name="confirmed_receipts">
+                        <field name="receipts_confirmed_ids"/>
+                    </page>
+                </xpath>
+
+            </field>
+        </record>
+
+        <record id="view_payment_search_filters_inherit" model="ir.ui.view">
+            <field name="name">account.payment.search.inherit</field>
+            <field name="model">account.payment</field>
+            <field name="inherit_id" ref="account.view_account_payment_search"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='name']" position="before">
+                    <field name="name" filter_domain="['|','|','|','|',('name','ilike',self)
+                                          ,('old_name','ilike',self)
+                                          ,('partner_id.name','ilike',self)
+                                          ,('partner_id.mobile','ilike',self)
+                                          ,('partner_id.email','ilike',self)]" string="All Search"/>
+                    <field name="spa_id" filter_domain="[('name','ilike',self)]" string="SPA"/>
+                    <field name="asset_project_id" filter_domain="[('asset_project_id','ilike',self)]"
+                           string="Project"/>
+                    <field name="property_id" filter_domain="[('property_id','ilike',self)]" string="Property"/>
+                    <field name="partner_id" filter_domain="[('partner_id','child_of',self)]" string="Customer Name"/>
+                </xpath>
+                <xpath expr="//filter[@name='inbound_filter']" position="before">
+                    <filter string="Today" name="today"
+                            domain="[('date', '=', datetime.datetime.now().strftime('%Y-%m-%d'))]"/>
+                    <filter name="this_month" string="This Month"
+                            domain="[('date','&lt;=',(datetime.date.today()+relativedelta(day=31)).strftime('%Y-%m-%d')),('date','&gt;=',(datetime.date.today()-relativedelta(day=1)).strftime('%Y-%m-%d'))]"
+                            help="Receipts in this month"/>
+                </xpath>
+
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="view_account_payment_form_pdc">
+            <field name="name">account.payment.pdc.form</field>
+            <field name="model">account.payment</field>
+            <field name="inherit_id" ref="account.view_account_payment_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//header" position="inside">
+                    <button name="submit_for_review"
+                            attrs="{'invisible': ['|',('payment_type','!=','inbound'),('state','!=','draft')]}"
+                            string="Submit for Review"
+                            type="object" class="oe_highlight"
+                            groups="security_groups.group_receivable_accountant,security_groups.basic_sale_person"/>
+                    <button name="submit_for_approval"
+                            attrs="{'invisible': ['|',('payment_type','!=','inbound'),('state','not in',('under_review','under_accounts_verification'))]}"
+                            string="Review" type="object" class="oe_highlight"
+                            groups="security_groups.group_receivable_accountant"/>
+                    <button name="submit_for_approval"
+                            attrs="{'invisible':['|',('payment_type','!=','outbound'),('state','not in',('under_review'))]}"
+                            string="Review" type="object" class="oe_highlight"
+                            groups="security_groups.group_chief_payable_accountant"/>
+                    <button name="submit_for_review" string="Submit For Review"
+                            attrs="{'invisible': ['|',('payment_type','!=','outbound'),('state','!=','draft')]}"
+                            type="object" class="oe_highlight" groups="security_groups.group_billing_manager"/>
+                     <button name="button_collected" type="object" string="Approve"
+                            attrs="{'invisible': ['|','|',('payment_type','!=','inbound'),('chk','=',False),('state','!=','under_approval')]}"
+                            class="oe_highlight" groups="security_groups.group_financial_manager,security_groups.group_receivable_accountant"/>
+<!--                    <button name="action_approve" type="object" string="Approve" attrs="{'invisible': ['|','|',('payment_type','!=','outbound'),('state','!=','under_approval'),('visibility_check','=', False)]}" class="oe_highlight"/>-->
+
+<!--                    <button name="action_approve" type="object" string="Approve"-->
+<!--                            attrs="{'invisible': ['|','|',('payment_type','!=','outbound'),('chk','=',False),('state','!=','under_approval')]}"-->
+<!--                            class="oe_highlight"/>-->
+                    <button name="action_post" class="oe_highlight"
+                            attrs="{'invisible':['|','|','|',('other_payment','=',True),('state','not in',['under_approval']),('chk','=',True),('payment_type','=','outbound')]}"
+                            string="Validate" type="object" groups="security_groups.group_chief_accountant"/>
+                    <button name="action_reject" type="object" string="Reject"
+                            attrs="{'invisible':['|',('state','not in',('under_review')),('payment_type','!=','inbound')]}"
+                            class="oe_highlight" groups="security_groups.group_receivable_accountant"/>
+                    <button name="action_reject" type="object" string="Reject"
+                            attrs="{'invisible':['|',('state','not in',('under_approval')),('payment_type','!=','inbound')]}"
+                            class="oe_highlight" groups="security_groups.group_chief_accountant"/>
+                    <button name="action_post" class="oe_highlight"
+                            attrs="{'invisible':['|','|','|','|',('other_payment','=',True),('state','not in',['under_approval']),('chk','=',True),('payment_type','!=','outbound'),('visibility_check','=', False)]}"
+                            string="Validate" type="object"/>
+<!--                    <button name="action_reject" type="object" string="Reject"-->
+<!--                            attrs="{'invisible':['|',('state','not in',('under_approval')),('payment_type','!=','outbound')]}"-->
+<!--                            class="oe_highlight" groups="base.group_erp_manager"/>-->
+                    <button name="action_reject" type="object" string="Reject" attrs="{'invisible': ['|','|',('payment_type','!=','outbound'),('state','!=','under_approval'),('visibility_check','=', False)]}" class="oe_highlight"/>
+
+                    <button name="action_reject" type="object" string="Reject"
+                            attrs="{'invisible':['|',('state','not in',('under_review')),('payment_type','!=','outbound')]}"
+                            class="oe_highlight" groups="security_groups.group_chief_payable_accountant"/>
+
+                    <!--                    <button name="submit_accounts_verification" attrs="{'invisible': ['|',('payment_type','!=','inbound'),('state','!=','draft')]}" string="Confirm"-->
+                    <!--                             type="object" class="oe_highlight"/>-->
+                    <button name="voucher_posted_inbound" string="Post Receipt" class="oe_highlight"
+                            groups="base.group_user,security_groups.group_chief_accountant"
+                            type="object"
+                            attrs="{'invisible':['|','|',('state','not in',('paid_unposted','deposited')),('chk','=',False),('payment_type','=','outbound')]}"/>
+
+                    <button name="voucher_posted_outbound" string="Post Payment" class="oe_highlight"
+                            groups="base.group_user"
+                            type="object"
+                            attrs="{'invisible':['|','|',('state','not in',['deposited']),('chk','=',False),('payment_type','=','inbound')]}"/>
+                    <button name="rejected_check" string="Bounced" type="object"
+                            attrs="{'invisible':['|','|',('state','not in',['posted']),('chk','=',False),('payment_type','=','inbound')]}"
+                            groups="security_groups.group_billing_manager"/>
+                    <button name="rejected_check" string="Bounced" type="object"
+                            attrs="{'invisible':['|','|',('state','not in',['posted']),('chk','=',False),('payment_type','=','outbound')]}"
+                            groups="security_groups.group_receivable_accountant"/>
+                    <button name="action_pending" string="Pending" class="oe_highlight" type="object"
+                            attrs="{'invisible':['|',('state','not in',['under_accounts_verification']),('chk','=',False)]}"/>
+                    <button name="button_collected" string="Collected" class="oe_highlight"
+                            type="object"
+                            attrs="{'invisible':['|',('state','not in',['under_accounts_verification']),('chk','=',False)]}"/>
+                    <button name="action_draft_to_cancel" string="Cancel" type="object" attrs="{'invisible': ['|','|',('payment_type','!=','outbound'),('state','!=','under_approval'),('visibility_check','=', False)]}" class="oe_highlight"/>
+
+                    <button name="action_draft_to_cancel" string="Cancel" type="object"
+                            attrs="{'invisible':['|',('state','not in'  ,('under_accounts_verification',)),('payment_type','!=','inbound')]}"/>
+                    <button name="action_pending" string="Pending" class="oe_highlight" type="object"
+                            attrs="{'invisible':['|','|',('state','not in',['draft','approved']),('chk','=',False),('payment_type','!=','inbound')]}"/>
+                    <button name="action_pending" string="Pending" class="oe_highlight" type="object"
+                            attrs="{'invisible':['|','|',('state','not in',['approved']),('payment_type','!=','outbound'),('chk','=',False)]}"
+                            groups="security_groups.group_billing_manager"/>
+                    <button name="button_collected" states="pending" string="Collected" class="oe_highlight"
+                            type="object"
+                            attrs="{'invisible':['|','|',('state','not in',['draft','approved','pending','refused']),('chk','=',False),('payment_type','!=','inbound')]}"/>
+                    <button name="button_collected" states="pending" string="Collected" class="oe_highlight"
+                            type="object"
+                            attrs="{'invisible':['|','|',('state','!=','approved'),('chk','=',False),('payment_type','!=','outbound')]}"
+                            groups="security_groups.group_billing_manager"/>
+                    <button name="check_replaced" string="Replaced" class="oe_highlight" type="object"
+                            attrs="{'invisible':['|','|',('state','not in', ['pending','collected','hold']),('chk','=',False),('payment_type','=','outbound')]}"/>
+
+                    <button name="button_hold" string="Hold" class="oe_highlight" type="object"
+                            attrs="{'invisible':['|','|',('state','not in', ['pending','collected']),('chk','=',False),('payment_type','=','outbound')]}"/>
+                    <button name="action_pay" string="Deposit" class="oe_highlight" type="object"
+                            attrs="{'invisible':['|','|',('state','not in',('pending','collected','hold')),('chk','=',False),('partner_type','=','supplier')]}"
+                            groups="security_groups.group_receivable_accountant"/>
+                    <button name="action_pay" string="Deposit" class="oe_highlight" type="object"
+                            attrs="{'invisible':['|','|',('state','!=','collected'),('chk','=',False),('partner_type','=','customer')]}"
+                            groups="security_groups.group_billing_manager"/>
+                    <button name="check_outsourced" string="Withdraw" class="oe_highlight" type="object"
+                            attrs="{'invisible':['|','|',('state','not in', ['collected','hold']),('chk','=',False),('payment_type','=','outbound')]}"/>
+                    <button name="action_stale" string="Stale" class="oe_highlight" type="object"
+                            attrs="{'invisible':['|','|',('state','not in',['collected']),
+                            ('chk','=',False),('partner_type','!=','supplier')]}"
+                            groups="security_groups.group_billing_manager"/>
+                    <button name="action_draft_to_cancel" string="Cancel" type="object"
+                            attrs="{'invisible':['|',('state','not in',('draft','under_accounts_verification')),('payment_type','!=','inbound')]}"
+                            groups="security_groups.group_receivable_accountant"/>
+                    <button name="action_draft_to_cancel" string="Cancel" type="object" attrs="{'invisible':['|',('state','!=','under_approval'),('payment_type','!=','inbound')]}"/>
+                    <button name="action_draft_to_cancel" string="Cancel" type="object"
+                            attrs="{'invisible':['|',('state','not in',['draft']),('payment_type','!=','outbound')]}"
+                            groups="security_groups.group_billing_manager"/>
+                    <button name="action_cancel" string="Cancel" type="object"
+                            attrs="{'invisible':['|',('state','!=','refused'),('payment_type','!=','outbound')]}"/>
+                    <!--                    <button name="action_draft_to_cancel" string="Cancel" type="object" attrs="{'invisible':['|',('state','not in',('under_review',)),('payment_type','!=','outbound')]}"/>-->
+                    <button name="action_draft" string="Reset To Draft" type="object" class="btn btn-secondary"
+                            attrs="{'invisible': [('state', 'not in', ('cancelled','rejected'))]}"
+                            groups="account.group_account_user,security_groups.group_receivable_accountant,security_groups.basic_sale_person,account.group_account_invoice,security_groups.group_billing_manager"/>
+
+                    <button name="action_cancel" string="Cancel" type="object" class="btn btn-secondary"
+                            attrs="{'invisible': [('state', 'not in', ('rejected'))]}"
+                            groups="security_groups.group_receivable_accountant"/>
+
+                    <button name="action_settle" string="Settle" type="object"
+                            attrs="{'invisible':['|',('state','!=','refused'),('chk','=',False)]}"/>
+                    <button name="action_cancel" attrs="{'invisible':[('state','!=','settle')]}" string="Cancel" type="object"/>
+                    <!--                    <button name="create_settlement" string="Create Settlement" type="object"-->
+                    <!--                            attrs="{'invisible':['|','|',('state','not in',('posted')),('settlement_check','=',False),('settlement','in',['done'])]}"/>-->
+                </xpath>
+                <button name="action_post" position="attributes">
+                    <attribute name="attrs">{'invisible':['|','|',('other_payment','=',True),
+                        ('state','not in',['approved']),('payment_type','!=','outbound')]}
+                    </attribute>
+                    <attribute name="string">Validate</attribute>
+                </button>
+<!--                <field name="partner_id" position="attributes">-->
+<!--                    <attribute name="options">{'no_create':True, 'no_create_edit':True, 'no_open': True}</attribute>-->
+<!--                </field>-->
+                <button name="action_draft" position="attributes">
+                    <attribute name="attrs">{'invisible': [('state', 'not in', ('posted', 'cancel'))]}</attribute>
+                    <attribute name="invisible">1</attribute>
+                </button>
+                <button name="mark_as_sent" position="attributes">
+                    <attribute name="attrs">{'invisible': ['|', '|', ('state', '!=', 'posted'), ('is_move_sent', '=',
+                        True), ('payment_method_code', '!=', 'manual')]}
+                    </attribute>
+                    <attribute name="invisible">1</attribute>
+                </button>
+                <button name="action_cancel" position="replace">
+                    <button name="action_cancel"
+                            attrs="{'invisible': [('state', 'in', ['draft','under_accounts_verification','cancelled','under_review','under_approval','rejected','refused','settle'])]}"
+                            string="Cancel" type="object"
+                            groups="security_groups.group_financial_officer,security_groups.group_receipts_cancellation"/>
+                </button>
+
+                <!--<field name="partner_type" position="after">
+                    <field name="collection_type_id" attrs="{'invisible':[('partner_type','=','supplier')]}" options="{'no_create':True, 'no_create_edit':True}"/>
+                </field>-->
+
+                <field name="journal_id" position="replace">
+
+                </field>
+                <xpath expr="//div[@class='oe_title']" position="replace">
+                    <div class="oe_title" attrs="{'invisible': [('state', '=', 'draft')]}">
+                        <h1>
+                            <field name="name"
+                                   attrs="{'readonly': [('state', '!=', 'draft')], 'invisible': [('old_name', '!=', False)]}"/>
+                        </h1>
+                        <h1>
+                            <field name="old_name"
+                                   attrs="{'readonly': [('state', '!=', 'draft')], 'invisible': [('old_name', '=', False)]}"/>
+                        </h1>
+                    </div>
+                </xpath>
+                <field name="partner_id" position="after">
+                    <field name="mobile"/>
+                    <field name="email"/>
+                    <field name="journal_id" domain="[('type', 'in', ('bank', 'cash', 'pdc'))]"
+                           attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                </field>
+                <field name="destination_account_id" position="after">
+                    <label for="amount" string="Payment Amount"/>
+                    <div name="amount_div" class="o_row">
+                        <field name="amount" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                        <field name="currency_id" options="{'no_create': True, 'no_open': True}" required="1"
+                               attrs="{'readonly': [('state', '!=', 'draft')]}" groups="base.group_multi_currency"/>
+                    </div>
+                    <!--                    <field name="is_internal_transfer" attrs="{'readonly': [('state', '!=', 'draft')]}"/>-->
+                    <field name="check_number" readonly="0" attrs="{'invisible':[('chk','=',False)]}"/>
+                    <field name="bank_issued_check" attrs="{'invisible':[('chk','=',False)]}"/>
+                    <field name="collection_type_id" options="{'no_create':True, 'no_create_edit':True, 'no_open': True}" invisible="1"/>
+                    <field name="bank_deposit"
+                           attrs="{'invisible':['|',('chk','=',False),('collection_type_id', '=', 19)]}"/>
+                    <field name="posting_ledger" attrs="{'invisible':['|',('chk','=',False),('collection_type_id', '!=', 19)]}"/>
+                    <field name="maturity_date" attrs="{'invisible':[('chk','=',False)]}"/>
+                    <field name="collection_date" attrs="{'invisible':[('chk','=',False)]}"/>
+                    <field name="account_holder_name" attrs="{'invisible':[('chk','=',False)]}"/>
+                    <!--<field name="settlement" attrs="{'invisible':[('partner_type','=','supplier')]}"/>
+                    <field name="settlement_check" invisible="True"/>-->
+                    <field name="oqood_amount" attrs="{'invisible':[('payment_type','=','outbound')]}"/>
+                    <field name="admin_amount" attrs="{'invisible':[('payment_type','=','outbound')]}"/>
+                    <field name="nets_amount" attrs="{'invisible':[('payment_type','=','outbound')]}"/>
+
+                    <!--                    <field name="ref" string="Memo"/>-->
+                </field>
+                <xpath expr="//group[@name='group3']" position="replace">
+                    <group></group>
+                </xpath>
+                <field name="company_id" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </field>
+                <field name="payment_type" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </field>
+                <!--                <field name="is_internal_transfer" position="attributes">-->
+                <!--                    <attribute name="invisible">1</attribute>-->
+                <!--                </field>-->
+                <xpath expr="//group[@name='group2']" position="replace">
+                    <group name="group2">
+                        <field name="chk" invisible="1"/>
+                        <field name="journal_entry_id" invisible="1"/>
+                        <field name="other_payment" invisible="1"/>
+                        <field name="move_id" invisible="1" required="False"/>
+                        <field name="create_uid"/>
+                        <field name="approval_from_ids" widget="many2many_tags"
+                               attrs="{'readonly': [('state', '!=', 'draft')], 'invisible':[('payment_type','!=','outbound')]}"/>
+                        <field name="visibility_check" invisible="1"/>
+                        <field name="old_payment_date"
+                               attrs="{'readonly': True, 'invisible':[('old_payment_date','=',False)]}"/>
+                        <field name="date"
+                               attrs="{'invisible':[('old_payment_date','!=', False)], 'readonly':[('state','!=','draft')], 'required':[('old_payment_date','=',False)]}"
+                               string="Payment Date"/>
+                        <field name="reference" attrs="{'readonly':[('state','not in',['draft','under_approval'])]}"
+                               string="Payment ref"/>
+                        <field name="agreed_term"
+                               attrs="{'invisible':[('payment_type','=','outbound')],'readonly':True}"/>
+                        <field name="spa_id" attrs="{'invisible':[('payment_type','!=','inbound')]}" options="{'no_create':True, 'no_create_edit':True, 'no_open': True}"/>
+                        <field name="spa_payment_id" attrs="{'invisible':[('payment_type','!=','outbound')]}"/>
+                        <field name="asset_project_id" attrs="{'readonly': [('state', '!=', 'draft')]}" options="{'no_create':True, 'no_create_edit':True, 'no_open': True}"/>
+                        <field name="property_id" attrs="{'readonly': [('state', '!=', 'draft')]}" options="{'no_create':True, 'no_create_edit':True, 'no_open': True}"/>
+                        <field name="amount_due" string="Amount Due"/>
+                        <field name="remarks"/>
+                        <field name="collection_team_id" domain="[('active','=', True)]"
+                               attrs="{'invisible':[('payment_type','=','outbound')]}"
+                        options="{'no_create':True, 'no_create_edit':True, 'no_open': True}"/>
+                        <field name="posting_date" attrs="{'invisible':[('chk','=',False)]}"/>
+                        <field name="paid_date" attrs="{'invisible':[('chk','=',False)]}"/>
+                        <field name="bounced_date" attrs="{'invisible':[('chk','=',False)]}"/>
+                        <field name="re_deposit" readonly="True"/>
+                        <field name="officer_id"
+                               attrs="{'invisible':[('payment_type','=','outbound')],'required':[('payment_type','=','inbound')]}"
+                        options="{'no_create':True, 'no_create_edit':True, 'no_open': True}"/>
+                    </group>
+                </xpath>
+                <field name="state" position="replace">
+                    <field name="state" widget="statusbar" statusbar_visible="draft,posted"
+                           statusbar_colors='{"proforma":"blue"}'/>
+                </field>
+
+                <xpath expr="//form/sheet" position="inside">
+                    <notebook>
+                        <!--<page string="Journal Pending" attrs="{'invisible': [('move_pending_ids','=',[])]}">-->
+                        <page string="Journal Items">
+                            <!--<group col="4">-->
+                            <!--<field name="journal_pending_show" invisible="1"/>-->
+                            <!--</group>-->
+                            <field name="move_entry_ids" readonly="1">
+                                <tree string="Journal Items">
+                                    <field name="move_id"/>
+                                    <field name="ref"/>
+                                    <field name="date"/>
+                                    <field name="statement_id"/>
+                                    <field name="partner_id"/>
+                                    <field name="account_id"/>
+                                    <field name="name"/>
+                                    <field name="debit"/>
+                                    <field name="credit"/>
+                                    <!--                                    <field name="state"/>-->
+                                    <!--<field name="reconcile_id"/>-->
+                                </tree>
+                            </field>
+                        </page>
+
+                        <!--<page string="Journal Bounced">-->
+                        <page string="Journal Bounced" attrs="{'invisible': [('move_rejected_ids','=',[])]}">
+                            <field name="move_rejected_ids" readonly="1">
+                                <tree string="Journal Rejected">
+                                    <field name="move_id"/>
+                                    <field name="ref"/>
+                                    <field name="date"/>
+                                    <field name="statement_id"/>
+                                    <field name="partner_id"/>
+                                    <field name="account_id"/>
+                                    <field name="name"/>
+                                    <field name="debit"/>
+                                    <field name="credit"/>
+                                    <!--                                    <field name="state"/>-->
+                                    <!--<field name="reconcile_id"/>-->
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Redeposit Dates"
+                              attrs="{'invisible': ['|',('payment_type','=','outbound'),('re_deposit','&lt;',1)]}"
+                              groups="account.group_account_manager">
+                            <group>
+                                <group string="1st Redeposit" attrs="{'invisible': [('re_deposit','=',0)]}">
+                                    <field name="rd1_deposit_date"/>
+                                    <field name="rd1_posting_date"/>
+                                    <field name="rd1_bounced_date"/>
+                                </group>
+                                <group string="2st Redeposit" attrs="{'invisible': [('re_deposit','&lt;=',1)]}">
+                                    <field name="rd2_deposit_date"/>
+                                    <field name="rd2_posting_date"/>
+                                    <field name="rd2_bounced_date"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Bounced Cheque- Redeposit Entries"
+                              attrs="{'invisible': [('bounced_move_deposited_ids','=',[])]}">
+                            <field name="bounced_move_deposited_ids" readonly="1">
+                                <tree string="Journal Deposited" default_order='create_date desc'>
+                                    <field name="move_id"/>
+                                    <field name="ref"/>
+                                    <field name="date"/>
+                                    <field name="statement_id"/>
+                                    <field name="partner_id"/>
+                                    <field name="account_id"/>
+                                    <field name="name"/>
+                                    <field name="debit"/>
+                                    <field name="credit"/>
+                                    <field name="create_date" invisible="True"/>
+                                </tree>
+                            </field>
+                        </page>
+
+                        <!--<page string="Journal Withdraw">-->
+                        <page string="Journal Withdraw/Replaced"
+                              attrs="{'invisible': [('move_outsourced_ids','=',[])]}">
+                            <field name="move_outsourced_ids" readonly="1">
+                                <tree string="Journal Withdraw">
+                                    <field name="move_id"/>
+                                    <field name="ref"/>
+                                    <field name="date"/>
+                                    <field name="statement_id"/>
+                                    <field name="partner_id"/>
+                                    <field name="account_id"/>
+                                    <field name="name"/>
+                                    <field name="debit"/>
+                                    <field name="credit"/>
+                                    <!--<field name="state"/>-->
+                                    <!--<field name="reconcile_id"/>-->
+                                </tree>
+                            </field>
+                        </page>
+
+                        <!--<page string="Journal Banks" attrs="{'invisible': ['|',('state','not in',('posted','refused')), ('chk','=',False)]}">-->
+                        <page string="Journal Banks" attrs="{'invisible': [('move_bank_ids','=',[])]}">
+                            <!--<page string="Journal Banks">-->
+                            <!--<group col="4">-->
+                            <!--&lt;!&ndash;<field name="period_id"/>&ndash;&gt;-->
+                            <!--&lt;!&ndash;<field name="audit"/>&ndash;&gt;-->
+                            <!--</group>-->
+                            <field name="move_bank_ids" readonly="1">
+                                <tree string="Journal Banks">
+                                    <field name="move_id"/>
+                                    <field name="ref"/>
+                                    <field name="date"/>
+                                    <field name="statement_id"/>
+                                    <field name="partner_id"/>
+                                    <field name="account_id"/>
+                                    <field name="name"/>
+                                    <field name="debit"/>
+                                    <field name="credit"/>
+                                    <!--<field name="state"/>-->
+                                    <!--<field name="reconcile_id"/>-->
+                                </tree>
+                            </field>
+                        </page>
+
+                        <page string="Journal Posted" attrs="{'invisible': [('move_posted_ids','=',[])]}">
+                            <!--<page string="Journal Posted">-->
+                            <field name="move_posted_ids" readonly="1">
+                                <tree string="Journal Posted">
+                                    <field name="move_id"/>
+                                    <field name="ref"/>
+                                    <field name="date"/>
+                                    <field name="statement_id"/>
+                                    <field name="partner_id"/>
+                                    <field name="account_id"/>
+                                    <field name="name"/>
+                                    <field name="debit"/>
+                                    <field name="credit"/>
+                                    <!--<field name="state"/>-->
+                                    <!--<field name="reconcile_id"/>-->
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="account.action_account_payments" model="ir.actions.act_window">
+            <field name="name">Receipts</field>
+            <field name="res_model">account.payment</field>
+            <field name="view_mode">tree,kanban,form,graph</field>
+            <field name="context">{'default_payment_type': 'inbound', 'default_partner_type': 'customer',
+                'search_default_inbound_filter': 1}
+            </field>
+            <field name="domain">[('payment_type','=','inbound')]</field>
+            <field name="view_id" ref="account.view_account_payment_tree"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Register a Receipt
+                </p>
+                <p>
+                    Payments are used to register liquidity movements. You can process those payments by your own means
+                    or by using installed facilities.
+                </p>
+            </field>
+        </record>
+
+        <record id="account.action_account_payments_payable" model="ir.actions.act_window">
+            <field name="name">Payments</field>
+            <field name="res_model">account.payment</field>
+            <field name="view_mode">tree,kanban,form,graph</field>
+            <field name="context">{'default_payment_type': 'outbound', 'default_partner_type': 'supplier',
+                'search_default_outbound_filter': 1}
+            </field>
+            <field name="domain">[('payment_type','=','outbound')]</field>
+            <field name="view_id" ref="account.view_account_supplier_payment_tree"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Register a payment
+                </p>
+                <p>
+                    Payments are used to register liquidity movements. You can process those payments by your own means
+                    or by using installed facilities.
+                </p>
+            </field>
+        </record>
+
+
+    </data>
+</odoo>
