@@ -1,0 +1,259 @@
+<odoo>
+    <template id="rent_properties" name="Rent Properties">
+        <t t-call="property_website.allassetlease_content" />
+    </template>
+    <template id="rent_properties_onload" name="Rent">
+        <t t-call="website.layout">
+            <t t-call="property_website.rent_properties"/>
+        </t>
+    </template>
+    <template id="allassetlease_onload" name="Samana Golf Avenue - Create Offer">
+        <t t-call="website.layout">
+            <t t-call="property_website.allassetlease_content" />
+        </t>
+    </template>
+    <template name="All Aseets Lease" id="allassetlease_content">
+        <section class="welcome-area">
+
+            <div class="welcome-slides owl-carousel">
+                <div class="col-md-12 asset-lease rent-single-welcome-slide bg-img bg-overlay">
+                    <div class='text-center inner-content'>
+                        <h3><strong>SAMANA</strong> PARK VIEW</h3>
+                        <!--<ul>
+                            <li>
+                               <div style="color:white;font-size:20px;"><strong> Available Units: </strong> <t t-esc="available_account_asset_lease"/>
+                                </div>
+                                <div style="color:white;font-size:20px;"><strong> Sold Units: </strong> <t t-esc="sold_account_asset_lease"/></div>
+                            </li>
+                        </ul>-->
+                    </div>
+                </div>
+            </div>
+            <t t-foreach="all_property_objs" t-as="account_asset_one_lease">
+        <div role="dialog" id="reset_template_confirmation" t-att-data-lease_id="account_asset_one_lease.id" class="modal" tabindex="-1" t-ignore="true">
+                <div class="modal-dialog" style="overflow-y: initial !important">
+                    <form role="form" name="inputform" action="/report/pdf/sale_offer" method="get">
+
+                                <input type='hidden' name="property_id" t-att-value="account_asset_one_lease.id"/>
+                    <div class="modal-content">
+                        <header class="modal-header">
+                            <h3 class="modal-title">Apartment details</h3>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">×</button>
+                        </header>
+                        <main class="modal-body" style="height: 80vh;overflow-y: auto;">
+                        <table class="table table-bordered">
+                            <tr>
+                                <td id="unit">Unit No</td>
+                                <td id="unit_value"><t t-esc="account_asset_one_lease.name" /></td>
+                            </tr>
+                            <tr>
+                                <td>Floor No</td>
+                                <td id="floor_no"><t t-esc="account_asset_one_lease.floor" /></td>
+                            </tr>
+                            <tr>
+                                <td>Unit Size</td>
+                                <td id="unit_size"><t t-esc="account_asset_one_lease.gfa_feet" /></td>
+                            </tr>
+                            <tr>
+                                <td>Apartment Type</td>
+                                <td id="type"><!--<t t-esc="account_asset_one_lease.unit_type_id.name" />--></td>
+                            </tr>
+                            <tr>
+                                <td>Apartment View</td>
+<!--                                <td id="view"><t t-if="account_asset_one_lease.facing_id" t-esc="account_asset_one_lease.facing_id.name" /></td>-->
+                            </tr>
+                            <tr>
+                                <td>Total Price</td>
+                                <td id="total"><t t-esc="account_asset_one_lease.value" /></td>
+                            </tr>
+                            <tr>
+                                <td>Status</td>
+                                <t t-if="account_asset_one_lease.web_state == 'draft'">
+                                    <td id="state">Available</td>
+
+                                </t>
+                                <!--<t t-if="account_asset_one_lease.state == 'book'">
+                                    <td id="state">Booked</td>
+
+                                </t>-->
+                                <t t-if="account_asset_one_lease.web_state == 'sold'">
+                                    <td id="state">Sold</td>
+
+                                </t>
+                            </tr>
+                        </table>
+                            <div class="col-md-12 mt16">
+                            <input type="text" class="form-control o_website_form_input" name="contact_name" placeholder="Agent Name"/>
+                            </div>
+                            <div class="col-md-12 mt16">
+                            <input type="text" class="form-control o_website_form_input" name="contact_mobile" placeholder="Agent Mobile"/>
+                            </div>
+                            <div class="col-md-12 mt16">
+                            <input type="text" class="form-control o_website_form_input" name="contact_email" placeholder="Agent Email"/>
+                            </div>
+
+                            <div class="col-md-12 mt16">
+                            <select id="payments" name="paymentlist" required="required" class="form-control">
+                                  <option value="">Payment Options</option>
+                                   <t t-foreach="all_payment_schedules or []" t-as="country">
+                                        <option t-att-value="country.id">
+                                            <t t-esc="country.name" />
+                                        </option>
+                                    </t>
+                                </select>
+                            </div>
+                            <!--<t t-if="account_asset_one_lease.parent_id.web_view_booking">
+                                <div class="col-md-12 mt16">
+                                    <label for="check_box" string="Create Tentative Booking &amp; Print Reservation"/>
+                                    <input type="checkbox" class="chkBoxHelp" id="chkBoxHelp" name="check_box" value="Create Tentative Booking &amp; Print Reservation"/>
+                                </div>
+                                <form class="oe_login_form col-xs-10 col-xs-offset-1" role="form" t-attf-action="/web/login{{ '?debug' if debug else '' }}" method="post" onsubmit="this.action = this.action + location.hash" style="padding: 14px;">
+                                    <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                                    <div class="row" style="padding: 14px;">
+                                        <h3>Login</h3>
+                                    </div>
+                                    <hr style="margin-top: 0px;"/>
+                                    <div class="form-group field-login">
+                                        <label for="login" class="control-label">Email</label>
+                                        <input type="text" placeholder="Email" name="login" t-att-value="login" id="login" t-attf-class="form-control #{'form-control-sm' if form_small else ''}" required="required" autofocus="autofocus" autocapitalize="off"/>
+                                        &lt;!&ndash; <input type="text" name="login" t-att-value="login" id="login" class="form-control" required="required" autofocus="autofocus"/> &ndash;&gt;
+                                    </div>
+                                    <div class="form-group field-password">
+                                        <label for="password" class="control-label">Password</label>
+                                        &lt;!&ndash; <input type="password" name="password" id="password" class="form-control" required="required" t-att-autofocus="'autofocus' if login else None"/> &ndash;&gt;
+                                        <input type="password" placeholder="Password" name="password" id="password" t-attf-class="form-control #{'form-control-sm' if form_small else ''}" required="required" autocomplete="current-password" t-att-autofocus="'autofocus' if login else None" maxlength="4096"/>
+                                    </div>
+                                    <p class="alert alert-danger" t-if="error" role="alert">
+                                        <t t-esc="error"/>
+                                    </p>
+                                    <p class="alert alert-success" t-if="message" role="status">
+                                        <t t-esc="message"/>
+                                    </p>
+                                    <div t-attf-class="clearfix oe_login_buttons text-center mb-1 {{'pt-2' if form_small else 'pt-3'}}">
+                                        <button type="button" class="wk_next_btn" style="
+                                        cursor: pointer;
+                                        display: block;
+                                        margin-left: auto;
+                                        margin-right: auto;
+                                        width: 145px;
+                                        height: 45px;
+                                        font-size: 14px;
+                                        background: none;
+                                        border-radius: 20px;
+                                        color: black;
+                                        border: 1px solid white;
+                                        margin-top: 20px;
+                                        background-color:white;
+                                        outline: none;">Verify</button>
+                                        <button type="submit" class="control-button in">Sign In</button>
+                                        <t t-if="debug">
+                                            <button type="submit" name="redirect" value="/web/become" class="btn btn-link btn-sm btn-block">Log in as superuser</button>
+                                        </t>
+                                        <div class="o_login_auth"/>
+                                    </div>
+
+                                    <input type="hidden" name="redirect" t-att-value="redirect"/>
+                                    &lt;!&ndash; <input type="hidden" name="redirect" t-att-value="redirect"/>
+                                    <div class="clearfix oe_login_buttons">
+                                        <a t-if="reset_password_enabled" t-attf-href="/web/reset_password?{{ keep_query() }}" class="btn btn-link pull-right">Reset Password</a>
+                                        <button type="submit" class="btn btn-primary pull-right">Log in</button>
+                                        <button type="submit" class="control-button in">Sign In</button>
+                                    </div> &ndash;&gt;
+                                </form>
+                            </t>
+-->
+
+
+
+
+                            <!--<div class="form-group row mb0">-->
+                                <!--<label for="page-name" class="col-md-9 col-form-label">-->
+                                    <!--<p>The selected templates will be reset to their factory settings.</p>-->
+                                    <!--<p>Type '<i class="confirm_word">yes</i>' in the box below if you want to confirm.</p>-->
+                                <!--</label>-->
+                                <!--<div class="col-md-3 mt16">-->
+                                    <!--<input type="text" class="form-control" required="required" placeholder="yes"/>-->
+                                <!--</div>-->
+                            <!--</div>-->
+
+                        <footer class="modal-footer">
+
+                            <button type="submit" name="button1" class="btn btn-primary a-submit" value="1">Print Pdf Detailed Plan
+                            </button>
+                            <button type="submit" name="button2" value="2" class="btn btn-primary a-submit">Print Pdf Summary Plan
+                            </button>
+                            <button type="button" class="btn" data-dismiss="modal" aria-label="Cancel">Cancel</button>
+                        </footer>
+                        </main>
+                    </div>
+                    </form>
+                </div>
+            </div>
+        </t>
+        </section>
+
+        <div class="rest feature-properties">
+            <section class="recent-viewed-section section" id="allassetlease_section">
+                <div class="container">
+                    <div class="row allassetsale_section_first_row" style="width: inherit;z-index: 1;">
+<!--                        <div class="mt32 mb32 col-md-3" id="display_saved_properties">-->
+<!--                            <input type="hidden" id="property_type" name="property_type" t-att-value="property_type" />-->
+<!--                            <ul class="nav navbar-nav">-->
+<!--                                &lt;!&ndash; <li style="cursor:pointer">-->
+<!--                                    <a id="view_all_asset_sale" class="active">Sales</a>-->
+<!--                                </li> &ndash;&gt;-->
+<!--                                &lt;!&ndash;<li style="cursor:pointer">&ndash;&gt;-->
+<!--                                    &lt;!&ndash;<a id="view_all_asset_sale_saved"></a>&ndash;&gt;-->
+<!--                                &lt;!&ndash;</li>&ndash;&gt;-->
+<!--                            </ul>-->
+<!--                        </div>-->
+                        <!-- <div class=''> -->
+                        <div class='mt32 mb32 col-md-12'>
+                            <t t-call="property_website.search_property_content" />
+                        </div>
+                        <!-- </div> -->
+                    </div>
+                    <!--  NEED TO ADD SEARCH-->
+                    <!-- <div class="row allassetlease_section_first_row" style="width: inherit;z-index: 1;background: #f5f1ed;">
+                        <div class="col-md-3 col-xs-12" id="display_saved_properties">
+                            <input type="hidden" id="property_type" name="property_type" t-att-value="property_type"/>
+                            <ul class="nav navbar-nav" style="width: 100%;">
+                                <li style="cursor:pointer">
+                                    <a id="view_all_asset_lease" class="active">Sales</a>
+                                </li>
+                                <li style="cursor:pointer">
+                                    <a id="view_all_asset_sale_saved"></a>
+                                </li>
+                            </ul>
+                        </div>
+                        <t t-call="property_management_website.search_property_content"/>
+                    </div> -->
+                    <!-- <t t-if="pager">
+                        <div class="row">
+                            <t t-call="property_website.view_pagination"/>
+                        </div>
+                    </t> -->
+                    <t t-call="property_website.featured_lease_content"/>
+                    <t t-if="pager">
+                        <div class="mt16 row">
+                            <t t-call="property_website.view_pagination" />
+                        </div>
+                    </t>
+                </div>
+            </section>
+            <!-- <t t-call="property_management_website.custom_footer"/> -->
+        </div>
+
+    </template>
+    <template id="featured_lease_content" name="Featured Lease Content">
+        <div class="row recent-viewed-content">
+            <t t-foreach="all_property_objs" t-as="account_asset_one_lease">
+<!--                <t t-if="(account_asset_one_lease.state in ['draft','sold'])">-->
+                    <t t-call="property_website.dosplay_properties" />
+<!--                </t>-->
+            </t>
+        </div>
+    </template>
+
+
+</odoo>

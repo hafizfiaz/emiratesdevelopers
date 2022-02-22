@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="paperformat_website_schedule" model="report.paperformat">
+            <field name="name">Website Report</field>
+            <field name="default" eval="True"/>
+            <field name="format">custom</field>
+            <field name="page_height">350</field>
+            <field name="page_width">0</field>
+            <field name="orientation">Landscape</field>
+            <field name="margin_top">27</field>
+            <field name="margin_bottom">16</field>
+            <!--<field name="margin_left">7</field>-->
+            <!--<field name="margin_right">7</field>-->
+            <field name="header_line" eval="False"/>
+            <field name="header_spacing">23</field>
+            <!--<field name="dpi">90</field>-->
+        </record>
+
+        <report id="report_website_schedule"
+                string="Website Report"
+                model="payment.schedule"
+                report_type="qweb-pdf"
+                paperformat="property_website.paperformat_website_schedule"
+                file="property_website.report_website_template"
+                name="property_website.report_website_template"/>
+
+
+        <template id="report_website_template">
+            <t t-call="web.html_container">
+
+                <t t-foreach="docs" t-as="account_asset_one_lease">
+                    <t t-call="crm_extension.rent_external_layout">
+
+                        <div class="page">
+                            <style>
+
+                                .table-bordered {
+                                          border: 1px solid black;
+                                        }
+
+                                        .table-bordered th,
+                                        .table-bordered tr,
+                                        .table-bordered td {
+                                          border: 1px solid black;
+                                            margin:5px;
+                                            padding:5px;
+
+
+                                        }
+
+                                        .table-bordered thead th,
+                                        .table-bordered thead tr,
+                                        .table-bordered thead td {
+                                          border-bottom-width: 2px;
+                                            border: 1px solid black;
+                                        }
+                </style>
+                        <div class="row">
+                            <div col-sm="4" style="width:30%;">
+                                <img src="/property_website/static/images/samana_golf.png" height="250px" width="300px"/>
+                                <!--<img t-att-src="'data:image/png:/samana_golf.png'"/>-->
+                            </div>
+                            <div col-sm="8" style="width:65%;font-size:14px;">
+                                <table class="table table-bordered" style="border-color:black;padding:0px;marging:0px;">
+                                    <tr height="20px;">
+                                        <td colspan="2" style="background-color:#A61943;color:white;font-size:24px;" class="text-center">
+                                            <b>Sales Offer</b>
+                                        </td>
+
+                                    </tr>
+                                    <tr height="20px;">
+                                        <td id="unit" class="text-left" style="background-color:#BBB4B7;">Apartment Unit
+                                            no
+                                        </td>
+                                        <td id="unit_value" class="text-right">
+                                            <t t-esc="account_asset_one_lease.name"/>
+                                        </td>
+                                    </tr>
+                                    <tr height="20px;">
+                                        <td class="text-left" style="background-color:#BBB4B7;">Apartment Type and View
+                                        </td>
+                                        <td id="floor_no" class="text-right">
+                                            <t t-esc="account_asset_one_lease.type_id.name"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-left" style="background-color:#BBB4B7;">Total Area (SQ. FT.)</td>
+                                        <td id="unit_size" class="text-right">
+                                            <t t-esc="account_asset_one_lease.gfa_feet"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-left" style="background-color:#BBB4B7;">Floor</td>
+                                        <td id="type" class="text-right">
+                                            <t t-esc="account_asset_one_lease.floor"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-left" style="background-color:#BBB4B7;">Selling Price (AED)</td>
+                                        <td id="view" class="text-right">
+                                            <t t-esc="account_asset_one_lease.value"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <t t-set="total" t-value="0"/>
+                                        <td class="text-left" style="background-color:#BBB4B7;">Selling Price (USD)</td>
+                                        <td id="total" class="text-right">
+                                            <t t-esc="account_asset_one_lease.value*0.27"/>
+                                            <t t-set="total" t-value="total+account_asset_one_lease.value"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-left" style="background-color:#BBB4B7;">Expected Return on
+                                            Investment Per Year
+                                        </td>
+                                        <td id="state" class="text-right">
+                                            <t t-esc="account_asset_one_lease.state"/>
+                                        </td>
+                                    </tr>
+                                </table>
+
+                            </div>
+                        </div>
+                        </div>
+                        <table style="font-size:24px;width:100%;margin-top:50px;">
+                                <tr>
+                                <td colspan="9" style="background-color:#A61943;color:white;padding-top:15px;padding-bottom:15px;" class="text-center">
+                                    <b>Payment Plan</b>
+                                </td>
+                            </tr>
+                        </table>
+                        <table class="table table-bordered" style="font-size:14px;width:100%;">
+
+                            <thead>
+                                <tr>
+                                    <th>Serial Number</th>
+                                    <th>Date</th>
+                                    <th>Percentage</th>
+                                    <th colspan="2">Amount</th>
+                                    <th>Total Amount</th>
+                                    <!--<th>Expected Rental Income</th>-->
+                                    <th>Net Investment</th>
+                                    <!--<th>Status</th>-->
+                                </tr>
+                            </thead>
+                            <t t-set="percent" t-value="0"/>
+                            <t t-set="a" t-value="0"/>
+                            <t t-set="b" t-value="1"/>
+                            <t t-set="total_amount" t-value="0"/>
+
+                            <!--<t t-set="add_date" t-value="''"/>-->
+                            <t t-foreach="payment.payment_criteria_ids" t-as="pay">
+                            <tr t-foreach="pay.no_of_period" t-as="l">
+                                <td>
+                                    <span t-esc="b"/>
+                                </td>
+                                <td>
+
+                                    <t t-if="a==0">
+                                        <span t-esc="all_dates[a]"/>
+                                    </t>
+                                    <t t-if="a > 0">
+                                        <span t-esc="all_dates[a]"/>
+                                    </t>
+                                    <t t-set="a" t-value="a+1"/>
+                                    <t t-set="b" t-value="b+1"/>
+
+                                    <!--<span t-esc="all_dates[a]"/>-->
+                                    <!--<span t-esc="start_date.strftime('%d.%m.%Y')"/>-->
+                                    <!--<span t-set="d_delta" t-value="datetime.timedelta(days=17)"/>-->
+
+                                    <!--<span t-set="start_date" t-value="start_date+d_delta"/>-->
+                                    <!--<span t-esc="datetime.datetime.strptime(start_date, '%Y-%m-%d') + datetime.timedelta(days=1) ).strftime('%Y-%m-%d')"/>-->
+                                </td>
+                                <td>
+                                    <span t-esc="pay.value_amount"/>
+                                </td>
+                                <td>
+                                    <t t-if="pay.value=='percent'">
+                                        <t t-if="pay.amount_get=='auto'">
+                                            <t t-set="percent" t-value="(total*pay.value_amount)/100"/>
+                                            AED
+                                            <span t-esc="percent"/>
+                                        </t>
+
+                                    </t>
+                                </td>
+                                <td>
+                                    <t t-if="a==0">
+                                        One-Of
+                                    </t>
+                                    <t t-if="a>0">
+                                        Per Month
+                                    </t>
+                                </td>
+                                <td>
+                                    <span t-esc="percent"/>
+                                    <t t-set="total_amount" t-value="total_amount+percent"/>
+                                </td>
+                                <!--<td></td>-->
+                                <td>
+                                    <span t-esc="pay.no_of_period*percent"/>
+                                </td>
+                                <!--<td></td>-->
+                            </tr>
+
+                            </t>
+                            <tr style="font-size:21px;">
+                                <td colspan="5" style="background-color:#A61943;color:white;" class="text-right">
+                                    Total Apartment Price
+                                </td>
+                                <td>
+                                    <span t-esc="total_amount"/>
+                                </td>
+                                <td></td>
+                                <!--<td></td>-->
+                                <!--<td></td>-->
+                            </tr>
+                            <tr style="font-size:21px;">
+                                <td colspan="5" style="background-color:#A61943;color:white;" class="text-right">
+                                    Expected Rental Income Return (9.25% Per Annum After Handover
+                                </td>
+                                <td></td>
+                                <td></td>
+                                <!--<td></td>-->
+                                <!--<td></td>-->
+                            </tr>
+                            <tr style="font-size:21px;">
+                                <td colspan="5" style="background-color:#A61943;color:white;" class="text-right">
+                                    Net Investment
+                                </td>
+                                <td></td>
+                                <td></td>
+                                <!--<td></td>-->
+                                <!--<td></td>-->
+                            </tr>
+                        </table>
+
+                    </t>
+                </t>
+            </t>
+        </template>
+    </data>
+</odoo>
+
+

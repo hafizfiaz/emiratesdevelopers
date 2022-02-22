@@ -1,0 +1,72 @@
+<odoo>
+	<template id="contactus_onload" name="Contact us">
+        <t t-call="website.layout">
+            <t t-call="property_website.contactus_content" />
+        </t>
+    </template>
+
+    <template id="website.contactus" name="Website Contact us Inherit">
+        <t t-call="website.layout">
+            <t t-call="property_website.contactus_content" />
+        </t>
+    </template>
+
+    <template id="contactus_content" name="Contact us">
+        <section class="hero-section" style="height: 100%;position:inherit;">
+            <!-- <div id="contacts-map"></div> -->
+            <div class="hero-content contact-form text-center" style="box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);background: rgba(255, 255, 255, 0.615686);margin-left: 2%;text-align: -webkit-auto; position: absolute;">
+                <form id="contactForm" data-toggle="validator" class="form-horizontal mt32 col-md-12">
+                    <div class="form-group">
+                        <label class="col-md-4 control-label" for="contact_name">Your Name</label>
+                        <div class="col-md-7">
+                            <input type="text" class="form-control" name="contact_name" required="True" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label" for="phone">Phone Number</label>
+                        <div class="col-md-7">
+                            <input type="tel" class="form-control" name="phone" />
+                        </div>
+                    </div>
+                    <div name="email_from_container" class="form-group has-feedback">
+                        <label class="col-md-4 control-label" for="email_from">Email</label>
+                        <div class="col-md-7">
+                            <input type="email" class="form-control" name="email_from" data-error="Please enter valid Email address." required="True" />
+                            <div class="help-block with-errors"></div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label" for="partner_name">Your Company</label>
+                        <div class="col-md-7">
+                            <input type="text" class="form-control" name="partner_name" required="True" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label" for="name">Subject</label>
+                        <div class="col-md-7">
+                            <input type="text" class="form-control" name="name" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label" for="description">Your Question</label>
+                        <div class="col-md-7">
+                            <textarea class="form-control" name="description" style="min-height: 120px" required="True"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-4"></div>
+                        <div class="col-md-7">
+                            <div id="display_success_msg" class="alert alert-success" style="display:none;">
+                                    Your message has been sent successfully.
+                            </div>
+                        </div>
+                    </div>
+      
+                </form>
+                <div class="col-md-offset-4 col-sm-offset-4 col-sm-8 col-md-7" style="margin-bottom: 5%;">
+                    <button class="btn btn-primary btn-lg" id="button_send">Send</button>
+                </div>
+            </div>
+        </section>
+    </template>
+</odoo>

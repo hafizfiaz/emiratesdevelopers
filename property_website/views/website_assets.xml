@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <template id="asset_frontend" name="website assets for frontend" inherit_id="website.assets_frontend">
+        <xpath expr="." position="inside">
+            <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"/> -->
+ <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> -->
+ <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script> -->
+ <!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script> -->
+
+            <!-- CSS -->
+            <!-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCJLEHiyqEpDsKmVP5xIr2O2ChXZNfeckc&amp;libraries=places"/> -->
+            <!-- <link rel="stylesheet" href="/hotel_website/static/src/css/animate.css"/> -->
+            <!-- <script src="https://maps.googleapis.com/maps/api/js?key=&amp;libraries=places"/> -->
+            <!-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD2va8jyh7yRcBzKBJ1-y6wliwb6MeyXA8&amp;libraries=places"/> -->
+            <script type="text/javascript" src="/property_website/static/lib/jquery.ui/jquery-ui.js"/>
+            <link rel="stylesheet" href="/property_website/static/lib/jquery.ui/jquery-ui.css"/>
+            <!-- <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script> -->
+            <!-- <script type='text/javascript' src='http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js'></script> -->
+            <link rel="stylesheet" href="/property_website/static/src/css/style.css"/>
+            <link rel="stylesheet" href="/property_website/static/src/css/gallery-grid.css"/>
+            <!-- <link rel="stylesheet" href="/property_website/static/src/css/flexslider.css"/> -->
+<!-- <script src="http://maps.googleapis.com/maps/api/js?libraries=places"></script> -->
+<!-- <script src="jquery.geocomplete.js"></script> -->
+
+            <link rel="stylesheet" href="/property_website/static/src/css/card.css"/>
+            <script type="text/javascript" src="/property_website/static/src/js/google.map.js"/>
+            <script type="text/javascript" src="/property_website/static/src/js/pms_main.js"/>
+            <script type="text/javascript" src="/property_website/static/src/js/property_rpc.js"/>
+            <script type="text/javascript" src="/property_website/static/src/js/google_map_script.js"/>
+            <script type="text/javascript" src="/property_website/static/src/js/homepage_search.js"/>
+            <!-- <script type="text/javascript" src="/property_website/static/src/js/flexslider.js"/> -->
+            <script type="text/javascript" src="/property_website/static/src/js/validator.js"/>
+        </xpath>
+    </template>
+    <template id="header" inherit_id="website.navbar_nav">
+        <xpath expr="//ul[@id='top_menu']/t" position="before">
+            <!--<li class='nav-item' groups="property_management.group_property_user">
+                <a role='menuitem' href="/my_properties" class="nav-link">
+                  My Properties
+                </a>
+            </li>-->
+            <t t-foreach="menu_list or []" t-as="menu">
+                <li class='nav-item'>
+                    <a role='menuitem' id="newmenu" t-att-href="menu_array[menu] or '#'" class="nav-link" t-att-data-value="menu_array_id[menu]">
+                      <t t-esc="menu"/>
+                    </a>
+                </li>
+            </t>
+        </xpath>
+    </template>
+</odoo>
