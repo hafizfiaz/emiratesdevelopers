@@ -1,0 +1,634 @@
+<odoo>
+    <template id="selected_property_onload" name="Property">
+        <t t-call="website.layout">
+            <t t-call="property_website.selected_property"/>
+        </t>
+    </template>
+    <template id="selected_property" name="selected Property">
+        <section class="welcome-area">
+            <div class="welcome-slides owl-carousel">
+                <div
+                    class="col-md-12 rent-single-welcome-slide bg-img bg-overlay"
+                    t-attf-style="background:url('data:image/jpg;base64,#{account_asset_property_obj.image}')no-repeat center center fixed; -webkit-background-size: cover; -moz-background-size: cover; -o-background-size: cover;background-size: cover;">
+                    <div class='text-center inner-content'>
+                        <div t-att-data-lease_id="account_asset_property_obj.id">
+                            <h3>
+                                <strong>Property</strong>
+                                Details
+                            </h3>
+                        </div>
+                        <ul>
+                            <li>
+                                <a href="/">Home</a>
+                            </li>
+                            <li>Properties /
+                                <t t-esc="account_asset_property_obj.name"/></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="col-md-12 row">
+            <div class="col-md-2 card-details">
+                <div class='card-property-container'>
+                    <div class="card-list-wrapper">
+                        <img t-att-src="'data:image/jpeg;base64,%s' %to_text(account_asset_property_obj.property_manager.image)" class="img img-responsive" style="border-radius: 40px;height: 80px;margin: 0 auto;"/>
+                    </div>
+                </div>
+                <div class="card-list-container">
+                    <div class="card-text">
+                        <span class="card-big"><t t-esc="account_asset_property_obj.property_manager.name"/></span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2 card-details">
+                <div class='card-property-container'>
+                    <div class="card-list-wrapper">
+                        <img src="/property_website/static/src/image/d3.png" class='img img-responsive' style="height: 80px;margin: 0 auto;"/>
+                    </div>
+                </div>
+                <div class="card-list-container">
+                    <div class="card-text">
+                        <span class="card-big"><t t-esc="'{0:,.2f}'.format(float(account_asset_property_obj.gfa_feet))"/>
+                            SqFt</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2 card-details">
+                <div class='card-property-container'>
+                    <div class="card-list-wrapper">
+                        <img src="/property_website/static/src/image/d2.png" class="img img-responsive" style="height: 80px;margin: 0 auto;"/>
+                    </div>
+                </div>
+                <div class="card-list-container">
+                    <div class="card-text">
+                        <span class="card-big"><t t-esc="account_asset_property_obj.bedroom"/>
+                            Bedrooms</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2 card-details">
+                <div class='card-property-container'>
+                    <div class="card-list-wrapper">
+                        <img src="/property_website/static/src/image/d1.png" class="img img-responsive" style="height: 80px;margin: 0 auto;"/>
+                    </div>
+                </div>
+                <div class="card-list-container">
+                    <div class="card-text">
+                        <span class="card-big"><t t-esc="account_asset_property_obj.bathroom"/>
+                            Bathrooms</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2 card-details">
+                <div class='card-property-container'>
+                    <div class="card-list-wrapper">
+                        <img src="/property_website/static/src/image/d4.png" style="height: 80px;margin: 0 auto;" class="img img-responsive"/>
+                    </div>
+                </div>
+                <div class="card-list-container">
+                    <div class="card-text">
+                        <span class="card-big"><t t-esc="account_asset_property_obj.parking"/>
+                            Parking</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2 card-details">
+                <div class='card-property-container'>
+                    <div class="card-list-wrapper">
+                        <img src="/property_website/static/src/image/for-rent.png" class="img img-responsive" style="height: 80px;margin: 0 auto;"/>
+                    </div>
+                </div>
+                <div class="card-list-container">
+                    <div class="card-text">
+                        <span class="card-big">Rental Only</span>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+        <section class="mt32">
+            <div class='property-main'>
+                <div class="container">
+                <div class='row'>
+                    <div class="col-md-8 mt32 main-details">
+                        <section>
+                        <div class="property-heading details">
+                            <div class="row">
+                                <div class="mt32 col-lg-6 col-md-6">
+                                    <h4>
+                                        <span class="heading-icon">
+                                            <i class="fa fa fa-home"></i>
+                                        </span>
+                                        <span class="title-property">
+                                            <strong><t t-esc="account_asset_property_obj.name"/></strong>
+                                        </span>
+                                    </h4>
+                                </div>
+                                <div class="mt32 col-lg-6 col-md-6">
+                                    <div class="col-md-8 float-right property-rent-price">
+                                        <span><t t-esc="account_asset_property_obj.currency_id.symbol"/><t t-esc="'{0:,.2f}'.format(float(account_asset_property_obj.ground_rent))"/></span>
+                                        <span class="property-price-type">/month</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                        <!-- <div id="contenedor-slider" class="contenedor-slider"> <t t-if='account_asset_property_obj'> <div id="slider" class="slider"> <section class="slider__section"> <img
+                        src="http://welltechnically.com/wp-content/uploads/2013/08/android-wallpapers-700x300.jpg" class="slider__img"/> </section> <t t-foreach="account_asset_property_obj.property_photo_ids" t-as="i"> <section class="slider__section"> <img
+                        t-att-src="'data:image/jpeg;base64,%s' % to_text(i.photos)" class="slider__img"/> </section> </t> </div> <div id="btn-prev" class="btn-prev">&#60;</div> <div id="btn-next" class="btn-next">&#62;</div> </t> </div> -->
+
+                        <!-- Place somewhere in the <body> of your page -->
+                        <div class='mt32 contenedor-slider'>
+                        <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+                            <div class="carousel-inner">
+                                <t t-if='account_asset_property_obj'>
+                                    <div class="carousel-item active">
+                                        <img class="d-block w-100" t-att-src="'data:image/jpeg;base64,%s' %to_text(account_asset_property_obj.image)" alt="First slide"/>
+                                    </div>
+                                    <t t-foreach="account_asset_property_obj.property_photo_ids" t-as="i">
+
+                                        <div class="carousel-item">
+                                            <img class="d-block w-100" t-att-src="'data:image/jpeg;base64,%s' % to_text(i.photos)"/>
+                                        </div>
+                                    </t>
+                                </t>
+                            </div>
+                            <a class="left carousel-control" href="#carouselExampleIndicators" role="button" data-slide="prev">
+                                <span class="fa fa-chevron-left" aria-hidden="true"></span>
+                                <span class="sr-only">Previous</span>
+                            </a>
+                            <a class="right carousel-control" href="#carouselExampleIndicators" role="button" data-slide="next">
+                                <span class="fa fa-chevron-right" aria-hidden="true"></span>
+                                <span class="sr-only">Next</span>
+                            </a>
+                        </div>
+                    </div>
+                        <div class="property-list mt32">
+                            <div class="property_address col-md-12 ">
+                                <div class="float-left">
+                                    <i class="fa fa-map-marker"></i>
+                                    <![CDATA[&nbsp;]]>
+                                    <t t-esc="account_asset_property_obj.street"/>
+                                    <t t-esc="account_asset_property_obj.city"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt32 selected-property-details">
+                            <t t-if="account_asset_property_obj.note">
+                                <div class="lease_property-details">
+                                    <h2>Property Description</h2>
+                                    <p>
+                                        <t t-esc="account_asset_property_obj.note"/>
+                                    </p>
+                                    <hr/>
+                                </div>
+                                <!-- /.property-description -->
+                            </t>
+                        </div>
+                        <div class="mt32 selected-property-details">
+                            <div class="lease_property-details">
+                                <h2>Property Overview</h2>
+                                <div class="mt32 clearfix property-overview-main">
+                                    <div class='row'>
+                                        <div class="col-md-4">
+                                            <div class='property-overview'>
+                                                Type:<span class='property-overview-info'><t t-esc="account_asset_property_obj.type_id.name"/></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class='property-overview'>
+                                                Parking:<span class='property-overview-info'><t t-esc="account_asset_property_obj.parking"/></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class='property-overview'>
+                                                Bedrooms:<span class='property-overview-info'><t t-esc="account_asset_property_obj.bedroom"/></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class='row'>
+                                        <div class="col-md-4">
+                                            <div class='property-overview'>
+                                                No of Towers:<span class='property-overview-info'><t t-esc="account_asset_property_obj.no_of_towers"/></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class='property-overview'>
+                                                Floor:<span class='property-overview-info'><t t-esc="account_asset_property_obj.floor"/></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class='property-overview'>
+                                                Furnishing:
+                                                <span class='property-overview-info'>
+                                                    <t t-if="account_asset_property_obj.furnished == &quot;semi_furnished&quot;">Semi Furnished</t>
+                                                    <t t-if="account_asset_property_obj.furnished == &quot;full_furnished&quot;">Full Furnished</t>
+                                                    <t t-if="account_asset_property_obj.furnished == &quot;none&quot;">None</t>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class='row'>
+
+                                        <div class="col-md-4">
+                                            <div class='property-overview'>
+                                                Facing:<span class='property-overview-info'>
+                                                    <t t-esc="account_asset_property_obj.facing"/></span>
+                                                <!-- <span class='float-left'>Facing: </span> <t t-esc="account_asset_property_obj.facing" /> -->
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class='property-overview'>
+                                                Built year:<span class='property-overview-info'><t t-esc="account_asset_property_obj.date"/></span>
+
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class='property-overview'>
+                                                Added:<span class='property-overview-info'><t t-esc="account_asset_property_obj.create_date"/></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr/>
+                            </div>
+                            <!-- /.property-description -->
+                        </div>
+                        <div class="mt32 selected-property-details" id="amenities">
+                            <div class="lease_property-details">
+                                <h2>Property Amenities</h2>
+                                <div class='row'>
+                                    <t t-foreach="account_asset_property_obj.utility_ids" t-as="u">
+                                        <div class="col-md-4">
+                                            <div class='property-amenities'>
+                                                <span class='amenities-info'><t t-esc="u.utility_id.name"/></span>
+                                                <i class="fa fa-check-square"></i>
+                                            </div>
+                                        </div>
+                                    </t>
+                                </div>
+                                <hr/>
+                            </div>
+                        </div>
+                        <div class="mt32 selected-property-details" id="floor_plane">
+                            <t t-if="account_asset_property_obj.floor_plans_ids">
+                                <div class="lease_property-details">
+                                    <h2>Property Floor Plane</h2>
+                                    <div class="gallery-container">
+                                        <div class="tz-gallery">
+                                            <div class="row">
+                                                <t t-foreach="account_asset_property_obj.floor_plans_ids" t-as="f">
+                                                    <div class="col-sm-6 col-md-4">
+                                                        <a class="lightbox" href="/property_website/static/src/image/a1.jpg">
+                                                            <img t-att-src="'data:image/jpeg;base64,%s' % to_text(f.photos)"/>
+                                                        </a>
+                                                    </div>
+                                                </t>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <hr/>
+                                </div>
+                            </t>
+                        </div>
+                        <div class="mt32 selected-property-details">
+                            <t t-if="account_asset_property_obj.note">
+                                <div class="lease_property-details">
+                                    <h2>Property Video</h2>
+                                    <div class="row recent-viewed-header text-center">
+                                        <div class="col-md-12 col-sm-12 col-xs-12">
+                                            <div class="col-md-12 col-sm-12 col-xs-12">
+                                                <div class="embed-responsive embed-responsive-16by9 mt32" style="box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);">
+                                                    <iframe class="embed-responsive-item" t-att-src="account_asset_property_obj.video_url" frameborder="0"></iframe>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <hr/>
+                                </div>
+                                <!-- /.property-description -->
+                            </t>
+                        </div>
+                        <div class="mt32 selected-property-details" id="map">
+                            <!-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD2va8jyh7yRcBzKBJ1-y6wliwb6MeyXA8&amp;libraries=places"/> -->
+                            <!-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCz98-4EQORRupSK-9EVtGSfp8sJzCFW1g&amp;libraries=places"/> -->
+
+                            <div class="lease_property-details">
+                                <h2>Property Location</h2>
+                                <div class='col-md-12'>
+                                    <div class="mapouter"><div class="gmap_canvas"><iframe width="600" height="500" id="gmap_canvas" src="https://maps.google.com/maps?q=serpentcs&amp;t=&amp;z=13&amp;ie=UTF8&amp;iwloc=&amp;output=embed" frameborder="0" scrolling="no" marginheight="0" marginwidth="0"></iframe>Google Maps Generator by <a href="https://www.embedgooglemap.net">embedgooglemap.net</a></div><style>.mapouter{position:relative;text-align:right;height:500px;width:600px;}.gmap_canvas {overflow:hidden;background:none!important;height:500px;width:600px;}</style></div>
+                                    <div class="col-md-12">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <h4 class='map_table-near' style="color: #484848 !important;">Please select the Nearby Places</h4>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <table class="map_table-near table" border="0" cellspacing="0" cellpadding="3" id="table-map-near-by">
+                                                    <tr>
+                                                        <td style="border:none">
+                                                            <input type="checkbox" name="mytype" class="chkbox" id="school" value="school"/>
+                                                            <label for="school">School</label>
+                                                        </td>
+                                                        <td style="border:none">
+                                                            <input type="checkbox" name="mytype" class="chkbox" id="petrol_pump" value="petrol_pump"/>
+                                                            <label for="petrol_pump">Petrol Pump</label>
+                                                        </td>
+                                                        <td style="border:none">
+                                                            <input type="checkbox" name="mytype" class="chkbox" id="hospital" value="hospital"/>
+                                                            <label for="hospital">Hospital</label>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td style="border:none">
+                                                            <input type="checkbox" name="mytype" class="chkbox" id="bus_station" value="bus_station"/>
+                                                            <label for="bus_station">Bus Stop</label>
+                                                        </td>
+                                                        <td style="border:none">
+                                                            <input type="checkbox" name="mytype" class="chkbox" id="park" value="park"/>
+                                                            <label for="park">Park</label>
+                                                        </td>
+                                                        <td style="border:none">
+                                                            <input type="checkbox" name="mytype" class="chkbox" id="bank" value="bank"/>
+                                                            <label for="bank">Bank</label>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td style="border:none">
+                                                            <input type="checkbox" name="mytype" class="chkbox" id="bar" value="bar"/>
+                                                            <label for="bar">Bar</label>
+                                                        </td>
+                                                        <td style="border:none">
+                                                            <input type="checkbox" name="mytype" class="chkbox" id="movie_theater" value="movie_theater"/>
+                                                            <label for="movie_theater">Movie Theater</label>
+                                                        </td>
+                                                        <td style="border:none">
+                                                            <input type="checkbox" name="mytype" class="chkbox" id="night_club" value="night_club"/>
+                                                            <label for="night_club">Night Club</label>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td style="border:none">
+                                                            <input type="checkbox" name="mytype" class="chkbox" id="zoo" value="zoo"/>
+                                                            <label for="zoo">Zoo</label>
+                                                            <br/>
+                                                        </td>
+                                                        <td style="border:none">
+                                                            <input type="checkbox" name="mytype" class="chkbox" id="gym" value="gym"/>
+                                                            <label for="gym">Gym</label>
+                                                        </td>
+                                                        <td style="border:none">
+                                                            <input type="checkbox" name="mytype" class="chkbox" id="atm" value="atm"/>
+                                                            <label for="atm">ATM</label>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td style="border:none">
+                                                            <input type="checkbox" name="mytype" class="chkbox" id="spa" value="spa"/>
+                                                            <label for="spa">Spa</label>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt32 selected-property-details">
+                            <t t-if="account_asset_property_obj.note">
+                                <div class="lease_property-details">
+                                    <h2>Property Maintenance</h2>
+                                    <div class="" id="maintenance">
+                                        <div class="">
+                                            <form id="MaintanancepropertyForm" t-att-data-property_id="account_asset_property_obj.id" data-toggle="validator">
+                                                <div class="form-group col-xs-12">
+                                                    <div class="form-group col-md-8 col-xs-8 col-sm-6">
+                                                        <input type="text" placeholder='Maintenance Request' class="form-control" id="maint_req_id" name="maint_req_id" required="True"/>
+                                                    </div>
+                                                    <!-- <div class="col-md-4"> </div> -->
+                                                    <div class="col-md-8 mt8">
+                                                        <!-- <label class="control-label" for="inputTelType">Maintenance Team</label> -->
+                                                        <select placeholder='Maintenance Team' id="inputTelType" name="telType" class="form-control" required="True">
+                                                            <option></option>
+                                                            <t t-if="maintenance_types">
+                                                                <t t-foreach="maintenance_types" t-as="one_maintenance_types">
+                                                                    <option class="maintenane_type_class" t-att-data-type_id="one_maintenance_types.id">
+                                                                        <t t-esc="one_maintenance_types.name"/>
+                                                                    </option>
+                                                                </t>
+                                                            </t>
+                                                        </select>
+                                                    </div>
+                                                    <!-- <div class="col-md-8 mt8"> -->
+                                                    <!-- <label class="control-label" for="dateOfmaint">Date</label> -->
+                                                    <!-- <input type="date" name="dateOfBirth" class='form-control' id="dateOfmaint" value="" placeholder="mm/dd/yyyy"/> -->
+                                                    <!-- <input type="text" placeholder='mm/dd/yyyy hh:mm:ss' class="form-control" id="dateOfmaint" name="dateOfmaint" required="True"/> -->
+
+                                                    <!-- </div> -->
+
+                                                    <div class="col-md-8 mt8">
+                                                        <label class="control-label" for="inputRentersFault">Renters Fault</label>
+                                                        <input type="checkbox" id="renters_fault" name="Renters Fault" value="renters_fault"/>
+                                                    </div>
+
+                                                    <div class="col-md-8 mt8">
+                                                        <textarea id="inputMsg" name="msg" placeholder="Enter maintenance detail" rows="3" class="form-control" required="True"></textarea>
+                                                    </div>
+
+                                                    <div class="form-group col-xs-12">
+                                                        <div class="col-md-4"></div>
+                                                        <div class="col-md-8">
+                                                            <div id="display_success_msg" class="form-group alert alert-success" style="display:none;">
+                                                                Your message has been sent successfully.
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group col-xs-12">
+                                                        <div class="col-md-4"></div>
+                                                        <div class="col-md-8">
+                                                            <button type="button" class="request-maintenance btn btn-lg" id="submit_maintanance">Submit</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                    <hr/>
+                                </div>
+                                <!-- /.property-description -->
+                            </t>
+                        </div>
+                        <div class="mt32 selected-property-details">
+                            <t t-if="account_asset_property_obj.note">
+                                <div class="lease_property-details">
+                                    <h2>Rent Schedule Details</h2>
+                                    <div class="row recent-viewed-header text-center">
+                                        <div class="map_table-near" id="payment">
+                                            <div class="mt32">
+                                                <table id="tanent_payments" class="table table-bordered table-striped">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Date</th>
+                                                            <th>Amount</th>
+                                                            <th>Penalty</th>
+                                                            <th>Payment</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <t t-if="selected_tenant">
+                                                            <t t-if="selected_tenant.rent_schedule_ids">
+                                                                <t t-foreach='selected_tenant.rent_schedule_ids' t-as='payment_id'>
+                                                                    <tr t-if="not payment_id.paid">
+                                                                        <td>
+                                                                            <span t-field="payment_id.start_date" t-field-options='{"format": "MM/dd/yyyy"}'/>
+                                                                        </td>
+                                                                        <td>
+                                                                            <t t-esc="payment_id.amount"/>
+                                                                        </td>
+                                                                        <td>
+                                                                            <t t-esc="payment_id.penalty_amount"/>
+                                                                        </td>
+                                                                        <td>
+                                                                            <form t-att-action="tx_url" method="post" target="_self">
+                                                                                <input type="hidden" name="cmd" t-att-value="cmd"/>
+                                                                                <input type="hidden" name="business" t-att-value="business"/>
+                                                                                <input type="hidden" name="item_name" t-att-value="item_name"/>
+
+                                                                                <input type="hidden" name="item_number" t-att-value="account_asset_property_obj.name"/>
+                                                                                <input type="hidden" name="amount" t-att-value="payment_id.amount + payment_id.penalty_amount"/>
+                                                                                <input type="hidden" name="currency_code" t-att-value="website.company_id.currency_id.name"/>
+
+                                                                                <input type="hidden" name="address1" t-att-value="partner.street"/>
+                                                                                <input type="hidden" name="city" t-att-value="partner.city"/>
+                                                                                <input type="hidden" name="country" t-att-value="partner.country_id.name"/>
+                                                                                <input type="hidden" name="email" t-att-value="partner.email"/>
+                                                                                <input type="hidden" name="first_name" t-att-value="partner.name"/>
+
+                                                                                <input type="hidden" name="zip" t-att-value="partner.zip"/>
+
+                                                                                <input type='hidden' name='return' t-att-value="return_url"/>
+                                                                                <input type='hidden' name='notify_url' t-att-value="notify_url"/>
+                                                                                <input type="hidden" name="cancel_return" t-att-value="cancel_return"/>
+                                                                                <input type="hidden" name="invoice" t-att-value="{'partner_id': partner.id, 'property_id': account_asset_property_obj.id, 'payment_id': payment_id.id}"/>
+
+                                                                                <button type="submit" style="width:100px" t-att-class="submit_class">
+                                                                                    <img style="width: 100%;" src="/property_management_website/static/src/image/paypal-icon.png" class="img-responsive"/>
+                                                                                </button>
+                                                                            </form>
+                                                                        </td>
+                                                                    </tr>
+                                                                </t>
+                                                            </t>
+                                                        </t>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <hr/>
+                                </div>
+                                <!-- /.property-description -->
+                            </t>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mt32">
+                        <div class="sidebar suggested_property-container">
+                            <span class='suggested-property'>Property Manager</span>
+                            <div class="property-manager-main">
+                                <div class="manager-profile-box">
+                                    <div class="manager-header">
+                                        <div class="manager-img">
+                                            <img t-att-src="'data:image/jpeg;base64,%s' %to_text(account_asset_property_obj.property_manager.image)" class="img img-responsive" width="300" height="300"/></div>
+                                        <h5 class="manager-title"><t t-esc="account_asset_property_obj.property_manager.name"/></h5>
+                                    </div>
+                                    <ul class="manager-contact">
+                                        <li>
+                                            <span>Email:
+                                            </span>
+                                            <a><t t-esc="account_asset_property_obj.property_manager.email"/></a>
+                                        </li>
+                                        <li>
+                                            <span>Phone:
+                                            </span><t t-esc="account_asset_property_obj.property_manager.phone"/></li>
+                                        <li>
+                                            <span>Address:
+                                            </span><t t-esc="account_asset_property_obj.property_manager.street"/>
+                                            <t t-esc="account_asset_property_obj.property_manager.city"/>
+                                            <t t-esc="account_asset_property_obj.property_manager.zip"/></li>
+                                    </ul>
+
+                                </div>
+                            </div>
+
+                        </div>
+                        <t t-if='suggeste_properties_obj'>
+                            <div class="sidebar suggested_property-container">
+                                <span class='suggested-property'>Suggested Property</span>
+                                <t t-foreach="suggeste_properties_obj" t-as="p">
+                                    <t t-call="property_website.suggested_property_template_id"/>
+                                </t>
+                            </div>
+                        </t>
+                        <div class="sidebar suggested_property-container">
+                            <span class='suggested-property'>Request To Book</span>
+                            <div class="row">
+                                <div class="mt32 col-md-12 col-xs-12" style="margin-bottom: -20px;">
+                                    <form id="selectedpropertyForm" class='needs-validation' data-toggle="validator">
+                                        <div class="form-group col-md-12 col-xs-12 col-sm-6">
+                                            <input type="text" placeholder='Firt Name' class="form-control" name="first_name" required="True"/>
+                                        </div>
+                                        <div class="form-group col-md-12 col-xs-12 col-sm-6">
+                                            <input type="text" placeholder='Last Name' class="form-control" name="last_name" required="True"/>
+                                        </div>
+                                        <div class="form-group col-md-12 col-xs-12 col-sm-12"></div>
+                                        <div class="form-group col-md-12 col-xs-12 col-sm-6">
+                                            <input type="tel" placeholder='Phone Number' class="form-control" name="phone" required="True"/>
+                                        </div>
+                                        <div class="form-group col-md-12 col-xs-12 col-sm-6">
+                                            <select id="inputTelType" name="telType" class="form-control" required="True">
+                                                <option value="mob">Mobile</option>
+                                                <option value="work">Work</option>
+                                                <option value="home">Home</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group col-md-12 col-xs-12 col-sm-12"></div>
+                                        <div class="form-group col-md-12 col-xs-12 col-sm-6">
+                                            <input type="email" placeholder='Email' class="form-control" name="email_from" data-error="Please enter valid Email address." required="True"/>
+                                            <div class="help-block with-errors" style="color:red;"></div>
+                                        </div>
+                                        <div class="form-group col-md-12 col-xs-12 col-sm-6">
+                                            <select id="inputTelTime" name="telTime" class="form-control" required="True">
+                                                <option value="anytime">Anytime</option>
+                                                <option value="morning">Morning</option>
+                                                <option value="afternoon">Afternoon</option>
+                                                <option value="evening">Evening</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group col-md-12 col-xs-12 col-sm-12"></div>
+                                        <div class="form-group col-md-12 col-xs-12">
+                                            <textarea id="inputMsg" name="msg" placeholder="Message for estate manager" rows="3" class="form-control" required="True"></textarea>
+                                        </div>
+                                        <div class="form-group">
+                                            <input type="hidden" t-att-value="account_asset_property_obj.id" name="asset" id="asset_id"/>
+                                        </div>
+                                        <div class="col-xs-12">
+                                            <div id="display_success_msg" class="form-group alert alert-success " style="display:none;">
+                                                Your message has been sent successfully.
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                <button type="button" class="mt32 text-center btn btn-primary signu-button" id="send_property_id">Request</button>
+                                <!-- <button type="button" class="text-center btn btn-primary" id="send_property_id">Subscribe Me</button> -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </div>
+        </section>
+    </template>
+</odoo>
