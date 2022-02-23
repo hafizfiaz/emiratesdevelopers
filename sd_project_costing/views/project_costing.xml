@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <record id="project_costing_tree" model="ir.ui.view">
+        <field name="name">project.costing.tree</field>
+        <field name="model">project.costing</field>
+        <field name="arch" type="xml">
+            <tree string="Project Costing">
+
+                <field name="name" optional="show"/>
+                <field name="contractor" optional="show"/>
+                <field name="project" optional="show"/>
+                <field name="plot_size_sqft" optional="show"/>
+                <field name="saleable_area_sqft" optional="show"/>
+                <field name="construction_start_date" optional="show"/>
+                <field name="construction_end_date" optional="show"/>
+                <field name="duration" optional="show"/>
+                <field name="actual_duration" optional="show"/>
+                <field name="handover_date" optional="show"/>
+            </tree>
+        </field>
+    </record>
+
+
+    <record id="project_costing_view" model="ir.ui.view">
+        <field name="name">Project Costing</field>
+        <field name="model">project.costing</field>
+        <field name="arch" type="xml">
+
+            <form string="Project Costing">
+
+                <header>
+                    <field name="stage_id" widget="statusbar" options="{'clickable': '1', 'fold_field': 'fold'}"
+                           domain="[('project_ids', '=', model_id),('user_ids','in', [uid])]"/>
+                </header>
+                <sheet>
+                    <!--                     <div class="oe_button_box" name="button_box">-->
+                    <!--                    <button name="action_view_spa_invoices"-->
+                    <!--                            string="Due Invoices/Installments" class="oe_stat_button" icon="fa-list icon" type="object"/>-->
+                    <!--                </div>-->
+                    <group>
+                        <group>
+
+                            <label for="name" style="font-size:20px;"/>
+                                <div class="address_format">
+                                    <field name="name" style="font-weight: bold; font-size:20px;" nolabel="1"/>
+                                </div>
+                            <label for="contractor" style="font-weight: bold;"/>
+                                <div class="address_format">
+                                    <field name="contractor" style="font-weight: bold;" nolabel="1"/>
+                                </div>
+
+                            <field name="all_contractors" invisible="1"/>
+                            <separator string="Project Detail"/>
+                            <field name="project"/>
+                            <field name="plot_size_sqft"/>
+                            <field name="saleable_area_sqft"/>
+                            <field name="construction_start_date"/>
+                            <field name="construction_end_date"/>
+                            <field name="duration"/>
+                            <field name="actual_duration"/>
+                            <field name="handover_date"/>
+                            <field name="model_id" invisible="1"/>
+                        </group>
+                        <group>
+                            <separator string="Project Costing"/>
+                            <field name="land_cost"/>
+                            <field name="total_contract_value"/>
+                            <field name="consultancy_cost"/>
+                            <field name="savings"/>
+                            <field name="net_cost_exc_vat"/>
+                            <field name="retention_amount_perc"/>
+                            <field name="retention_amount"/>
+                            <field name="vat_perc"/>
+                            <field name="other_cost"/>
+                            <field name="total_project_cost"/>
+<!--                            <field name="total_pc_value"/>-->
+<!--                            <field name="total_pc_value"/>-->
+                            <field name="total_payments"/>
+                            <field name="total_invoiced"/>
+                            <label for="advance_payments" style="font-weight: bold; color:'#e30b0b';"/>
+                                <div class="address_format">
+                                    <field name="advance_payments" style="font-weight: bold; color:'#e30b0b';" nolabel="1"/>
+                                </div>
+                            <separator string="Values As Per Ledger" name="as_per_ledger"/>
+                            <field name="land_cost_ap_ledger"/>
+                            <field name="contract_value_ap_ledger"/>
+                            <field name="consultancy_cost_ap_ledger"/>
+                            <field name="other_cost_ap_ledger"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Contractors Payments" name="contract_payments">
+                            <field name="receipt_lines" context="{'default_payment_type': 'outbound', 'default_partner_type': 'supplier'}" domain="[('payment_type','=','outbound'),('state', '=', 'posted'),('partner_id','in',all_contractors)]"
+                                   widget="many2many"/>
+                        </page>
+                        <page string="Contractors Bills" name="contractor_payments">
+                            <field name="move_ids" context="{'default_move_type': 'in_invoice'}" domain="[('move_type', '=', 'in_invoice'),('state', '=', 'posted'),('partner_id','=',all_contractors)]" widget="many2many">
+                                <tree decoration-info="state == 'posted'" create="true" string="Contractor Bills">
+                                    <field name="date"/>
+                                    <field name="id"/>
+                                    <field name="name"/>
+                                    <field name="partner_id"/>
+                                    <field name="asset_project_id"/>
+                                    <field name="property_id"/>
+                                    <field name="journal_id"/>
+                                    <field name="ref"/>
+                                    <field name="state"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Other Bills" name="other_bills">
+                            <field name="other_bill_ids" context="{'default_move_type': 'in_invoice'}" domain="[('move_type', '=', 'in_invoice'),('partner_id','in',all_contractors)]" widget="many2many"/>
+                        </page>
+                        <page string="All Contractors" name="all_costing_contractors">
+                            <field name="contractor_id" domain="[('project','=',name)]" widget="many2many"/>
+                        </page>
+                        <page string="Other" name="other_add_less">
+                            <separator string="Add"/>
+                            <field name="add_charges_ids">
+                                <tree string="Add" editable="bottom">
+                                    <field name="detail"/>
+                                    <field name="date"/>
+                                    <field name="amount"/>
+                                    <field name="remarks"/>
+                                </tree>
+                            </field>
+                            <separator string="Less"/>
+                            <field name="less_charges_ids">
+                                <tree string="Less" editable="bottom">
+                                    <field name="detail"/>
+                                    <field name="date"/>
+                                    <field name="amount"/>
+                                    <field name="remarks"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+
+<!--    <menuitem id="planned_boq_menu" name="Planned BOQ"-->
+<!--              parent="account.menu_finance_payables"-->
+<!--              sequence="110"-->
+<!--              action="planned_boq_action"/>-->
+
+    <record id="project_costing_action" model="ir.actions.act_window">
+        <field name="name">Project Costing</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">project.costing</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Project Costing Request!
+            </p>
+        </field>
+    </record>
+
+<!--    <menuitem id="project_costing_menu" name="Project Costing"-->
+<!--              parent="account.menu_finance_payables"-->
+<!--              sequence="99"-->
+<!--              action="project_costing_action"/>-->
+</odoo>

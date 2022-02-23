@@ -1,0 +1,283 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="handover_clearance_form" model="ir.ui.view">
+        <field name="name">handover.clearance.tree</field>
+        <field name="model">handover.clearance</field>
+        <field name="arch" type="xml">
+            <tree string="Handover Clearance">
+                <field name="create_date"/>
+                <field name="partner_id"/>
+                <field name="project"/>
+                <field name="property"/>
+                <field name="spa"/>
+                <field name="spa_status"/>
+<!--                <field name="booking_id"/>-->
+<!--                <field name="booking_status"/>-->
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+    <record id="view_handover_clearance" model="ir.ui.view">
+        <field name="name">handover.clearance.search</field>
+        <field name="model">handover.clearance</field>
+        <field name="arch" type="xml">
+            <search string="Handover Clearance">
+                 <field name="name" string="Name"
+                           filter_domain="[('name','ilike',self)]"/>
+                    <field name="spa" filter_domain="[('spa','ilike',self)]" string="SPA"/>
+                    <field name="project" filter_domain="[('project','ilike',self)]"
+                           string="Project"/>
+                    <field name="property" filter_domain="[('property','ilike',self)]" string="Property"/>
+                    <field name="partner_id" filter_domain="[('partner_id','child_of',self)]" string="Customer Name"/>
+            </search>
+        </field>
+    </record>
+<!--    <record id="saless_inherit" model="ir.ui.view">-->
+<!--        <field name="name">sale.inherit</field>-->
+<!--        <field name="model">sale.order</field>-->
+<!--        <field name="inherit_id" ref="sale.view_order_form"/>-->
+<!--        <field name="arch" type="xml">-->
+<!--            <field name="sale_type" position="after">-->
+<!--                <field name="handover_status"/>-->
+<!--            </field>-->
+<!--        </field>-->
+<!--    </record>-->
+    <record id="agent_ref_inherit" model="ir.ui.view">
+        <field name="name">property.inherit</field>
+        <field name="model">account.asset.asset</field>
+        <field name="inherit_id" ref="ow_account_asset.view_account_asset_asset_form"/>
+        <field name="arch" type="xml">
+            <field name="active" position="after">
+                <field name="handover_status"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="handover_clearance" model="ir.ui.view">
+        <field name="name">Handover Approval Request</field>
+        <field name="model">handover.clearance</field>
+        <field name="arch" type="xml">
+
+            <form string="Handover Clearance">
+
+                <header>
+                    <button name="action_draft" string="Back to Draft" type="object" class="oe_highlight"
+                            states="cancel"/>
+                    <button name="submit_for_manager" string="Submit For Manager" type="object" class="oe_highlight"
+                            states="draft,under_sd_admin"/>
+                    <button name="submit_for_discount" string="Submit for Discount Approval" type="object"
+                            class="oe_highlight"
+                            states="draft"/>
+                    <button name="discount_approve" string="Discount Approve" type="object" class="oe_highlight"
+                            states="under_director_approval"/>
+                    <button name="review" string="Review" type="object" class="oe_highlight"
+                            states="under_manager_review"/>
+                    <button name="verify" string="Verify" type="object" class="oe_highlight"
+                            states="under_accounts_verification"/>
+                    <button name="review" string="Review" type="object" class="oe_highlight" states="under_review"/>
+                    <button name="approve" string="Approve" type="object" class="oe_highlight" states="under_approval"/>
+                    <button name="rollback" string="Roll Back" type="object" class="oe_highlight"
+                            states="under_manager_review,under_director_approval,under_accounts_verification,under_approval,approved"/>
+                    <button name="action_reject" string="Reject" type="object"
+                            states="under_accounts_verification,under_review,under_approval,approved"/>
+                    <button name="action_cancel" string="Cancel" type="object" states="draft,rejected,under_sd_admin"/>
+                    <field name='state' widget='statusbar'/>
+                </header>
+                <sheet>
+                    <h3>Handover Approval Request</h3>
+                    <div class="oe_title">
+                        <h3>
+                            <field name="sequence" nolabel="1"/>
+                        </h3>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="subject"/>
+                            <field name="clearance_type"/>
+                            <field name="create_uid" readonly="1"/>
+                            <field name="create_date" readonly="1"/>
+                            <field name="total_spa_customer"/>
+<!--                            <field name="total_bookings"/>-->
+                        </group>
+                        <group>
+                            <separator string="Customer Details"/>
+                            <field name="name" invisible="1"/>
+                            <field name="partner_id"/>
+                            <field name="mobile"/>
+                            <field name="email"/>
+<!--                            <field name="nationality"/>-->
+                            <field name="address"/>
+
+                        </group>
+                        <group>
+
+                            <separator string="SPA Details"/>
+                            <field name="project"/>
+                            <field name="property" domain="[('parent_id','=', project)]"/>
+                            <field name="spa"/>
+                            <field name="spa_status"/>
+<!--                            <field name="booking_id"/>-->
+<!--                            <field name="booking_status"/>-->
+<!--                            <field name="unit_type_id"/>-->
+                            <field name="size"/>
+                            <field name="parking"/>
+                            <field name="oqood_status"/>
+                            <field name="admin_status"/>
+                            <field name="receivable_status"/>
+<!--                            <field name="tag_ids" widget="many2many_tags"-->
+<!--                                   options="{'color_field': 'color', 'no_create_edit': True}"/>-->
+                            <separator string="Discount &amp; Waiver"/>
+                            <br/>
+
+                            <label for="discount_amount"/>
+                            <div class="address_format">
+                                <field name="discount_amount" style="width:40%;" nolabel="1"/>
+                                <span style="width:10%;margin-left:10px;">
+                                    |
+                                </span>
+                                <field name="discount_amount_perc" nolabel="1"
+                                       style="width:20%; color:black;margin-left:20px;"/>
+                                <span style="font-weight: bold; color:black;">%%</span>
+                            </div>
+                            <field name="notes"/>
+
+                        </group>
+                        <group>
+                            <separator string="Accounts Remarks"/>
+                            <field name="due_amount_to_clear"/>
+                            <field name="account_remarks"/>
+                            <field name="total_spa" widget="monetary"/>
+
+                            <label for="total_due_amount"/>
+                            <div class="address_format">
+                                <field name="total_due_amount" style="width:40%;" nolabel="1"/>
+                                <span style="width:10%;margin-left:10px;">
+                                    |
+                                </span>
+                                <field name="total_due_amount_perc" nolabel="1"
+                                       style="width:20%; color:black;margin-left:20px;"/>
+                                <span style="font-weight: bold; color:black;">%%</span>
+                            </div>
+
+                            <label for="realized_collection" style="color: #32a84e;"/>
+                            <div class="address_format">
+                                <field name="realized_collection" style="font-weight: bold; width:40%;color: #32a84e;"
+                                       nolabel="1"/>
+                                <span style="width:10%;font-weight: bold; color:#32a84e;margin-left:10px;">
+                                    |
+                                </span>
+                                <field name="realized_collection_perc" nolabel="1"
+                                       style="width:20%;font-weight: bold; color: #32a84e;margin-left:20px;"/>
+                                <span style="font-weight: bold; color:#32a84e;">%%</span>
+
+                            </div>
+
+                            <label for="due_balance_collections" style="font-weight: bold; color: #eb0707;"/>
+                            <div class="address_format">
+                                <field name="due_balance_collections"
+                                       style="font-weight: bold; width:40%;color: #eb0707;" nolabel="1"/>
+                                <span style="width:10%;font-weight: bold; color: #eb0707;margin-left:10px;">
+                                    |
+                                </span>
+                                <field name="due_balance_perc" nolabel="1"
+                                       style="width:20%;font-weight: bold; color:#eb0707;margin-left:20px;"/>
+                                <span style="font-weight: bold; color:#eb0707;">%%</span>
+                            </div>
+                            <label for="total_collection" style="font-weight: bold; color: black;"/>
+                            <div class="address_format">
+                                <field name="total_collection" style="font-weight: bold; width:40%;color: black;"
+                                       nolabel="1"/>
+                                <span style="width:10%;font-weight: bold; color:black;margin-left:10px;">
+                                    |
+                                </span>
+                                <field name="total_collection_perc" nolabel="1"
+                                       style="width:20%;font-weight: bold; color:black;margin-left:20px;"/>
+                                <span style="font-weight: bold; color:black;">%%</span>
+                            </div>
+                            <label for="pending_collections" style="font-weight: bold; color:black;"/>
+                            <div class="address_format">
+                                <field name="pending_collections" style="font-weight: bold; width:40%;color: black;"
+                                       nolabel="1"/>
+                                <span style="width:10%;font-weight: bold; color:black;margin-left:10px;">
+                                    |
+                                </span>
+                                <field name="pending_collections_perc" nolabel="1"
+                                       style="width:20%;font-weight: bold; color:black;margin-left:20px;"/>
+                                <span style="font-weight: bold; color:black;">%%</span>
+                            </div>
+                            <separator string="Receipts Break Up"/>
+                            <br/>
+
+                            <label for="escrow"/>
+                            <div class="address_format">
+                                <field name="escrow" style="width:40%;" nolabel="1"/>
+                                <span style="width:10%;margin-left:10px;">
+                                    |
+                                </span>
+                                <field name="escrow_perc" nolabel="1"
+                                       style="width:20%; color:black;margin-left:20px;"/>
+                                <span style="font-weight: bold; color:black;">%%</span>
+                            </div>
+                            <label for="non_escrow"/>
+                            <div class="address_format">
+                                <field name="non_escrow" style="width:40%;" nolabel="1"/>
+                                <span style="width:10%;margin-left:10px;">
+                                    |
+                                </span>
+                                <field name="non_escrow_perc" nolabel="1"
+                                       style="width:20%; color:black;margin-left:20px;"/>
+                                <span style="font-weight: bold; color:black;">%%</span>
+                            </div>
+                            <label for="total_escrow" style="font-weight: bold; color:black;"/>
+                            <div class="address_format">
+                                <field name="total_escrow" style="font-weight: bold; width:40%;color: black;"
+                                       nolabel="1"/>
+                                <span style="width:10%;font-weight: bold; color:black;margin-left:10px;">
+                                    |
+                                </span>
+                                <field name="total_escrow_perc" nolabel="1"
+                                       style="font-weight: bold; width:20%; color:black;margin-left:20px;"/>
+                                <span style="font-weight: bold; color:black;">%%</span>
+                            </div>
+                        </group>
+
+                    </group>
+                    <notebook>
+                        <page string="Handover Charges Details">
+                            <field name="handover_lines" nolabel="1">
+                                <tree string="Handover Lines" editable="bottom">
+                                    <field name="detail"/>
+                                    <field name="amount"/>
+                                    <field name="approve_reject"/>
+                                    <field name="remarks"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+    <record id="action_handover" model="ir.actions.act_window">
+        <field name="name">Handover Clearance</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">handover.clearance</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Handover Approval Request!
+            </p>
+        </field>
+    </record>
+    <menuitem id="handover_clearance_form" name="Handover Clearance" parent="crm.crm_menu_sales" sequence="5"
+              action="action_handover"/>
+    <menuitem id="handover_clearance_form_accounting" name="Handover Approval Request"
+              parent="account.menu_finance_receivables"
+              sequence="6"
+              action="action_handover" groups="sales_team.group_sale_salesman_all_leads"/>
+</odoo>

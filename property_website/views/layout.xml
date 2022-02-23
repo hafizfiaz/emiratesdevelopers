@@ -1,0 +1,92 @@
+<odoo>
+    <template id="reservation_external_layout">
+        <t t-if="not o" t-set="o" t-value="doc"/>
+
+        <t t-if="not company">
+            <!-- Multicompany -->
+            <t t-if="company_id">
+                <t t-set="company" t-value="company_id"/>
+            </t>
+            <t t-elif="o and 'company_id' in o">
+                <t t-set="company" t-value="o.company_id.sudo()"/>
+            </t>
+            <t t-else="else">
+                <t t-set="company" t-value="res_company"/>
+            </t>
+        </t>
+
+        <t t-call="property_website.external_layout_header_reservation"/>
+        <t t-call="property_website.external_layout_footer_reservation"/>
+        <t t-if="company.external_report_layout_id" t-call="{{company.external_report_layout_id.key}}"><t t-raw="0"/></t>
+        <t t-else="else" t-call="web.external_layout_standard"><t t-raw="0"/></t>
+
+
+
+    </template>
+
+    <template id="external_layout_header_reservation">
+        <div class="header" height="2">
+            <!-- <div style="position:absolute;
+             opacity:0.7;
+             z-index:1000;
+             width:60%;
+             -ms-transform: rotate(-90deg);
+            -webkit-transform: rotate(-90deg);
+            margin-top:700px;
+            font-size:14px;
+            color:grey;
+            margin-left:-268px;
+            transform: rotate(-90deg);">
+            System Generated Document, Stamp Not Required
+            </div> -->
+            <div style='width:100%;'>
+
+                <div class="row">
+                    <div class="col-3 mb4">
+
+                        <img src="/property_website/static/images/samana_golf_logo.png" height="230px" width="220px"/>
+                    </div>
+                    <div class="col-6 text-center" style="margin-top:25px;">
+                        <h3>UNIT SALE OFFER</h3>
+                        <h3>عرض بيع الوحدات</h3>
+
+                        <strong style="font-size:16px;">Print Date: <span t-esc="datetime.datetime.now().strftime('%d-%B-%Y')"/></strong>
+                    </div>
+                    <div class="col-3">
+                        <img t-if="docs.parent_id.image" t-att-src="image_data_uri(docs.parent_id.image)"  height="180px" width="220px"/>
+<!--                        <img src="/property_website/static/images/samana_golf.png" height="180px" width="220px"/>-->
+                    </div>
+                </div>
+                <div t-if="company.logo or company.report_header" class="row zero_min_height">
+                    <div class="col-12">
+                        <div style="border-bottom: 2px solid #DAA520;"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <template id="external_layout_footer_reservation">
+        <div class="footer">
+            <div class="text-center" style="border-top: 1px solid black;">
+                <ul class="list-inline mb4">
+                    <li t-if="company.phone" class="list-inline-item">Phone: <span t-field="company.phone"/></li>
+                    <li t-if="company.email" class="list-inline-item">Email: <span t-field="company.email"/></li>
+                    <li t-if="company.website" class="list-inline-item">Web: <span t-field="company.website"/></li>
+<!--                    <li t-if="company.website" class="list-inline-item">User: <span t-field="user_id.name"/></li>-->
+<!--                    <li t-if="company.vat" class="list-inline-item"><t t-esc="company.country_id.vat_label or 'Tax ID'"/>: <span t-field="company.vat"/></li>-->
+                </ul>
+
+                <div name="financial_infos">
+                    <span t-field="company.report_footer"/>
+                </div>
+
+                <div t-if="report_type == 'pdf'" class="text-muted">
+                    Page: <span class="page"/> / <span class="topage"/>
+                </div>
+            </div>
+        </div>
+    </template>
+
+
+</odoo>

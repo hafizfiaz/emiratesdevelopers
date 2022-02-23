@@ -1,0 +1,81 @@
+<odoo>
+    <template id="srs_external_layout">
+        <t t-if="not o" t-set="o" t-value="doc"/>
+
+        <t t-if="not company">
+            <!-- Multicompany -->
+            <t t-if="company_id">
+                <t t-set="company" t-value="company_id"/>
+            </t>
+            <t t-elif="o and 'company_id' in o">
+                <t t-set="company" t-value="o.company_id.sudo()"/>
+            </t>
+            <t t-else="else">
+                <t t-set="company" t-value="res_company"/>
+            </t>
+        </t>
+
+        <t t-call="sale_rent_schedule_reports.external_layout_header_srs"/>
+        <t t-call="sale_rent_schedule_reports.external_layout_footer_srs"/>
+        <t t-if="company.external_report_layout_id" t-call="{{company.external_report_layout_id.key}}"><t t-raw="0"/></t>
+        <t t-else="else" t-call="web.external_layout_standard"><t t-raw="0"/></t>
+
+
+
+    </template>
+
+    <template id="external_layout_header_srs">
+        <div class="header" height="2">
+            <!-- <div style="position:absolute;
+             opacity:0.7;
+             z-index:1000;
+             width:60%;
+             -ms-transform: rotate(-90deg);
+            -webkit-transform: rotate(-90deg);
+            margin-top:700px;
+            font-size:14px;
+            color:grey;
+            margin-left:-268px;
+            transform: rotate(-90deg);">
+            System Generated Document, Stamp Not Required
+            </div> -->
+            <div style='width:100%;'>
+
+                <div class="row">
+                    <div class="col-3 mb4">
+                        <img t-if="company.logo" t-att-src="image_data_uri(company.logo)" style="max-height: 45px;" alt="Logo"/>
+                    </div>
+                    <div class="col-9 text-right" style="margin-top:25px;" t-field="company.name" name="moto"/>
+                </div>
+                <div t-if="company.logo or company.report_header" class="row zero_min_height">
+                    <div class="col-12">
+                        <div style="border-bottom: 1px solid black;"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <template id="external_layout_footer_srs">
+        <div class="footer">
+            <!--<div class="text-center" style="border-top: 1px solid black;">-->
+                <!--<ul class="list-inline mb4">-->
+                    <!--<li t-if="company.phone" class="list-inline-item">Phone: <span t-field="company.phone"/></li>-->
+                    <!--<li t-if="company.email" class="list-inline-item">Email: <span t-field="company.email"/></li>-->
+                    <!--<li t-if="company.website" class="list-inline-item">Web: <span t-field="company.website"/></li>-->
+                    <!--<li t-if="company.website" class="list-inline-item">User: <span t-field="user_id.name"/></li>-->
+                    <!--<li t-if="company.vat" class="list-inline-item"><t t-esc="company.country_id.vat_label or 'Tax ID'"/>: <span t-field="company.vat"/></li>-->
+                <!--</ul>-->
+
+                <!--<div name="financial_infos">-->
+                    <!--<span t-field="company.report_footer"/>-->
+                <!--</div>-->
+
+                <!--<div t-if="report_type == 'pdf'" class="text-muted">-->
+                    <!--Page: <span class="page"/> / <span class="topage"/>-->
+                <!--</div>-->
+            <!--</div>-->
+        </div>
+    </template>
+
+</odoo>

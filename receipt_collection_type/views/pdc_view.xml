@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <record id="view_collection_type_tree" model="ir.ui.view">
+            <field name="name">collection.type.tree</field>
+            <field name="model">collection.type</field>
+            <field name="arch" type="xml">
+                <tree string="Collection Type">
+                    <field name="name"/>
+                    <field name="active"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_collection_type_form" model="ir.ui.view">
+            <field name="name">collection.type.form</field>
+            <field name="model">collection.type</field>
+            <field name="arch" type="xml">
+                <form string="Collection Type">
+                    <sheet>
+                        <div class="oe_title">
+                            <label for="name" class="oe_edit_only"/>
+                            <h1>
+                                <field name="name"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="active"/>
+                                <field name="auto_reconcile" />
+                            </group>
+                            <group string="Mandatory Fields" name="mandatory_fields">
+                                <field name="project"/>
+                                <field name="property"/>
+                                <field name="booking"/>
+                            </group>
+                            <group string="Hide Fields" name="mandatory_fields">
+                                <field name="hide_booking"/>
+                                <field name="hide_spa"/>
+                            </group>
+                            <group string="Tenancy" name="mandatory_fields">
+                                <field name="related_tenancy_chk"/>
+                            </group>
+
+                        </group>
+
+                    </sheet>
+
+                </form>
+            </field>
+        </record>
+
+
+        <record model="ir.actions.act_window" id="action_collection_type_action">
+            <field name="name">Collection Type</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">collection.type</field>
+            <!--            <field name="view_type">form</field>-->
+            <field name="view_mode">tree,form</field>
+        </record>
+
+
+        <menuitem action="action_collection_type_action"
+                  name="Collection Type"
+                  id="menu_collection_type"
+                  parent="account.root_payment_menu"
+                  sequence="6"
+                  groups="base.group_erp_manager"/>
+
+        <record model="ir.ui.view" id="view_account_payment_form_collection_type_inherit">
+            <field name="name">account.payment.pdc.form.inherit</field>
+            <field name="model">account.payment</field>
+            <field name="inherit_id" ref="account.view_account_payment_form"/>
+            <field name="arch" type="xml">
+                <field name="partner_type" position="after">
+                    <field name="collection_type_id"
+                           attrs="{'invisible':[('partner_type','=','supplier')], 'required':[('partner_type','=', 'customer')]}"
+                           options="{'no_create':True, 'no_create_edit':True, 'no_open': True}"/>
+                </field>
+                <field name="journal_id" position="attributes">
+                    <attribute name="options">{'no_create':True, 'no_create_edit':True, 'no_open': True}</attribute>
+                </field>
+                <field name="destination_account_id" position="attributes">
+                    <attribute name="options">{'no_create':True, 'no_create_edit':True, 'no_open': True}</attribute>
+                </field>
+
+                <field name="spa_id" position="after">
+                    <field name="project" invisible="1"/>
+                    <field name="property" invisible="1"/>
+                    <field name="booking" invisible="1"/>
+                    <field name="hide_booking" invisible="1"/>
+                    <field name="hide_spa" invisible="1"/>
+                    <field name="related_tenancy_chk" invisible="1"/>
+                </field>
+                <!--                <field name='booking_id' position="attributes">-->
+                <!--                    <attribute name="attrs">{'readonly': [('state', '!=', 'draft')],'invisible':['|',('payment_type','!=','inbound'),('hide_booking','=',True)], 'required':[('booking','=',True),('partner_type','=','customer')]}</attribute>-->
+                <!--                </field>-->
+                <!--                <field name='booking_payment_id' position="attributes">-->
+                <!--                    <attribute name="attrs">{'readonly': [('state', '!=', 'draft')],'invisible':['|',('payment_type','!=','outbound'),('hide_booking','=',True)], 'required':[('booking','=',True),('partner_type','=','supplier')]}</attribute>-->
+                <!--                </field>-->
+                <field name='spa_id' position="attributes">
+                    <attribute name="attrs">{'readonly': [('state', '!=',
+                        'draft')],'invisible':['|',('payment_type','!=','inbound'),('hide_spa','=',True)]}
+                    </attribute>
+                </field>
+                <!--                <field name='spa_payment_id' position="attributes">-->
+                <!--                    <attribute name="attrs">{'readonly': [('state', '!=', 'draft')],'invisible':['|',('payment_type','!=','outbound'),('hide_spa','=',True)]}</attribute>-->
+                <!--                </field>-->
+                <field name='asset_project_id' position="attributes">
+                    <attribute name="attrs">{'readonly': [('state', '!=', 'draft')],
+                        'required':[('project','=',True)]}
+                    </attribute>
+                </field>
+                <field name='property_id' position="attributes">
+                    <attribute name="attrs">{'readonly': [('state', '!=', 'draft')],
+                        'required':[('property','=',True)]}
+                    </attribute>
+                </field>
+                <!--                <field name='spa_id' position="after">-->
+                <!--                    <field name="rental_id" attrs="{'readonly': [('state', '!=', 'draft')], 'invisible': ['|',('payment_type','!=','inbound'),('related_tenancy_chk', '=', False)]}"-->
+                <!--                           domain="[('property_id','=',property_id),('asset_project_id','=',asset_project_id)]"-->
+                <!--                           context="{'form_view_ref': 'sd_rent.tenancy_inherit1', 'default_asset_project_id':asset_project_id,'default_property_id':property_id,'default_property_id':property_id}"/>-->
+                <!--                </field>-->
+
+            </field>
+        </record>
+
+    </data>
+    <record model="ir.ui.view" id="account_voucher_collection_form_viewcollection_type_inherit">
+        <field name="name">account.voucher.collection.pdc.form.inherit</field>
+        <field name="model">account.voucher.collection</field>
+        <field name="inherit_id" ref="account_voucher_collection.account_voucher_collection_form_view"/>
+        <field name="arch" type="xml">
+            <field name="partner_id" position="after">
+                <field name="collection_type_id" options="{'no_create':True, 'no_create_edit':True}"/>
+            </field>
+            <xpath expr="//field[@name='collection_line']/tree/field[@name='journal_id']" position="after">
+                <field name="collection_type_id" options="{'no_create':True, 'no_create_edit':True}" optional="show"/>
+                <field name="officer_id" options="{'no_create':True, 'no_create_edit':True}" optional="show"/>
+                <field name="spa_id" optional="hide"/>
+            </xpath>
+            <xpath expr="//field[@name='officer_id']" position="attributes">
+                <attribute name="string">Collection Officer</attribute>
+            </xpath>
+            <xpath expr="//field[@name='officer_id']" position="after">
+                <field name="account_holder_name"/>
+                <field name="bank_issued_check"/>
+                <field name="remarks"/>
+            </xpath>
+            <xpath expr="//field[@name='collection_line']" position="attributes">
+                <attribute name="context">{'default_date':date,'default_spa_id':sale_id,
+                    'default_officer_id':officer_id,'default_collection_type_id':collection_type_id,
+                    'default_account_holder_name':account_holder_name,'default_bank_issued_check':bank_issued_check,
+                    'default_remarks':remarks,'default_partner_id':partner_id,'default_payment_type':'inbound',
+                    'default_partner_type':'customer','default_asset_project_id':asset_project_id,
+                    'default_property_id':property_id, 'default_reference': reference, 'default_communication': name,
+                    'default_journal_id': journal_id, 'default_payment_method_id':1}
+                </attribute>
+            </xpath>
+        </field>
+    </record>
+
+
+    <!--<record id="view_account_payment_form_inherit_salesperson" model="ir.ui.view">
+        <field name="name">account.payment.form.salesperson</field>
+        <field name="model">account.payment</field>
+        <field name="inherit_id" ref="receipt_owner_and_rule.view_account_payment_form_inherit_owner"/>
+        <field name="arch" type="xml">
+            <field name="owner_ids" position="replace">
+                <field name="salesperson_id"/>
+            </field>
+        </field>
+    </record>-->
+</odoo>

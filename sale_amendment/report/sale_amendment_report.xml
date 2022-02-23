@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+<data>
+<template id="sale_report_amendment">
+    <t t-call="report.external_layout">
+        <div t-foreach="docs" t-as="o">
+            <div class="page">
+                <br/>
+                <h1 class="text-center">Amendment In Contract</h1>
+                <div class="row">
+                    <div class="col-xs-4"></div>
+                    <div class="col-xs-4"></div>
+                        <div class="col-xs-4 mt32 text-center">
+                            <img t-if="o.name" t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s' % ('Code128', o.name, 600, 100)" style="width:300px;height:50px"/>
+                            <p t-if="o.name" t-field="o.name"></p>
+                        </div>
+                    </div>
+
+                <br/>
+                <div class="row">
+                    <div class="col-xs-6"><b>Amendment No:</b> <span t-esc="o.name"/></div>
+                    <div class="col-xs-6"><b>Date:</b> <span t-esc="o.create_date"/></div>
+                </div>
+                <br/>
+                <br/>
+                <div class="row">
+                    <div class="col-xs-4">
+                        <div style="border-bottom:1px solid black;font-size:20px; width:240px">
+
+                            <strong>Original Contract Detail:</strong>
+
+                        </div>
+                    </div>
+                </div>
+
+
+                    <table class="table table-condensed" style="border:0px;margin-top:50px;">
+                        <tr style="border:0px;">
+                            <td width="155px"><strong>Sale Order No :</strong></td>
+                            <td width="200px"><span t-esc="o.sale_id.name"/></td>
+                            <td width="155px"><strong>Signup Date :</strong></td>
+                            <td width="200px"><span t-esc="o.signup_date"/></td>
+                        </tr>
+                        <tr>
+                            <td width="155px" style="border:0px;"><strong>Customer Name :</strong></td>
+                            <td style="border:0px;"><span t-esc="o.partner_id.name"/></td>
+                            <td style="border:0px;" width="155px"><strong>Product :</strong></td>
+                            <td style="border:0px;"><span t-esc="o.product_id.name"/></td>
+                        </tr>
+                        <tr>
+                            <td width="155px" style="border:0px;"><strong>Mobile :</strong></td>
+                            <td style="border:0px;"><span t-esc="o.mobile"/></td>
+                            <td style="border:0px;" width="155px"><strong>Payment Term:</strong></td>
+                            <td style="border:0px;"><span t-esc="o.payment_option.name"/></td>
+                        </tr>
+                        <tr>
+                            <td width="155px" style="border:0px;"><strong>Email :</strong></td>
+                            <td style="border:0px;"><span t-esc="o.email"/></td>
+                            <!--<td style="border:0px;" width="155px"><strong>Payment Term:</strong></td>-->
+                            <!--<td style="border:0px;"><span t-esc="o.payment_option.name"/></td>-->
+                        </tr>
+
+                    </table>
+                <div class="row">
+                    <div class="col-xs-4">
+                        <div style="border-bottom:1px solid black;font-size:20px; width:240px">
+
+                            <strong>Amemdment Detail:</strong>
+
+                        </div>
+                    </div>
+                </div>
+                    <table class="table table-condensed" style="border:0px;margin-top:50px;">
+                        <!--<thead>
+                            <tr style="border-bottom:0px">
+                                <td colspan="2" style="border:0px;font-size:22px;"><strong>AGENT DETAILS</strong></td>
+                                <td colspan="2" style="border:0px;margin-left:30px;font-size:22px;"><strong>CUSTOMER &amp; SALE DETAILS</strong></td>
+                            </tr>
+                        </thead>-->
+                        <tr style="border:0px;">
+                            <td width="155px"><strong>New Payment Term :</strong></td>
+                            <td width="200px"><span t-esc="o.new_payment_option.name"/></td>
+                            <td width="155px"><strong> New Occupation :</strong></td>
+                            <td width="200px"><span t-esc="o.new_occupation_programe"/></td>
+                        </tr>
+                        <tr>
+                            <td width="155px" style="border:0px;"><strong>New Occupation No :</strong></td>
+                            <td style="border:0px;"><span t-esc="o.new_occupation_no"/></td>
+                            <td style="border:0px;" width="155px"><strong> New Product :</strong></td>
+                            <td style="border:0px;"><span t-esc="o.new_product_id.name"/></td>
+                        </tr>
+                        <tr>
+                            <td width="155px" style="border:0px;"><strong>New Discount Amount :</strong></td>
+                            <td style="border:0px;"><span t-esc="o.new_discount_amount"/></td>
+                            <td style="border:0px;" width="155px"><strong>Sale Amendment Detail:</strong></td>
+                            <td style="border:0px;"><span t-esc="o.text"/></td>
+                        </tr>
+
+
+                    </table>
+                <div>
+                    <!--<span t-raw="o.product_id.sales_terms"/>-->
+                </div>
+
+                <!--<div style="border-bottom:2px solid black;width:150px;margin-top:40px;"></div>-->
+                <div><strong>Officer Created : </strong><span t-esc="user.name"/></div>
+                <div class="row" style="margin-top:60px;">
+                    <div class="col-xs-6"><strong>System generated document,stamp not required</strong></div>
+                    <div class="col-xs-6">
+                        <div style="border-top:1px solid black;width:110px;margin-left:200px;">Client Signature</div>
+                        <div style="margin-left:200px;"><span t-esc="o.partner_id.name"/></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </t>
+</template>
+</data>
+</openerp>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+
+        <record model="ir.ui.view" id="unallocated_draft_wiz_form_view">
+            <field name="name">unallocated.draft.wiz.form</field>
+            <field name="model">unallocated.draft.wiz</field>
+            <field name="arch" type="xml">
+                <form string="Unallocated Receipts">
+                    <group>
+                        <group>
+                            <field name="start_date"/>
+                            <field name="end_date"/>
+                        </group>
+                        <group>
+                            <field name="unallocated_check"/>
+                            <field name="draft_check"/>
+                        </group>
+                    </group>
+                    <footer>
+                        <button string="Apply" name="get_result" type="object" class="oe_highlight"/>
+                        or
+                        <button string="Cancel" class="oe_link" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+
+        <act_window id="unallocated_draft_wiz_action"
+                    name="Unallocated and Draft Reciepts"
+                    res_model="unallocated.draft.wiz"
+                    view_mode="form"
+                    view_id="unallocated_draft_wiz_form_view"
+                    target="new"
+        />
+
+        <menuitem action="unallocated_draft_wiz_action" id="menu_unallocated_draft_wiz"
+                  parent="account_voucher_collection.menu_receipts_and_payments" sequence="8" name="Unallocated &amp; Draft Receipts"/>
+    </data>
+</odoo>

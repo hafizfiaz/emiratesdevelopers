@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="collection_team" model="ir.ui.view">
+            <field name="name">Collection Team</field>
+            <field name="model">collections.team</field>
+            <field name="arch" type="xml">
+
+                <form string="Collections Team">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="name"/>
+                                <field name="active"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <record id="action_collection_team" model="ir.actions.act_window">
+            <field name="name">Collections Team</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">collections.team</field>
+            <field name="view_mode">tree,form</field>
+            <field name="context"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Collections Team!
+                </p>
+            </field>
+        </record>
+        <menuitem id="collections_team_menu" name="Collections Team" parent="account.root_payment_menu" sequence="5"
+              action="action_collection_team"/>
+
+
+    </data>
+</odoo>

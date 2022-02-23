@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="waive_off_wizard" model="ir.ui.view">
+            <field name="name">Waive Off</field>
+            <field name="model">waive.off</field>
+            <field name="arch" type="xml">
+                <form>
+                    <group>
+                        <group>
+                             <field name="type" widget="radio" attrs="{'invisible': [('already_waive_off', '=', True)]}"/>
+                            <field name="to_reduce" attrs="{'invisible': [('already_waive_off', '=', False)], 'readonly': [('penalty_status', '=', 'waive_off')]}"/>
+                            <field name="already_waive_off" invisible="1"/>
+                            <field name="to_reduce_amount" attrs="{'invisible': [('to_reduce', '=', False)], 'required': [('to_reduce', '=', True)]}"/>
+                        </group>
+                        <group>
+                            <field name="amount"/>
+                            <field name="penalty_status" invisible="1"/>
+                            <field name="already_waive_off_amount" attrs="{'invisible': [('already_waive_off', '=', False)]}"/>
+                            <field name="waive_off_amount" attrs="{'invisible': ['|',('type', '=', 'full'),('penalty_status', '=', 'waive_off')], 'readonly': [('to_reduce', '=', True)], 'required': [('type', '=', 'partial')]}"/>
+                        </group>
+                    </group>
+                    <footer>
+                        <button name="action_confirm" string="Confirm" type="object" class="oe_highlight"/>
+                        or
+                        <button string="Cancel" class="oe_link" special="cancel" />
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_penalty_rule_tree" model="ir.ui.view">
+            <field name="name">penalty.rules.tree</field>
+            <field name="model">penalty.rules</field>
+            <field name="arch" type="xml">
+                <tree create="false" delete="false">
+                    <field name="incremental_days_start" invisible="1"/>
+                    <field name="incremental_days_end" invisible="1"/>
+                    <field name="asset_project_id" readonly="1"/>
+                    <field name="property_id" readonly="1"/>
+                    <field name="delay_days" readonly="1"/>
+                    <field name="penalty_criteria" invisible="1"/>
+                    <field name="penalty_amount"/>
+                    <field name="waive_off_amount"/>
+                    <field name="penalty_status"/>
+                    <field name="recurring_penalty_srs_id" invisible="1"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_penalty_rule_form" model="ir.ui.view">
+            <field name="name">penalty.rules.form</field>
+            <field name="model">penalty.rules</field>
+            <field name="arch" type="xml">
+                <form string="Penalty Rule">
+                    <header>
+                        <button name="action_under_approval_waive_off" type="object" string="Submit to Waive Off" attrs="{'invisible': [('penalty_status', '!=', 'charged')]}" class="oe_highlight"/>
+                        <button name="action_waive_off" type="object" string="Waive Off" attrs="{'invisible': [('penalty_status', 'not in', ['under_approval_waive_off','partially'])]}" class="oe_highlight"/>
+                        <button name="action_waive_off" type="object" string="Reduce Waive Off Amount" attrs="{'invisible': [('penalty_status', '!=', 'waive_off')]}" class="oe_highlight"/>
+                        <field name="penalty_status" widget="statusbar" statusbar_visible="charged,under_approval_waive_off,partially,waive_off"/>
+                    </header>
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="delay_days" readonly="1"/>
+                                <field name="penalty_amount" readonly="1"/>
+                                <separator string="Installment Info" name="installment_info"/>
+                                <field name="related_installment" string="Related Installment"/>
+                                <field name="receipt_total"/>
+                                <field name="pen_amt"/>
+                                <field name="installment_delay_days"/>
+                                <field name="installment_status"/>
+                            </group>
+                            <group>
+                                <field name="waive_off_amount" readonly="1"/>
+                                <field name="asset_project_id" readonly="1"/>
+                                <field name="property_id" readonly="1"/>
+                                <field name="installment_start_value" invisible="1"/>
+                                <field name="installment_ending_value" invisible="1"/>
+                                <field name="penalty_criteria" invisible="1"/>
+                                <field name="first_penalty_project_id" invisible="1"/>
+                                <field name="recurring_penalty_project_id" invisible="1"/>
+                            </group>
+                        </group>
+                    </sheet>
+                    <div class="oe_chatter" style="display:block;">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="activity_ids" widget="mail_activity"/>
+                        <field name="message_ids" widget="mail_thread" options="{'post_refresh': 'recipients'}"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+
+    <record id="action_pr" model="ir.actions.act_window">
+        <field name="name">Penalty Lines</field>
+        <field name="res_model">penalty.rules</field>
+		<field name="view_mode">tree,form</field>
+        <!--<field name="search_view_id" ref="account_voucher_collection_search_view"/>-->
+        <field name="view_id" eval="False"/>
+        <field name="domain">[('related_installment','!=', False)]</field>
+        <field name="help" type="html">
+          <p class="oe_view_nocontent_create">
+            Click to Register a new Penalty Rules.
+          </p>
+        </field>
+    </record>
+
+    <menuitem action="action_pr" sequence="3" id="menu_action_pr"  parent="sale.menu_sale_config" name="Penalty Lines"/>
+
+    <record id="srs_penalty_rules_view" model="ir.ui.view">
+        <field name="name">sale.rent.schedule.form</field>
+        <field name="model">sale.rent.schedule</field>
+        <field name="inherit_id" ref="spa_customizations.sale_rent_form"/>
+        <field name="arch" type="xml">
+            <field name="move_check" position="after">
+                <field name="penalty"/>
+            </field>
+            <xpath expr="//newline" position="before">
+                <notebook>
+                    <page string="Penalty Rules" name="penalty_rules">
+                        <separator string="First Penalty"/>
+                        <field name="first_penalty_ids" context="{'default_first_penalty_srs_id':id}" readonly="1">
+                            <tree name="f_penalty_rules" editable="bottom">
+                                <field name="installment_start_value" invisible="1"/>
+                                <field name="installment_ending_value" invisible="1"/>
+                                <field name="asset_project_id" readonly="1"/>
+                                <field name="property_id" readonly="1"/>
+                                <field name="delay_days" readonly="1"/>
+                                <field name="first_penalty_srs_id" invisible="1"/>
+                                <field name="penalty_criteria" invisible="1"/>
+                                <field name="penalty_amount" readonly="1"/>
+                                <field name="waive_off_amount" readonly="1"/>
+                                <field name="penalty_status" readonly="1"/>
+                            </tree>
+                        </field>
+                        <separator string="Recurring Penalty"/>
+                        <field name="recurring_penalty_ids" context="{'default_recurring_penalty_srs_id':id}" readonly="1">
+                            <tree name="r_penalty_rules" editable="bottom">
+                                <field name="incremental_days_start" invisible="1"/>
+                                <field name="incremental_days_end" invisible="1"/>
+                                <field name="asset_project_id" readonly="1"/>
+                                <field name="property_id" readonly="1"/>
+                                <field name="delay_days" readonly="1"/>
+                                <field name="penalty_criteria" invisible="1"/>
+                                <field name="penalty_amount"/>
+                                <field name="waive_off_amount"/>
+                                <field name="penalty_status"/>
+                                <field name="recurring_penalty_srs_id" invisible="1"/>
+                            </tree>
+                        </field>
+                    </page>
+                </notebook>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="project_penalty_rules_view" model="ir.ui.view">
+        <field name="name">project.penalty_rules</field>
+        <field name="model">account.asset.asset</field>
+        <field name="inherit_id" ref="ow_account_asset.view_account_asset_asset_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook" position="inside">
+                <page string="Penalty Rules" name="penalty_rules">
+                    <separator string="First Penalty"/>
+                    <field name="first_penalty_ids" context="{'default_first_penalty_project_id':id}">
+                        <tree name="f_penalty_rules" editable="bottom">
+                            <field name="installment_start_value"/>
+                            <field name="installment_ending_value"/>
+                            <field name="delay_days"/>
+                            <field name="first_penalty_project_id" invisible="1"/>
+                            <field name="penalty_criteria" invisible="1"/>
+                            <field name="penalty_amount" readonly="0"/>
+                        </tree>
+                        <form string="Penalty Rule">
+                            <sheet>
+                                <group>
+                                    <group>
+                                        <field name="delay_days" readonly="1"/>
+                                        <field name="penalty_amount" readonly="1"/>
+                                    </group>
+                                    <group>
+                                        <field name="waive_off_amount" readonly="1"/>
+                                        <field name="asset_project_id" readonly="1"/>
+                                        <field name="property_id" readonly="1"/>
+                                        <field name="installment_start_value" invisible="1"/>
+                                        <field name="installment_ending_value" invisible="1"/>
+                                        <field name="recurring_penalty_srs_id" invisible="1"/>
+                                        <field name="penalty_criteria" invisible="1"/>
+                                    </group>
+                                </group>
+                            </sheet>
+                        </form>
+                    </field>
+                    <separator string="Recurring Penalty"/>
+                    <field name="recurring_penalty_ids" context="{'default_recurring_penalty_project_id':id}">
+                        <tree name="r_penalty_rules" editable="bottom">
+                            <field name="incremental_days_start" invisible="0"/>
+                            <field name="incremental_days_end" invisible="0"/>
+                            <field name="penalty_criteria" invisible="1"/>
+                            <field name="penalty_amount" readonly="0"/>
+                            <field name="recurring_penalty_project_id" invisible="1"/>
+                        </tree>
+                        <form string="Penalty Rule">
+                            <sheet>
+                                <group>
+                                    <group>
+                                        <field name="delay_days" readonly="1"/>
+                                        <field name="penalty_amount" readonly="1"/>
+                                    </group>
+                                    <group>
+                                        <field name="waive_off_amount" readonly="1"/>
+                                        <field name="asset_project_id" readonly="1"/>
+                                        <field name="property_id" readonly="1"/>
+                                        <field name="installment_start_value" invisible="1"/>
+                                        <field name="installment_ending_value" invisible="1"/>
+                                        <field name="recurring_penalty_srs_id" invisible="1"/>
+                                        <field name="penalty_criteria" invisible="1"/>
+                                    </group>
+                                </group>
+                            </sheet>
+                        </form>
+                    </field>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+
+    </data>
+</odoo>

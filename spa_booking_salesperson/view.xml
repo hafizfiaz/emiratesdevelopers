@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="view_order_sales_person" model="ir.ui.view">
+            <field name="name">sale.order.form.salesperson</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="spa_customizations.view_spa_form"/>
+            <field name="arch" type="xml">
+                <field name="user_id" position="replace">
+                    <field name="salesperson_ids" widget="many2many_tags"/>
+                </field>
+            </field>
+        </record>
+
+    </data>
+</odoo>

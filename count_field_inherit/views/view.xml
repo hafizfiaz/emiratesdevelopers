@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <record id="spa_count_field" model="ir.ui.view">
+        <field name="name">sale.order.inherit</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="spa_customizations.view_spa_form"/>
+        <field name="arch" type="xml">
+            <field name="booking_date" position="after">
+                <field name="count" invisible="1"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="termination_count_field" model="ir.ui.view">
+        <field name="name">termination.process.inherit</field>
+        <field name="model">termination.process</field>
+        <field name="inherit_id" ref="termination_process.termination_process"/>
+        <field name="arch" type="xml">
+            <field name="total_spa_customer" position="after">
+                <field name="count" invisible="1"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="asset_count_field" model="ir.ui.view">
+        <field name="name">account.asset.asset.inherit</field>
+        <field name="model">account.asset.asset</field>
+        <field name="inherit_id" ref="ow_account_asset.view_account_asset_asset_form"/>
+        <field name="arch" type="xml">
+            <field name="company_id" position="after">
+                <field name="count" invisible="1"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="commission_count_field" model="ir.ui.view">
+        <field name="name">commission.invoice.inherit</field>
+        <field name="model">commission.invoice</field>
+        <field name="inherit_id" ref="commission_extension.commission_invoice_form_inherit"/>
+        <field name="arch" type="xml">
+            <field name="diffrence2" position="after">
+                <field name="count" invisible="1"/>
+            </field>
+        </field>
+    </record>
+    <record id="move_count_field" model="ir.ui.view">
+            <field name="name">account.move.inherit</field>
+            <field name="model">account.move</field>
+            <field name="inherit_id" ref="spa_customizations.account_move_inherit_spa"/>
+            <field name="arch" type="xml">
+                <field name="property_id" position="after">
+                    <field name="count" invisible="1"/>
+                </field>
+            </field>
+        </record>
+    <record id="approval_count_field" model="ir.ui.view">
+            <field name="name">approval.inherit</field>
+            <field name="model">approval.approval</field>
+            <field name="inherit_id" ref="custom_approvals.view_approvals_bills_form"/>
+            <field name="arch" type="xml">
+                <field name="approve_user_id" position="after">
+                    <field name="count" invisible="1"/>
+                </field>
+            </field>
+        </record>
+    <record id="payment_count_field" model="ir.ui.view">
+            <field name="name">account.payment.inherit</field>
+            <field name="model">account.payment</field>
+            <field name="inherit_id" ref="account_pdc.view_account_payment_form_pdc"/>
+            <field name="arch" type="xml">
+                <field name="mobile" position="after">
+                    <field name="count" invisible="1"/>
+                </field>
+            </field>
+        </record>
+
+</odoo>

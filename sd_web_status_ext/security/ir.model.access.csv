@@ -1,0 +1,2 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+res_change_web_status_all,change.web.status,sd_web_status_ext.model_change_web_status,,1,1,1,1

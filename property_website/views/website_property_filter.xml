@@ -1,0 +1,87 @@
+<odoo>
+    <template id="search_property_content">
+        <input type="hidden" id="property_type" name="property_type" t-att-value="property_type"/>
+        <div class="col-md-1  pull-right location-filter">
+            <ul class="dropdown dropdown_filter_change" style="list-style-type: none;">
+<!--                        <h5>View</h5>-->
+
+                        <li class="mb4">
+                        <br/>
+<!--                            <input type="text" class="form-control" t-att-value="number" id="number" name="number" placeholder="Number"/>-->
+                        <button type="button" class="request-maintenance btn btn-lg" id="search_property_filter">Search</button>
+                        </li>
+            </ul>
+        </div>
+        <div class="col-md-2  pull-right location-filter">
+            <ul class="dropdown dropdown_filter_change" style="list-style-type: none;">
+<!--                        <h5>View</h5>-->
+
+                        <li class="mb4">
+                            Number
+                            <input type="text" class="form-control" t-att-value="number" id="number" name="number" placeholder="Number"/>
+<!--                        <button type="button" class="request-maintenance btn btn-lg" id="submit_maintanance">Search</button>-->
+                        </li>
+            </ul>
+        </div>
+        <div class="col-md-3 pull-right location-filter">
+<!--            <ul class="nav navbar-nav nav-pills" role="tablist" data-dropdown-in="fadeInDown" data-dropdown-out="fadeOutUp">-->
+<!--                <li role="presentation" class="dropdown">-->
+<!--                    <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="true">View<span class="caret"></span>-->
+<!--                    </a>-->
+                    <ul class="dropdown dropdown_filter_change" style="list-style-type: none;">
+<!--                        <h5>View</h5>-->
+
+                        <li class="mb4">
+                            Views
+                            <select id="viewlist" name="viewlist" class="viewlist">
+                                  <option value=""></option>
+                                  <option value="4">Pool View</option>
+                                  <option value="9">City View</option>
+                                  <option value="10">Hessa Street View</option>
+
+                                </select>
+                        </li>
+                    </ul>
+        </div>
+        <div class="col-md-3 pull-right location-filter">
+
+            <form id="searchunitForm" class="form_filter_rent_unit" name="body_property_unit" method="post">
+                    <ul class="dropdown dropdown_filter_change" style="list-style-type: none;">
+<!--                        <h5>Unit Type</h5>-->
+
+                        <li class="mb4">
+                            Unit Type
+                            <select id="unittypelist" name="unittypelist" class="unittypelist">
+                                <option value=""></option>
+                                <option value="1">Studio</option>
+                                <option value="2">1 Bed Room</option>
+                                <option value="3">2 Bed Room</option>
+                            </select>
+                        </li>
+                    </ul>
+            </form>
+        </div>
+        <div class="col-md-3  pull-right location-filter">
+            <ul class="dropdown dropdown_filter_change" style="list-style-type: none;">
+<!--                        <h5>View</h5>-->
+
+                        <li class="mb4">
+                            Status
+                            <select id="statelist" name="statelist" class="statelist">
+                                  <option value=""></option>
+<!--                                   <t t-foreach="all_status or []" t-as="country">-->
+<!--                                        <option value="new_draft">Booking Open</option>-->
+                                        <option value="draft">Available</option>
+<!--                                        <option value="book">Booked</option>-->
+<!--                                        <option value="normal">On Lease</option>-->
+<!--                                        <option value="close">Sale</option>-->
+                                        <option value="sold">Sold</option>
+<!--                                        <option value="open">Running</option>-->
+<!--                                        <option value="cancel">Cancel</option>-->
+<!--                                    </t>-->
+                                </select>
+                        </li>
+            </ul>
+        </div>
+    </template>
+</odoo>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <report id="report_sale_form"
+                string="Sale Form"
+                model="report.spa_customizations.report_sale_form_template"
+                report_type="qweb-pdf"
+                file="spa_customizations.report_sale_form_template"
+                name="spa_customizations.report_sale_form_template"/>
+
+
+        <report id="report_golf_form"
+                string="Sale Form Golf"
+                model="report.spa_customizations.report_golf_form_template"
+                report_type="qweb-pdf"
+                file="spa_customizations.report_golf_form_template"
+                name="spa_customizations.report_golf_form_template"/>
+
+    </data>
+</odoo>

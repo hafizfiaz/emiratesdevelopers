@@ -1,0 +1,581 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <report id="report_amendment_form"
+                string="Amendment Form"
+                model="sale.amendment"
+                report_type="qweb-pdf"
+                menu="False"
+                file="sale_amendment.report_amendment_form_template"
+                name="sale_amendment.report_amendment_form_template"
+                />
+                <!--menu="False"/>-->
+
+        <record id="paperformat_amendment_form" model="report.paperformat">
+            <field name="name">Amendment Form</field>
+            <field name="default" eval="True"/>
+            <field name="format">custom</field>
+            <field name="page_height">350</field>
+            <field name="page_width">0</field>
+            <field name="orientation">Portrait</field>
+            <field name="margin_top">20</field>
+            <field name="margin_bottom">15</field>
+            <!--<field name="margin_left">7</field>-->
+            <!--<field name="margin_right">7</field>-->
+            <field name="header_line" eval="False"/>
+            <field name="header_spacing">23</field>
+            <!--<field name="dpi">90</field>-->
+        </record>
+
+
+        <record id="report_amendment_form" model="ir.actions.report">
+            <field name="paperformat_id" ref="sale_amendment.paperformat_amendment_form"/>
+        </record>
+
+        <template id="report_amendment_form_template">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-call="sd_sale_order_report.sale_order_customer_penalty">
+                        <t t-set="o" t-value="o.with_context({'lang': lang})"/>
+                        <div class="page" style='font-size: 12px;'>
+                            <style>
+
+                                .table-bordered {
+                                          border: 1px solid black;
+                                            margin: 6px;
+                                        }
+
+                                        .table-bordered th,
+                                        .table-bordered tr,
+                                        .table-bordered td {
+                                          border: 1px solid black;
+
+                                        }
+
+                                        .table-bordered thead th,
+                                        .table-bordered thead tr,
+                                        .table-bordered thead td {
+                                          border-bottom-width: 1px;
+                                        }
+
+                                .table {
+                                      width: 100%;
+                                      margin-bottom: 1rem;
+                                      background-color: transparent;
+                                    }
+
+                                    .table th,
+                                    .table td {
+                                      padding: 0.25rem;
+                                      vertical-align: top;
+                                      border-top: 1px solid balck;
+                                    }
+
+                                    .table thead th {
+                                      vertical-align: bottom;
+                                      border-bottom: 1px solid black;
+                                    }
+
+                                    .table tbody + tbody {
+                                      border-top: 1px solid black;
+                                    }
+
+                            </style>
+                            <div class="row">
+                                <div class="col-12 text-center">
+                                    <h3>
+                                        <strong>Booking/Sale Revert Request Form</strong>
+                                    </h3>
+                                </div>
+                            </div>
+                            <br/>
+
+                            <table class="table table-bordered">
+                                <tbody>
+                                    <div class="row">
+                                        <div class="col-4 text-center">
+                                            <t t-set="code" t-value="str(o.spa_id.name)+'-'+ str(o.property_id.name)"/>
+                                            <div>
+                                                <img t-if="o.spa_id.name" t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s' %('Code128',code,300,40)"/>
+                                            </div>
+                                            <span t-esc="code"/>
+                                            <!--</t>-->
+                                        </div>
+                                        <div class="col-8"></div>
+                                    </div>
+                                    <br/>
+                                    <div class="row">
+                                        <div class="col-6 text-left">
+                                            <span style='font-size: 18px;'>
+                                                <strong>Original Booking Detail </strong>
+                                            </span>
+                                        </div>
+                                        <div class="col-6 text-left">
+                                            <span style='font-size: 16px;'>
+                                                <strong>Date: </strong><span> </span><span t-field="o.spa_id.booking_date" t-options='{"format": "dd/MM/yyyy"}'/>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <!--<div class="row">
+                                        <div class="col-12 text-left">
+                                            <span style='font-size: 14px;'>
+                                                <strong>Project Name: </strong><span> </span><span t-esc="o.asset_project_id.name"/>
+                                            </span>
+                                        </div>
+                                    </div>-->
+                                    <tr>
+                                        <th >
+                                            <span>Customer Name</span>
+                                        </th>
+                                        <td>
+                                            <span t-esc="o.partner_id.name"/>
+                                        </td>
+                                        <th>
+                                            <span>Booking No</span>
+                                        </th >
+                                        <td >
+                                            <span t-esc="o.spa_id.name"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th >
+                                            <span>Mobile</span>
+                                        </th>
+                                        <td>
+                                            <span t-esc="o.partner_id.mobile"/>
+                                        </td>
+                                        <th>
+                                            <span>Booking Date</span>
+                                        </th >
+                                        <td >
+                                            <span t-field="o.spa_id.booking_date" t-options='{"format": "dd/MM/yyyy"}'/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th >
+                                            <span>Phone</span>
+                                        </th>
+                                        <td>
+                                            <span t-esc="o.partner_id.phone"/>
+                                        </td>
+                                        <th>
+                                            <span>Unit No</span>
+                                        </th >
+                                        <td >
+                                            <span t-esc="o.property_id.name"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th >
+                                            <span>Email</span>
+                                        </th>
+                                        <td>
+                                            <span t-esc="o.partner_id.email"/>
+                                        </td>
+                                        <th>
+                                            <span>Project</span>
+                                        </th >
+                                        <td >
+                                            <span t-esc="o.asset_project_id.name"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th >
+                                            <span>Nationality</span>
+                                        </th>
+                                        <td>
+                                            <span t-esc="o.partner_id.nationality_id.name"/>
+                                        </td>
+                                        <th>
+                                            <span>Property Price</span>
+                                        </th >
+                                        <td >
+                                            <span t-esc="o.spa_id.price"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th >
+                                            <span>Internal Agent</span>
+                                        </th>
+                                        <td>
+                                             <t t-if="o.user_id">
+                                                    <span t-esc="o.user_id.name"/>
+                                                </t>
+
+                                        </td>
+                                        <th>
+                                            <span>External Agent</span>
+                                        </th >
+                                        <td >
+                                           <t t-if="o.spa_id">
+                                                    <span t-esc="o.spa_id.agent_id.name"/>
+                                                </t>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+
+                            <br/>
+                            <table class="table table-bordered">
+                                <tbody>
+                                    <div class="row">
+                                        <div class="col-6 text-left">
+                                            <span style='font-size: 18px;'>
+                                                <strong>Amendment Detail</strong>
+                                            </span>
+                                        </div>
+                                        <div class="col-6">
+                                        </div>
+                                    </div>
+                                    <tr>
+                                        <td colspan="2" style="padding: 0.65rem;"><span t-esc="o.saleamendment_text"/> </td>
+                                    </tr>
+                                    <t t-if="o.partner_check">
+                                        <tr>
+                                            <th>Unit Transfer To</th>
+                                            <td>Name: <span t-esc="o.new_partner_id.name"/>, Mobile: <span t-esc="o.new_partner_id.mobile"/>, Passport No: <span t-esc="o.new_partner_id.passport_no"/>, EID No: <span t-esc="o.new_partner_id.eid_no"/>  </td>
+                                        </tr>
+                                    </t>
+                                    <t t-if="o.product_check">
+                                        <tr>
+                                            <th>Property Unit Swap</th>
+                                            <td>Unit No: <span t-esc="o.new_property_id.name"/>, Project: <span t-esc="o.new_asset_project_id.name"/>, Address: <span t-esc="o.new_asset_project_id.street"/>,<span t-esc="o.new_asset_project_id.street2"/>, <span t-esc="o.new_asset_project_id.township"/>,</td>
+                                        </tr>
+                                    </t>
+                                    <t t-if="o.payment_schedule_check">
+                                        <tr>
+                                            <th>New Payment Plan</th>
+                                            <td>
+                                                Payment Schedule: <span t-esc="o.new_payment_schedule_id.name"/><br/>
+                                                Value: <!--<span t-esc="o.new_partner_id.name"/>-->
+                                            </td>
+                                        </tr>
+                                    </t>
+                                    <t t-if="o.refund_check">
+                                        <tr>
+                                            <th>Cancelation &amp; Refund</th>
+                                            <td style="font-size:20px;">
+                                                &#10003;
+                                            </td>
+                                        </tr>
+                                    </t>
+
+                                </tbody>
+                            </table>
+                            <table class="table table-bordered">
+                                <tbody>
+                                    <div class="row">
+                                        <div class="col-6 text-left">
+                                            <span style='font-size: 18px;'>
+                                                <strong>Original Booking</strong>
+                                            </span>
+                                        </div>
+                                        <div class="col-6">
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-6 text-left">
+                                            <span style='font-size: 18px;'>
+                                                <strong>Receipts</strong>
+                                            </span>
+                                        </div>
+                                        <div class="col-6">
+                                        </div>
+                                    </div>
+                                    <tr>
+                                        <th>Receipt No</th>
+                                        <th>Payment Method</th>
+                                        <th>Date</th>
+                                        <th>Amount</th>
+                                    </tr>
+                                    <t t-set="total" t-value="0"/>
+                                    <tr t-foreach="o.receipts_ids" t-as="rec">
+                                        <td><span t-esc="rec.name"/></td>
+                                        <td><span t-esc="rec.journal_id.name"/></td>
+                                        <td><span t-esc="datetime.datetime.strftime(rec.date,'%d-%m-%Y')"/></td>
+                                        <td><span t-esc="'{:,.2f}'.format(rec.amount)"/></td>
+                                        <t t-set="total" t-value="total+rec.amount"/>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Total</strong></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td><strong><span t-esc="'{:,.2f}'.format(total)"/></strong></td>
+                                    </tr>
+
+                                </tbody>
+                            </table>
+
+                            <div class="row" style='font-size: 14px;'>
+                                <div class="col-12">
+                                    <span>Note: This form is not valid if receipt payment method is Escrow Account Fund transfer. For Escrow account fund transfer department will intimate about this amendment confirmation.</span>
+                                </div>
+                            </div>
+                            <br/>
+                            <br/>
+                            <div class="row" style='font-size: 18px;'>
+                                <div class="col-12"><strong>Customer Undertaking &amp;</strong></div>
+                            </div>
+                            <div class="row" style='font-size: 18px;'>
+                                <div class="col-12"><strong>Acknowledgement</strong></div>
+                            </div>
+                            <div class="row" style='font-size: 14px;'>
+                                <div class="col-12">
+                                    I <span t-esc="o.partner_id.name"/> hereby agree &amp; confirm above amendment in my original booking # <span t-esc="o.spa_id.name"/> Dated <span t-field="o.spa_id.booking_date" t-options='{"format": "dd/MM/yyyy"}'/> , and so all risk &amp; reward transfer with this amendment &amp; changes. In case of unit/booking cancelation, refund decision will be as per reservation form terms &amp; conditions.
+                                </div>
+                            </div>
+                            <br/>
+                            <div class="row text-center">
+                                <div class="col-4">
+                                    <strong>__________________________</strong>
+                                </div>
+                                <div class="col-4">
+<!--                                    <strong>_________________</strong>-->
+                                </div>
+                                <t t-if="o.new_partner_id">
+                                    <div class="col-4">
+                                        <strong>__________________________</strong>
+                                    </div>
+                                </t>
+                            </div>
+                            <div class="row text-center">
+                                <div class="col-4">
+                                    <strong style="font-size:18px;">Original Buyer Signature</strong><br/>
+                                    <strong>Name: <span t-esc="o.partner_id.name"/></strong><br/>
+                                </div>
+                                <div class="col-4">
+<!--                                    <strong>_________________</strong>-->
+                                </div>
+                                <t t-if="o.new_partner_id">
+                                    <div class="col-4">
+                                        <strong style="font-size:18px;">New Buyer Signature</strong><br/>
+                                        <strong>Name: <span t-esc="o.new_partner_id.name"/></strong>
+                                    </div>
+                                </t>
+                            </div>
+                            <div class="row text-left" style="padding-top:17px;">
+                                <div class="col-5">
+                                </div>
+                                <div class="col-3">
+                                    <strong>Manager Signature</strong>
+                                </div>
+                                <div class="col-4" style="border-bottom:1px solid black;">
+                                </div>
+                            </div>
+                            <div class="row text-left" style="padding-top:17px;">
+                                <div class="col-5">
+                                </div>
+                                <div class="col-3">
+                                    <strong>HOD Signature</strong>
+                                </div>
+                                <div class="col-4" style="border-bottom:1px solid black;">
+                                </div>
+                            </div>
+                            <div class="row text-left" style="padding-top:17px;">
+                                <div class="col-5">
+                                </div>
+                                <div class="col-3">
+                                    <strong>Director Signature</strong>
+                                </div>
+                                <div class="col-4" style="border-bottom:1px solid black;">
+                                </div>
+                            </div>
+
+                         <div class="row text-left">
+                            <div class="col-7">
+                                <strong style="font-size:16px;">
+                                    Not Valid without compnay sign &amp; stamp
+                                </strong>
+                            </div>
+                            <div class="col-5">
+                            </div>
+                        </div>
+
+                            <!--<span t-esc="o.payment_schedule_id.name"/>-->
+                            <!--<br/>-->
+
+
+                            <!--<table class="table table-bordered">
+                                <tbody>
+                                    &lt;!&ndash;<tr>&ndash;&gt;
+                                        &lt;!&ndash;<th >&ndash;&gt;
+                                            &lt;!&ndash;<span>Payment Remarks</span>&ndash;&gt;
+                                        &lt;!&ndash;</th>&ndash;&gt;
+                                        &lt;!&ndash;<td colspan="2">&ndash;&gt;
+                                            &lt;!&ndash;&lt;!&ndash;<span t-esc="o.agent_id.name"/>&ndash;&gt;&ndash;&gt;
+                                        &lt;!&ndash;</td>&ndash;&gt;
+                                    &lt;!&ndash;</tr>&ndash;&gt;
+                                    &lt;!&ndash;<tr>&ndash;&gt;
+                                        &lt;!&ndash;<th >&ndash;&gt;
+                                            &lt;!&ndash;<span>Remarks (if any)</span>&ndash;&gt;
+                                        &lt;!&ndash;</th>&ndash;&gt;
+                                        &lt;!&ndash;<td colspan="2">&ndash;&gt;
+                                            &lt;!&ndash;&lt;!&ndash;<span t-esc="o.agent_id.mobile"/>&ndash;&gt;&ndash;&gt;
+                                        &lt;!&ndash;</td>&ndash;&gt;
+                                    &lt;!&ndash;</tr>&ndash;&gt;
+                                    <tr>
+                                        <th >
+                                            <span>External Agent</span>
+                                        </th>
+                                        <td colspan="2">
+                                            <span t-if="o.agent_id" t-esc="o.agent_id.name"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th style="width:35%">
+                                            <span>Agreed Agent Commission (%age)</span>
+                                        </th>
+                                        <td style="width:20%">
+                                            <span t-if="o.agent_commission_type_id" t-esc="o.agent_commission_type_id.percentage_value"/>
+                                        </td>
+                                        <th rowspan="4" style="width:45%">
+                                            <span>Sign:</span>
+                                        </th>
+                                    </tr>
+                                    <tr>
+                                        <th >
+                                            <span>Agent Discount (%age)</span>
+                                        </th>
+                                        <td >
+                                            <span  t-if="o.agent_discount_perc"  t-esc="o.agent_discount_perc"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th >
+                                            <span>Agent Net Commission (%age)</span>
+                                        </th>
+                                        <td >
+                                            <span t-if="o.net_commission_perc"  t-esc="o.net_commission_perc"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th >
+                                            <span>Agent Net Commission (AED)</span>
+                                        </th>
+                                        <td >
+                                            <span t-if="o.net_commission_sp" t-esc="o.net_commission_sp"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th colspan="2">
+                                            <span>Internal Agent:</span><span>     </span>                                             &lt;!&ndash;<span t-esc="o.agent_id.mobile"/>&ndash;&gt;
+                                            <span t-if="o.user_id" t-esc="o.user_id.name"/>
+                                        </th>
+                                        <th >
+                                            <span>Sign:</span>
+                                        </th>
+                                    </tr>
+                                </tbody>
+                            </table>-->
+
+
+                            <br/>
+                            <!--<div class="row" style='font-size: 16px;'>
+                                <div class="col-12">
+                                    <span><strong><u>Payment Details:</u></strong></span>
+                                </div>
+                            </div>-->
+                            <!--<span t-esc="o.payment_schedule_id.name"/>-->
+                            <!--<br/>-->
+
+
+                            <table class="table table-bordered">
+                                <tbody>
+                                    <!--<tr>
+                                        <th style="width:30%">
+                                            <span>Initial Payment</span>
+                                        </th>
+                                        <td style="width:70%">
+                                            <t t-if="o.receipt_ids">
+                                                <span t-esc="o.receipt_ids[-1].name"/><span> / </span><span t-esc="o.receipt_ids[-1].amount"/>
+                                            </t>
+                                        </td>
+                                    </tr>-->
+                                    <!--<tr>
+                                        <th >
+                                            <span>Mode of Payment</span>
+                                        </th>
+                                        <td>
+                                            <t t-if="o.receipt_ids">
+                                                <span t-esc="o.receipt_ids[-1].journal_id.name"/>
+                                            </t>
+                                        </td>
+                                    </tr>-->
+                                    <!--<tr>
+                                        <th >
+                                            <span>Comments on Booking Balance Payment</span>
+                                        </th>
+                                        <td>
+
+                                            <span t-esc="o.booking_remarks"/>
+                                            &lt;!&ndash;<t t-if="o.receipt_ids">&ndash;&gt;
+                                                &lt;!&ndash;<span t-esc="o.receipt_ids[0].amount"/>&ndash;&gt;
+                                            &lt;!&ndash;</t>&ndash;&gt;
+                                        </td>
+                                    </tr>-->
+                                    <!--<tr>
+                                        <th >
+                                            <span>Remarks (if any)</span>
+                                        </th>
+                                        <td>
+                                            <t t-if="o.receipt_ids">
+                                                <span t-esc="o.receipt_ids[-1].remarks"/>
+                                            </t>
+                                        </td>
+                                    </tr>-->
+                                    <!--<tr>
+                                        <th >
+                                            <span>Rental Returns (Yes/No)</span>
+                                        </th>
+                                        <td>
+                                            <span t-esc="o.rental_returns"/>
+                                            &lt;!&ndash;<t t-if="o.receipt_ids">&ndash;&gt;
+                                                &lt;!&ndash;<span t-esc="o.receipt_ids[0].amount"/>&ndash;&gt;
+                                            &lt;!&ndash;</t>&ndash;&gt;
+                                        </td>
+                                    </tr>-->
+                                </tbody>
+                            </table>
+
+<!--                            <br/>-->
+<!--                            <br/>-->
+<!--                            <div class="row text-center" style='font-size: 14px;'>-->
+<!--                                <div class="col-4">-->
+<!--                                    <strong>Sales Manager</strong>-->
+<!--                                </div>-->
+<!--                                <div class="col-4">-->
+<!--                                    <strong>Head of Sales &amp; Operations</strong>-->
+<!--                                </div>-->
+<!--                                <div class="col-4">-->
+<!--                                    <strong>CEO/DIRECTOR</strong>-->
+<!--                                </div>-->
+<!--                            </div>-->
+
+<!--                            <br/>-->
+<!--                            <br/>-->
+<!--                            <br/>-->
+<!--                            <div class="row text-center">-->
+<!--                                <div class="col-4">-->
+<!--                                    <strong>_________________</strong>-->
+<!--                                </div>-->
+<!--                                <div class="col-4">-->
+<!--                                    <strong>_________________</strong>-->
+<!--                                </div>-->
+<!--                                <div class="col-4">-->
+<!--                                    <strong>_________________</strong>-->
+<!--                                </div>-->
+<!--                            </div>-->
+
+
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </template>
+
+    </data>
+</odoo>
+
+

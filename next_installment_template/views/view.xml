@@ -1,0 +1,1171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+
+        <record id="ir_cron_payment_schedule_email" model="ir.cron">
+        <field name="name">Payment Schedule Installment Email</field>
+        <field name="user_id" ref="base.user_root"/>
+        <field name="interval_number">24</field>
+        <field name="interval_type">hours</field>
+        <field name="numbercall">-1</field>
+        <field name="doall" eval="False"/>
+        <field name="model_id" ref="next_installment_template.model_sale_rent_schedule"/>
+        <field name="code">model.send_installment_email()</field>
+        <field name="state">code</field>
+    </record>
+
+
+        <record id="email_after_due_installment" model="mail.template">
+            <field name="name">After Due Installment</field>
+            <field name="email_from">${object.company_id and object.company_id.email or ''}</field>
+            <field name="subject">Notice of Default Payment ${object.start_date.strftime('%B %d, %Y')}</field>
+            <field name="partner_to">${object.partner_id.id}</field>
+            <field name="lang">${user.partner_id.lang}</field>
+            <field name="model_id" ref="next_installment_template.model_sale_rent_schedule"/>
+            <field name="auto_delete" eval="False"/>
+            <!--<field name="attachment_ids" eval="[(6, 0, [ref(${object.success_mail.lang})])]"/>-->
+            <field name="body_html">
+                <![CDATA[
+<div style="display:table; width:100%;">
+    <div style="display:table-header-group;">
+        <div style="display:table-row;width:100%;">
+            <div style="display:table-cell; text-align: left;width:33%;">
+                <div style="color:blue;font-weight:bold; font-size:21px;">SAMANA</div>
+                <div style="color:blue;font-weight:bold; font-size:21px;">INTERNATIONAL</div>
+                <div>REAL ESTATE </div>
+                <div>DEVELOPMENT</div>
+            </div>
+            <div style="display:table-cell;text-align: left; width:33%;">
+                <img src="/logo.png" style="padding: 0px; margin: 0px; height: auto; width: 180px;" alt="${user.company_id.name}" />
+            </div>
+            <div style="display:table-cell; text-align: left;width:33%;">
+                <p>4th Floor , Building 7-Bay Square Business Bay, Dubai - United Arab Emirates</p>
+                <p style="color:blue;">Email: info@samanadevelopers.com </p>
+                <p>Website:www.samanadevelopers.com  </p>
+                <p>Phone: +971 4 563 9510  </p>
+            </div>
+        </div>
+    </div>
+</div>
+</br>
+</br>
+</br>
+
+<div style="display:table; border-collapse: collapse; width:100%;">
+    <div style="display:table-header-group;">
+        <div style="display:table-row; border: 1px solid #000;width:100%;">
+            <div style="display:table-cell; border: 1px solid #000; text-align: left;width:50%;">
+                <p> ${object.start_date.strftime('%B, %d, %Y')} </p>
+                <p> ${object.partner_id.name} </p>
+                <p> ${object.property_id.name} ,  ${object.asset_property_id.name}  </p>, Al Barsha South 3rd, Dubai – UAE
+                <p> Sale and Purchase Agreement (“SPA”) </p>
+            </div>
+            <div style="display:table-cell; border: 1px solid #000; text-align: right;width:50%;">
+               <p> ${object.arabic_text(object.start_date)}</p>
+               <p> ${object.arabic_text(object.partner_id.name)}<br/></p>
+               <p>,${object.arabic_text(object.property_id.name)},${object.arabic_text(object.asset_property_id.name)}
+               البرشاء جنوب 3، دبي - الإمارات العربية المتحدة
+               </p>
+
+               <p>"اتفاقية بيع وشراء"</p>
+            </div>
+        </div>
+
+        <div style="display:table-row; border: 1px solid #000;width:100%;">
+            <div style="display:table-cell; border: 1px solid #000; text-align: left;width:50%;">
+                <p><b><u>NOTIFICATION FOR PAYMENT OF OVERDUE AMOUNT</u></b></p></br>
+                <p>This notification is served to you in furtherance of the Sale and Purchase Agreement signed between you and <b>Samana International Real Estate Development</b> for Off-Plan Unit <b>${object.property_id.name}</b> in our project <b>${object.asset_property_id.name}</b>. </p>
+            </div>
+            <div style="display:table-cell; border: 1px solid #000; text-align: right;width:50%;">
+
+                <p><b><u>إشعار بدفع المبلغ المتأخ</u></b></p></br>
+                <p>
+                    يتم إرسال هذا الإشعار إليك تعزيزًا لاتفاقية البيع والشراء الموقعة بينك وبين سامانا انترناشيونال للتطوير العقاري  للوحدة على الخريطة${object.arabic_text(object.property_id.name)} في مشروعن${object.arabic_text(object.asset_property_id.name)}
+                </p>
+            </div>
+        </div>
+        <div style="display:table-row; border: 1px solid #000;width:100%;">
+            <div style="display:table-cell; border: 1px solid #000; text-align: left;width:50%;">
+                <p>Please note that you are at default in payment of as per the payment schedule in the Sale and Purchase Agreement.
+According to the Schedule ‘A’/Amendment to Schedule ‘A’, payment of amount<b><u> ${object.pen_amt} </u></b> is overdue since <b>${object.start_date.strftime('%d-%m-%Y')}</b>.
+We request you to proceed with the payment of overdue amount within <b>07 days</b> of service of this notice.</p>
+% if object.penalty:
+<p>
+    Please note that the penalty against the subject installment is AED  ${object.penalty}
+</p>
+% endif
+            </div>
+            <div style="display:table-cell; border: 1px solid #000; text-align: right;width:50%;">
+
+                <p>
+                    يرجىالعلم  بأنك قد تخلفت عن السداد وفقًا لجدول الدفع في اتفاقية البيع والشراء.
+ووفقًا للجدول "أ" / التعديل على الجدول "أ" ، فقد تأخر سداد المبلغ ${object.arabic_text(object.pen_amt)} منذ ${object.start_date}.
+نطلب منك المضي قدمًا في دفع المبلغ المتأخر في غضون 07 يومًا من تاريخ إرسال هذا الإشعار.
+                </p>
+
+                <p>
+برجاء الملاحظة ان غرامة تاخير دفعات الاقساط هي ${object.arabic_text (object.penalty)} درهم اماراتي
+                </p>
+
+            </div>
+        </div>
+
+        <div style="display:table-row; border: 1px solid #000;width:100%;">
+            <div style="display:table-cell; border: 1px solid #000; text-align: left;width:50%;">
+                <p>You are, hereby, requested to comply with the terms of the notification at the earliest.
+                <p>Yours sincerely</p></br>
+                <p>Authorized Signatory</p>
+            </div>
+            <div style="display:table-cell; border: 1px solid #000; text-align: right;width:50%;">
+
+                <p>يُطلب منك بموجب هذا الالتزام بشروط الإخطار في أقرب وقت ممكن.</p>
+                <p>خالص التحيات</p></br>
+                <p>المفوض بالتوقيع</p>
+            </div>
+        </div>
+
+    </div>
+</div></br>
+<div>**If the payment has been made already, please send the evidence at the following email address and apologies for the inconvenience</div>
+<div style="color:blue;margin-top;5px;">info@samanadevelopers.com</div>
+
+        ]]>
+            </field>
+        </record>
+        <record id="email_after_due_installment_15" model="mail.template">
+            <field name="name">After Due Installment 15</field>
+            <field name="email_from">${object.company_id and object.company_id.email or ''}</field>
+            <field name="subject">Notice of Default Payment ${object.start_date.strftime('%B %d, %Y')}</field>
+            <field name="partner_to">${object.partner_id.id}</field>
+            <field name="lang">${user.partner_id.lang}</field>
+            <field name="model_id" ref="next_installment_template.model_sale_rent_schedule"/>
+            <field name="auto_delete" eval="False"/>
+            <!--<field name="attachment_ids" eval="[(6, 0, [ref(${object.success_mail.lang})])]"/>-->
+            <field name="body_html">
+                <![CDATA[
+<div style="display:table; width:100%;">
+    <div style="display:table-header-group;">
+        <div style="display:table-row;width:100%;">
+            <div style="display:table-cell; text-align: left;width:33%;">
+                <div style="color:blue;font-weight:bold; font-size:21px;">SAMANA</div>
+                <div style="color:blue;font-weight:bold; font-size:21px;">INTERNATIONAL</div>
+                <div>REAL ESTATE </div>
+                <div>DEVELOPMENT</div>
+            </div>
+            <div style="display:table-cell;text-align: left; width:33%;">
+                <img src="/logo.png" style="padding: 0px; margin: 0px; height: auto; width: 180px;" alt="${user.company_id.name}" />
+            </div>
+            <div style="display:table-cell; text-align: left;width:33%;">
+                <p>4th Floor , Building 7-Bay Square Business Bay, Dubai - United Arab Emirates</p>
+                <p style="color:blue;">Email: info@samanadevelopers.com </p>
+                <p>Website:www.samanadevelopers.com  </p>
+                <p>Phone: +971 4 563 9510  </p>
+            </div>
+        </div>
+    </div>
+</div>
+</br>
+</br>
+</br>
+
+<div style="display:table; border-collapse: collapse; width:100%;">
+    <div style="display:table-header-group;">
+        <div style="display:table-row; border: 1px solid #000;width:100%;">
+            <div style="display:table-cell; border: 1px solid #000; text-align: left;width:50%;">
+                <p> ${object.start_date.strftime('%B, %d, %Y')} </p>
+                <p> ${object.partner_id.name} </p>
+                <p> ${object.property_id.name} ,  ${object.asset_property_id.name}  </p>, Al Barsha South 3rd, Dubai – UAE
+                <p> Sale and Purchase Agreement (“SPA”) </p>
+            </div>
+            <div style="display:table-cell; border: 1px solid #000; text-align: right;width:50%;">
+               <p> ${object.arabic_text(object.start_date)}</p>
+               <p> ${object.arabic_text(object.partner_id.name)}<br/></p>
+               <p>,${object.arabic_text(object.property_id.name)},${object.arabic_text(object.asset_property_id.name)}
+               البرشاء جنوب 3، دبي - الإمارات العربية المتحدة
+               </p>
+
+               <p>"اتفاقية بيع وشراء"</p>
+            </div>
+        </div>
+
+        <div style="display:table-row; border: 1px solid #000;width:100%;">
+            <div style="display:table-cell; border: 1px solid #000; text-align: left;width:50%;">
+                <p><b><u>NOTIFICATION FOR PAYMENT OF OVERDUE AMOUNT</u></b></p></br>
+                <p>This notification is served to you in furtherance of the Sale and Purchase Agreement signed between you and <b>Samana International Real Estate Development</b> for Off-Plan Unit <b>${object.property_id.name}</b> in our project <b>${object.asset_property_id.name}</b>. </p>
+            </div>
+            <div style="display:table-cell; border: 1px solid #000; text-align: right;width:50%;">
+
+                <p><b><u>إشعار بدفع المبلغ المتأخ</u></b></p></br>
+                <p>
+                    يتم إرسال هذا الإشعار إليك تعزيزًا لاتفاقية البيع والشراء الموقعة بينك وبين سامانا انترناشيونال للتطوير العقاري  للوحدة على الخريطة${object.arabic_text(object.property_id.name)} في مشروعن${object.arabic_text(object.asset_property_id.name)}
+                </p>
+            </div>
+        </div>
+        <div style="display:table-row; border: 1px solid #000;width:100%;">
+            <div style="display:table-cell; border: 1px solid #000; text-align: left;width:50%;">
+                <p>Please note that you are at default in payment of as per the payment schedule in the Sale and Purchase Agreement.
+According to the Schedule ‘A’/Amendment to Schedule ‘A’, payment of amount<b><u> ${object.pen_amt} </u></b> is overdue since <b>${object.start_date.strftime('%d-%m-%Y')}</b>.
+We request you to proceed with the payment of overdue amount within <b>15 days</b> of service of this notice.</p>
+% if object.penalty:
+<p>
+    Please note that the penalty against the subject installment is AED  ${object.penalty}
+</p>
+% endif
+<p style="color:red;">
+    NOTE: The non-compliance to the payment may lead to attraction of penalties and/or termination procedure.
+</p>
+            </div>
+            <div style="display:table-cell; border: 1px solid #000; text-align: right;width:50%;">
+
+                <p>
+                    يرجىالعلم  بأنك قد تخلفت عن السداد وفقًا لجدول الدفع في اتفاقية البيع والشراء.
+ووفقًا للجدول "أ" / التعديل على الجدول "أ" ، فقد تأخر سداد المبلغ ${object.arabic_text(object.pen_amt)} منذ ${object.start_date}.
+نطلب منك المضي قدمًا في دفع المبلغ المتأخر في غضون 15 يومًا من تاريخ إرسال هذا الإشعار.
+                </p>    
+                % if object.penalty:
+                <p>
+برجاء الملاحظة ان غرامة تاخير دفعات الاقساط هي ${object.arabic_text(object.penalty)} درهم اماراتي
+                </p>
+                % endif
+                <p style="color:red;">
+                    ملاحظة: قد يؤدي عدم الامتثال للدفع إلى فرض عقوبات و / أو إجراءات الإنهاء.
+                </p>
+            </div>
+        </div>
+
+        <div style="display:table-row; border: 1px solid #000;width:100%;">
+            <div style="display:table-cell; border: 1px solid #000; text-align: left;width:50%;">
+                <p>You are, hereby, requested to comply with the terms of the notification at the earliest.
+                <p>Yours sincerely</p></br>
+                <p>Authorized Signatory</p>
+            </div>
+            <div style="display:table-cell; border: 1px solid #000; text-align: right;width:50%;">
+
+                <p>يُطلب منك بموجب هذا الالتزام بشروط الإخطار في أقرب وقت ممكن.</p>
+                <p>خالص التحيات</p></br>
+                <p>المفوض بالتوقيع</p>
+            </div>
+        </div>
+
+    </div>
+</div></br>
+<div>**If the payment has been made already, please send the evidence at the following email address and apologies for the inconvenience</div>
+<div style="color:blue;margin-top;5px;">info@samanadevelopers.com</div>
+
+        ]]>
+            </field>
+        </record>
+
+        <record id="email_sg_developer_notice" model="mail.template">
+            <field name="name">SG Developer Notice</field>
+            <field name="email_from">${object.company_id and object.company_id.email or ''}</field>
+            <field name="subject">Initial Termination Notice ${object.start_date.strftime('%B %d, %Y')}</field>
+            <field name="partner_to">${object.partner_id.id}</field>
+            <field name="lang">${user.partner_id.lang}</field>
+            <field name="model_id" ref="next_installment_template.model_sale_rent_schedule"/>
+            <field name="auto_delete" eval="False"/>
+            <!--<field name="attachment_ids" eval="[(6, 0, [ref(${object.success_mail.lang})])]"/>-->
+            <field name="body_html">
+                <![CDATA[
+<div style="display:table; width:100%;">
+    <div style="display:table-header-group;">
+        <div style="display:table-row;width:100%;">
+            <div style="display:table-cell; text-align: left;width:33%;">
+                <div style="color:blue;font-weight:bold; font-size:21px;">SAMANA</div>
+                <div style="color:blue;font-weight:bold; font-size:21px;">INTERNATIONAL</div>
+                <div>REAL ESTATE </div>
+                <div>DEVELOPMENT</div>
+            </div>
+            <div style="display:table-cell;text-align: left; width:33%;">
+                <img src="/logo.png" style="padding: 0px; margin: 0px; height: auto; width: 180px;" alt="${user.company_id.name}" />
+            </div>
+            <div style="display:table-cell; text-align: left;width:33%;">
+                <p>4th Floor , Building 7-Bay Square Business Bay, Dubai - United Arab Emirates</p>
+                <p style="color:blue;">Email: info@samanadevelopers.com </p>
+                <p>Website:www.samanadevelopers.com  </p>
+                <p>Phone: +971 4 563 9510  </p>
+            </div>
+        </div>
+    </div>
+</div>
+</br>
+</br>
+</br>
+
+<div style="display:table; border-collapse: collapse; width:100%;">
+    <div style="display:table-header-group;">
+        <div style="display:table-row; border: 1px solid #000;width:100%;">
+            <div style="display:table-cell; border: 1px solid #000; text-align: left;width:50%;">
+                <p>Customer: ${object.partner_id.name if object.partner_id.name else ''} </p>
+                <p>P.O. Box: <!--${object.partner_id.name}--> </p>
+                <p> Address: ${object.partner_id.home_address if object.partner_id.home_address else ''} </p>
+                <p> Mobile: ${object.partner_id.mobile if object.partner_id.mobile else ''} </p>
+                <p> Phone:${object.partner_id.phone if object.partner_id.phone else ''}</p>
+                <p> Date: ${(datetime.date.today()).strftime('%B, %d, %Y')} </p>
+            </div>
+            <div style="display:table-cell; border: 1px solid #000; text-align: right;width:50%;">
+                <p>العميل</p>
+                <p>الرمز البريدي</p>
+                <p> العنوان</p>
+                <p> البريد الالكتروني</p>
+                <p>الهاتف المتحرك</p>
+                <p>الهاتف الثابت </p>
+                <p>التاريخ</p>
+            </div>
+        </div>
+
+        <div style="display:table-row; border: 1px solid #000;width:100%;">
+            <div style="display:table-cell; border: 1px solid #000; text-align: left;width:50%;">
+                <p><b><u>Re: Notification for paying  of Overdue Payment</u></b></p></br>
+                <p>Dear Customer,</p>
+                <p>Reference to [Sale and Purchase Agreement / Unit Reservation Contract] Dated ${object.sale_id.date_order.strftime('%B, %d, %Y')} between us, concerning Unit No. <strong>${object.property_id.name}</strong> on of Project <strong>${object.property_id.parent_id.name}</strong> in Dubai (“the Contract”) The current percentage of this project is <strong>${object.property_id.parent_id.project_completeion_perc} %</strong>
+
+</b>. </p>
+            </div>
+            <div style="display:table-cell; border: 1px solid #000; text-align: right;width:50%;">
+
+                <p><b><u>الموضوع: إشعار بالدفع  للتأخر  في  السدادخ</u></b></p></br>
+                <p>عزيزي العميل ،</p>
+                <p>
+                    بالإشارة إلى اتفاقية البيع والشراء/عقد حجز الوحدة المبرم بيننا بتاريخ ${object.sale_id.date_order.strftime('%B, %d, %Y')} فيما يتعلق بالوحدة رقم <strong>${object.property_id.name}</strong> ضمن مشروع <strong>${object.property_id.parent_id.name}</strong> "المشروع" الكائن في دبي ("العقد") حيث أن نسبة الانجاز حاليا  <strong>%${object.property_id.parent_id.project_completeion_perc if object.property_id.parent_id.project_completeion_perc else ''}</strong>
+                </p>
+            </div>
+        </div>
+        <div style="display:table-row; border: 1px solid #000;width:100%;">
+            <div style="display:table-cell; border: 1px solid #000; text-align: left;width:50%;">
+                <p>
+                    Please note that you are in default in payment of purchase price as per the payment schedule in the Contract. As per the Dubai Land Department rules and regulations you shall be liable to pay the total amount of <strong> AED ${'{:,.2f}'.format(object.property_id.total_price)} </strong> from the Unit purchase price, therefore we request you to settle the outstanding amount within (30) days from date of  Serving this Notification.
+                </p>
+            </div>
+            <div style="display:table-cell; border: 1px solid #000; text-align: right;width:50%;">
+                <p>
+طبقا  لقواعد ولوائح دائرة الأراضي والأملاك / دبي ، فإنكم ملزمين  بسداد المبلغ المستحق  والبالغ قدره
+                     <strong>${'{:,.2f}'.format(object.property_id.total_price)}</strong>
+                      درهم من  سعر شراء الوحدة، وبالتالي نطلب منكم سداد المبلغ المستحق المذكور خلال 30 يوم من تاريخ توجيه هذا الاشعار
+                </p>
+            </div>
+        </div>
+        <div style="display:table-row; border: 1px solid #000;width:100%;">
+            <div style="display:table-cell; border: 1px solid #000; text-align: left;width:50%;">
+                <p>
+                    Should you fail to pay the full outstanding amount within the timescales set out above otherwise we will proceed to the judicial procedures, we hereby reserve our rights under the contract, and to commence legal proceedings as per Dubai Laws / UAE including law
+No. (13) / 2008 And its amendments and resolution of the Executive Council No. (6) Of 2010.
+                </p>
+            </div>
+            <div style="display:table-cell; border: 1px solid #000; text-align: right;width:50%;">
+                <p>
+في حال  إخفاقكم في  سداد كامل المبلغ المستحق  خلال المدة الزمنية  المبينة أعلاه فإننا سوف نضطر اسفين في مباشرة الأجراءات القانونية لالغاء تسجيل الوحدة من اسمكم في سجلات دائراة الاراضي والاملاك بموجب قوانين دبي/الإمارات العربية المتحدة بما في ذلك القانون رقم 13 لعام 2008 وتعديلاته وقرار المجلس التنفيذي رقم 6 لعام 2010.
+                </p>
+            </div>
+        </div>
+
+        <div style="display:table-row; border: 1px solid #000;width:100%;">
+            <div style="display:table-cell; border: 1px solid #000; text-align: left;width:50%;">
+                <p><b><u>If you have already made the overdue payment, please ignore this Notification.</u></b></p></br>
+            </div>
+            <div style="display:table-cell; border: 1px solid #000; text-align: right;width:50%;">
+
+                <p><b><u>في حال قيامكم بسداد الدفعة المتأخرة، يرجى تجاهل هذا الإشعار. </u></b></p></br>
+            </div>
+        </div>
+
+
+        <div style="display:table-row; border: 1px solid #000;width:100%;">
+            <div style="display:table-cell; border: 1px solid #000; text-align: left;width:50%;">
+                <p>
+                    Payment should be made payable to the below account number, please also include your full name and apartment number on the bank transfer document.
+                </p>
+            </div>
+            <div style="display:table-cell; border: 1px solid #000; text-align: right;width:50%;">
+                <p>
+يجب تحويل الدفعة إلى الحساب أدناه. يرجى أيضاً إدراج الاسم الكامل ورقم الوحدة في مستند التحويل المصرفي.
+                </p>
+            </div>
+        </div>
+
+        <div style="display:table-row; border: 1px solid #000;width:100%;">
+            <div style="display:table-cell; text-align: left;width:50%;">
+                <p>
+                    Account Name:
+                    <strong style="margin-left:0px;">${object.property_id.parent_id.name}</strong>
+                </p>
+            </div>
+            <div style="display:table-cell; text-align: right;width:50%;">
+                <p>
+                    :اسم الحساب
+                </p>
+            </div>
+        </div>
+        <div style="display:table-row; border: 1px solid #000;width:100%;">
+            <div style="display:table-cell; text-align: left;width:50%;">
+                <p>
+                    Account No:
+                    <strong style="margin-left:0px;">${object.property_id.parent_id.all_payment_bank_id.bank_account_id.acc_number}</strong>
+                </p>
+            </div>
+            <div style="display:table-cell; text-align: right;width:50%;">
+                <p>
+                 :رقم الحساب
+                </p>
+            </div>
+        </div>
+        <div style="display:table-row; border: 1px solid #000;width:100%;">
+            <div style="display:table-cell; text-align: left;width:50%;">
+                <p>
+                    IBAN No.:
+                    <strong style="margin-left:0px;">${object.property_id.parent_id.all_payment_bank_id.bank_account_id.iban}</strong>
+                </p>
+            </div>
+            <div style="display:table-cell; text-align: right;width:50%;">
+                <p>
+                                    :رقم ايبان
+
+                </p>
+            </div>
+        </div>
+        <div style="display:table-row; border: 1px solid #000;width:100%;">
+            <div style="display:table-cell; text-align: left;width:50%;">
+                <p>
+                    Bank Name :
+                    <strong style="margin-left:0px;">${object.property_id.parent_id.all_payment_bank_id.bank_account_id.bank_id.name}</strong>
+                </p>
+            </div>
+            <div style="display:table-cell; text-align: right;width:50%;">
+                <p>
+                                       :اسم البنك
+
+                </p>
+            </div>
+        </div>
+        <div style="display:table-row; border: 1px solid #000;width:100%;">
+            <div style="display:table-cell; text-align: left;width:50%;">
+                <p>
+                    Branch 	:
+                    <strong style="margin-left:0px;">
+                    ${object.property_id.parent_id.all_payment_bank_id.bank_account_id.bank_id.street if object.property_id.parent_id.all_payment_bank_id.bank_account_id.bank_id.street else ''}
+                    </strong>
+                </p>
+            </div>
+            <div style="display:table-cell; text-align: right;width:50%;">
+                <p>
+                                        :الفرع
+
+                </p>
+            </div>
+        </div>
+        <div style="display:table-row; border: 1px solid #000;width:100%;">
+            <div style="display:table-cell;column-span: all; text-align: left;width:50%;">
+                <p>
+                    Swift Code :
+                    <strong style="margin-left:200px;">${object.property_id.parent_id.all_payment_bank_id.bank_account_id.bank_id.bic}</strong>
+                </p>
+            </div>
+            <div style="display:table-cell; text-align: right;width:50%;">
+                <p>
+                                        :رمز سويف
+
+                </p>
+            </div>
+        </div>
+
+        <div style="display:table-row; border: 1px solid #000;width:100%;">
+            <div style="display:table-cell; border: 1px solid #000; text-align: left;width:50%;">
+                <p>Developer contact address :</p>
+            </div>
+            <div style="display:table-cell; border: 1px solid #000; text-align: right;width:50%;">
+                <p> :للتواصل مع المطور على العناوين التاليه</p>
+            </div>
+        </div>
+    </div>
+</div>
+<div style="display:table; border-collapse: collapse; width:100%;border-top:none;">
+    <div style="display:table-header-group;border-top:none;">
+        <div style="display:table-row; border: 1px solid #000;width:100%;border-top:none;">
+            <div style="display:table-cell; border: 1px solid #000; text-align: center;width:100%;border-top:none;">
+                <p><strong>4th floor, Bay Square, Building 7, Business Bay ,Dubai, UAE</strong></p>
+                <p><strong> P.O. Box 44026 Tel No. +9714 5639510</strong></p>
+                <p><strong>   Email: info@samanadevelopers.com</strong></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div style="display:table; border-collapse: collapse; width:100%;border-top:none;">
+    <div style="display:table-header-group;border-top:none;">
+        <div style="display:table-row; border: 1px solid #000;width:100%;border-top:none;">
+            <div style="display:table-cell; border: 1px solid #000; text-align: left;width:50%;border-top:none;">
+                <p>
+                    This notification is prepared in the Arabic and English languages and if any discrepancy is found between the Arabic and the English the Arabic version of this notification shall prevail.
+                </p></br>
+                <p>
+                    <strong>Yours sincerely,</strong>
+                </p>
+            </div>
+            <div style="display:table-cell; border: 1px solid #000; text-align: right;width:50%;border-top:none;">
+                <p>
+                    تم صياغة هذه الاشعار باللغتين العربية والانجليزية وفي حال ظهور أي تعارض بين النص المحرر باللغة العربية والنص المحرر باللغة الانجليزية يسري النص المحرر باللغة العربية
+                </p></br>
+                <p>
+                <strong>
+                    وتفضلوا بقبول فائق التحية والاحترام،
+                </strong>
+                </p>
+            </div>
+        </div>
+        <div style="display:table-row; border: 1px solid #000;width:100%;border-top:none;">
+            <div style="display:table-cell; border: 1px solid #000; text-align: left;width:50%;border-top:none;">
+                <p>
+                    <strong>For and on behalf of  Samana International Real Estate Development </strong>
+                </p>
+            </div>
+            <div style="display:table-cell; border: 1px solid #000; text-align: right;width:50%;border-top:none;">
+                <p>
+                    <strong>
+                        بالنيابة عن Samana International Real Estate Development
+                    </strong>
+                </p>
+            </div>
+        </div>
+        <div style="display:table-row; border: 1px solid #000;width:100%;border-top:none;">
+            <div style="display:table-cell; border: 1px solid #000; text-align: left;width:50%;border-top:none;">
+                <p>
+                    <strong>Client Relations Department </strong>
+                </p>
+            </div>
+            <div style="display:table-cell; border: 1px solid #000; text-align: right;width:50%;border-top:none;">
+                <p>
+                    <strong>
+                        دائرة علاقات العملاء
+                    </strong>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+</br>
+<div>**If the payment has been made already, please send the evidence at the following email address and apologies for the inconvenience</div>
+<div style="color:blue;margin-top;5px;">info@samanadevelopers.com</div>
+
+        ]]>
+            </field>
+        </record>
+
+
+        <record id="email_next_installment" model="mail.template">
+            <field name="name">Next Instalment</field>
+            <field name="email_from">${object.company_id and object.company_id.email or ''}</field>
+            <field name="subject">Next Instalment dated ${object.start_date.strftime('%B %d, %Y')}</field>
+            <field name="partner_to">${object.partner_id.id}</field>
+            <field name="lang">${user.partner_id.lang}</field>
+            <field name="model_id" ref="next_installment_template.model_sale_rent_schedule"/>
+            <field name="auto_delete" eval="False"/>
+            <!--<field name="attachment_ids" eval="[(6, 0, [ref(${object.success_mail.lang})])]"/>-->
+            <field name="body_html">
+               <![CDATA[
+        <p>Dear <b>${object.partner_id.name}</b>,<br/><br/>
+        Greetings from Samana.<br/><br/>
+        We hope that this email finds you in good health.<br/><br/>
+        This is to remind you that the next installment amounted AED ${object.amount} for your unit# ${object.property_id.name} of ${object.asset_property_id.name} will be due on ${object.start_date.strftime('%B %d, %Y')}. To view the installment, pls <a href="${object.get_url(object)}">Click Here
+        </a>
+        <br/><br/>
+        If you wish to make the payment online please click http://samanadevelopers.com/pay/
+        <br/><br/>
+        In case of bank transfers, please send us the payment advice once the transfer is done so that your payments may be allocated to your account without fail.
+        <br/><br/>
+        Please note that a Late-Payment Penalty of AED 5,000 will be applicable in case of any delay of payment and we strongly suggest that you make the payment well in advance in order to avoid any delays due to procedures and protocols.
+        <br/><br/>
+        We thank you in advance for your understanding and assistance in this matter and should you have any queries please do not hesitate to reach out to us at receivables@samana-group.com
+        <br/><br/>
+        <b>Please ignore this message if you have already paid</b>
+        <br/><br/>
+        Thanks & Regards
+        <br/>
+        Samana International Real Estate Development
+        <br/><br/>
+        <p style="color: #8b0000;">*Please do not reply on this email as this is system generated.</p>
+        <br/>
+        </p>
+        ]]>
+            </field>
+        </record>
+
+        <record id="receipt_Back_dated_receipt_cancellation_email" model="mail.template">
+            <field name="name">Back Dated Receipt Cancellation</field>
+            <field name="email_from">${object.company_id and object.company_id.email or ''}</field>
+            <field name="subject">Back Dated Receipt Cancellation</field>
+            <field name="email_to">${''} </field>
+            <field name="lang">${user.partner_id.lang}</field>
+            <field name="model_id" ref="account.model_account_payment"/>
+            <field name="auto_delete" eval="False"/>
+            <!--<field name="attachment_ids" eval="[(6, 0, [ref(${object.success_mail.lang})])]"/>-->
+            <field name="body_html">
+                <![CDATA[
+              <p>Dear All,<br/><br/>
+This is to notify you that <b>${object.journal_id.name}</b> receipt# <b>${object.name}</b> dated <b>${object.payment_date.strftime('%d/%m/%Y')}</b> is cancelled by <b>${user.name}</b> on <b>${datetime.datetime.now().strftime('%d/%m/%Y')}</b>.
+<br/><br/>
+Regards,<br/>
+Samana Developers ERP<br/>
+              </p>
+            ]]>
+            </field>
+        </record>
+
+
+        <record id="booking_discount_approval_email" model="mail.template">
+            <field name="name">Booking Approval</field>
+            <field name="email_from">${object.company_id and object.company_id.email or ''}</field>
+            <field name="subject">BOOKING APPROVAL (${object.property_id.name if object.property_id else ''} ${object.asset_project_id.name if object.asset_project_id else ''})</field>
+            <field name="partner_to">${''}</field>
+            <field name="lang">${user.partner_id.lang}</field>
+            <field name="model_id" ref="spa_customizations.model_sale_order"/>
+            <field name="auto_delete" eval="False"/>
+            <!--<field name="attachment_ids" eval="[(6, 0, [ref(${object.success_mail.lang})])]"/>-->
+            <field name="body_html">
+               <![CDATA[
+        <p>Dear Sir,<br/><br/>
+        Following booking is under your review:<br/><br/>
+<div style="display:table; border-collapse: collapse; width:100%; line-height: 2; text-align: center;">
+    <div style="display:table-header-group;">
+        <div style="display:table-row; border: 1px solid #000;border-bottom: none;">
+            <div style="display:table-cell; border: 1px solid #000; font-weight:bold;border-bottom: none; text-align: center;" >PROPERTY DETAILS</div>
+        </div>
+    </div>
+</div>
+<div style="display:table; border-collapse: collapse; width:100%; line-height: 2; text-align: center;">
+
+    <div style="display:table-row-group;">
+        <div style="display:table-row; border: 1px solid #000;width:100%; text-align: left;">
+            <div style="display:table-cell; border: 1px solid #000;width:50%;">Unit No.</div>
+            <div style="display:table-cell; border: 1px solid #000;width:50%;">${object.property_id.name if object.property_id else ''}</div>
+        </div>
+        <div style="display:table-row; border: 1px solid #000; text-align: left;">
+            <div style="display:table-cell; border: 1px solid #000;">Project</div>
+            <div style="display:table-cell; border: 1px solid #000;">${object.asset_project_id.name if object.asset_project_id else ''}</div>
+        </div>
+        <div style="display:table-row; border: 1px solid #000; text-align: left;">
+            <div style="display:table-cell; border: 1px solid #000;">Type</div>
+            <div style="display:table-cell; border: 1px solid #000;">${object.unit_type_id.name if object.unit_type_id else ''}</div>
+        </div>
+        <div style="display:table-row; border: 1px solid #000; text-align: left;">
+            <div style="display:table-cell; border: 1px solid #000;">View</div>
+            <div style="display:table-cell; border: 1px solid #000;">${object.property_id.facing_id.name if object.property_id.facing_id else ''}</div>
+        </div>
+        <div style="display:table-row; border: 1px solid #000; text-align: left;">
+            <div style="display:table-cell; border: 1px solid #000;">Customer Name</div>
+            <div style="display:table-cell; border: 1px solid #000;">${object.partner_id.name if object.partner_id else ''}</div>
+        </div>
+        <div style="display:table-row; border: 1px solid #000; text-align: left;">
+            <div style="display:table-cell; border: 1px solid #000;">Agent Name</div>
+            <div style="display:table-cell; border: 1px solid #000;">${object.agent_id.name if object.agent_id else ''}</div>
+        </div>
+    </div>
+</div>
+<br/>
+<div style="display:table; border-collapse: collapse; width:100%; line-height: 2; text-align: center;">
+    <div style="display:table-header-group;">
+        <div style="display:table-row; border: 1px solid #000;border-bottom: none;">
+            <div style="display:table-cell; border: 1px solid #000; font-weight:bold;border-bottom: none; text-align: center;">PRICE AND DISCOUNT DETAILS</div>
+        </div>
+    </div>
+</div>
+<div style="display:table; border-collapse: collapse; width:100%; line-height: 2; text-align: center;">
+
+    <div style="display:table-row-group;">
+        <div style="display:table-row; border: 1px solid #000; width:100%; text-align: left;">
+            <div style="display:table-cell; border: 1px solid #000;width:50%;">List Price</div>
+            <div style="display:table-cell; border: 1px solid #000;width:50%;">AED ${'{:,.2f}'.format(object.property_price)}</div>
+        </div>
+        <div style="display:table-row; border: 1px solid #000; text-align: left;">
+            <div style="display:table-cell; border: 1px solid #000;">Agent Discount (%)</div>
+            <div style="display:table-cell; border: 1px solid #000;">${'{:,.2f}'.format(object.agent_discount_perc) if object.agent_discount_perc else '-'}</div>
+        </div>
+        <div style="display:table-row; border: 1px solid #000; text-align: left;">
+            <div style="display:table-cell; border: 1px solid #000;">Booking Discount (%)</div>
+            <div style="display:table-cell; border: 1px solid #000;">${'{:,.2f}'.format(object.manual_discount_perc) if object.manual_discount_perc else '-'}</div>
+        </div>
+        <div style="display:table-row; border: 1px solid #000; text-align: left;">
+            <div style="display:table-cell; border: 1px solid #000;">Total Discount (%)</div>
+            <div style="display:table-cell; border: 1px solid #000;">${"%.2f" % (object.manual_discount_perc + object.agent_discount_perc)}</div>
+        </div>
+        <div style="display:table-row; border: 1px solid #000; text-align: left;">
+            <div style="display:table-cell; border: 1px solid #000;">Total Discount Amount</div>
+            <div style="display:table-cell; border: 1px solid #000;">AED ${'{:,.2f}'.format((object.property_price - object.price))}</div>
+        </div>
+        <div style="display:table-row; border: 1px solid #000; text-align: left;">
+            <div style="display:table-cell; border: 1px solid #000;">Selling Price</div>
+            <div style="display:table-cell; border: 1px solid #000; color: #8B0000;">AED ${'{:,.2f}'.format(object.price)}</div>
+        </div>
+    </div>
+</div>
+<br/>
+<div style="display:table; border-collapse: collapse; width:100%; line-height: 2; text-align: center;">
+    <div style="display:table-header-group;">
+        <div style="display:table-row; border: 1px solid #000;border-bottom: none;">
+            <div style="display:table-cell; border: 1px solid #000; font-weight:bold; border-bottom: none; text-align: center;" >PAYMENT PLAN DETAILS</div>
+        </div>
+    </div>
+</div>
+<div style="display:table; border-collapse: collapse; width:100%; line-height: 2; text-align: center;">
+    <div style="display:table-header-group;">
+        <div style="display:table-row; border: 1px solid #000;width:100%;border-bottom: none;">
+            <div style="display:table-cell; border: 1px solid #000; width:34%;border-bottom: none; text-align: left;color: #8B0000; font-weight:bold;">PAYMENT PLAN SELECTED</div>
+            <div style="display:table-cell; border: 1px solid #000; border-bottom: none; text-align: left; color: #8B0000; font-weight:bold;">${object.get_payment_plan_creation(object.payment_plan_creation)}</div>
+        </div>
+    </div>
+</div>
+<div style="display:table; border-collapse: collapse; width:100%; line-height: 2; text-align: center;">
+    <div style="display:table-row-group;">
+        <div style="display:table-row; border: 1px solid #000; width:100%; text-align: center;">
+            <div style="display:table-cell; border: 1px solid #000; width:34%; font-weight:bold; text-align: left;">DESCRIPTION</div>
+            <div style="display:table-cell; border: 1px solid #000; width:33%; font-weight:bold;">PERCENTAGE (%)</div>
+            <div style="display:table-cell; border: 1px solid #000; width:33%; font-weight:bold;">AMOUNT (AED)</div>
+        </div>
+        <div style="display:table-row; border: 1px solid #000; text-align: left;">
+            <div style="display:table-cell; border: 1px solid #000; width:34%;">Down Payment</div>
+            <div style="display:table-cell; border: 1px solid #000; text-align: center; width:33%;">${'{:,.2f}'.format(object.down_payment_perc) if object.down_payment_perc else '-'}</div>
+            <div style="display:table-cell; border: 1px solid #000; text-align: center; width:33%;">${'{:,.2f}'.format(object.down_payment) if object.down_payment else '-'}</div>
+        </div>
+        <div style="display:table-row; border: 1px solid #000; text-align: left;">
+            <div style="display:table-cell; border: 1px solid #000;">Pre-Handover Incl. Down Payment</div>
+            <div style="display:table-cell; border: 1px solid #000; text-align: center;">${'{:,.2f}'.format(object.get_pp_vals(object)['pre_perc'])}</div>
+            <div style="display:table-cell; border: 1px solid #000; text-align: center;">${'{:,.2f}'.format(object.get_pp_vals(object)['pre_handover'])}</div>
+        </div>
+        <div style="display:table-row; border: 1px solid #000; text-align: left;">
+            <div style="display:table-cell; border: 1px solid #000;">Handover</div>
+            <div style="display:table-cell; border: 1px solid #000; text-align: center;">${'{:,.2f}'.format(object.get_pp_vals(object)['handover_perc'])}</div>
+            <div style="display:table-cell; border: 1px solid #000; text-align: center;">${'{:,.2f}'.format(object.get_pp_vals(object)['handover'])}</div>
+        </div>
+        <div style="display:table-row; border: 1px solid #000; text-align: left;">
+            <div style="display:table-cell; border: 1px solid #000;">Post-Handover</div>
+            <div style="display:table-cell; border: 1px solid #000; text-align: center;">${'{:,.2f}'.format(object.get_pp_vals(object)['post_perc'])}</div>
+            <div style="display:table-cell; border: 1px solid #000; text-align: center;">${'{:,.2f}'.format(object.get_pp_vals(object)['post_handover'])}</div>
+        </div>
+    </div>
+</div>
+<br/>
+<div style="display:table; border-collapse: collapse; width:100%; line-height: 2; text-align: center;">
+    <div style="display:table-header-group;">
+    <div style="display:table-row; border: 1px solid #000;border-bottom: none;">
+            <div style="display:table-cell; border: 1px solid #000; border-bottom: none; font-weight:bold; text-align: center;" >PAYMENT PLAN (YEARWISE SUMMARY)</div>
+        </div>
+    </div>
+</div>
+<div style="display:table; border-collapse: collapse; width:100%; line-height: 2; text-align: center;">
+    <div style="display:table-header-group;">
+        <div style="display:table-row; border: 1px solid #000; width:100%; text-align: center;">
+            <div style="display:table-cell; border: 1px solid #000; width:34%; font-weight:bold; text-align: left;">YEAR</div>
+            <div style="display:table-cell; border: 1px solid #000; width:33%; font-weight:bold;">PERCENTAGE (%)</div>
+            <div style="display:table-cell; border: 1px solid #000; width:33%; font-weight:bold;">AMOUNT (AED)</div>
+        </div>
+    </div>
+    <div style="display:table-row-group;">
+        % for line in object.get_years(object):
+        <div style="display:table-row; border: 1px solid #000; text-align: left;">
+            <div style="display:table-cell; border: 1px solid #000;">${line}</div>
+            <div style="display:table-cell; border: 1px solid #000; text-align: center;">${'{:,.2f}'.format(object.get_yearly_pp_vals(object)[str(line)+'perc'])}</div>
+            <div style="display:table-cell; border: 1px solid #000; text-align: center;">${'{:,.2f}'.format(object.get_yearly_pp_vals(object)[line])}</div>
+        </div>
+        % endfor
+    </div>
+</div>
+<br/>
+<br/>
+<p><b>You are requested to please Approve/ Reject accordingly. </b></p> <br/>
+<a href="${object.get_approve_url(object)}" style="background-color: #7e577f; padding: 8px 16px 8px 16px; text-decoration: none; color: #fff; border-radius: 4px; font-size:12px;">Approve</a><br/><br/>
+<a href="${object.get_reject_url(object)}" style="background-color: #7e577f; padding: 8px 16px 8px 16px; text-decoration: none; color: #fff; border-radius: 4px; font-size:12px;">Reject</a>
+<br/><br/>
+
+<p>Regards,</p>
+<p style="color: #8B0000;">Samana International Real Estate Development</p><br/>
+
+        </p>
+        ]]>
+            </field>
+        </record>
+
+        <record id="booking_update_email" model="mail.template">
+            <field name="name">Booking Update E-Mail</field>
+            <field name="email_from">${object.company_id and object.company_id.email or ''}</field>
+            <field name="subject">Booking Update (${object.property_id.name if object.property_id else ''} ${object.asset_project_id.name if object.asset_project_id else ''})</field>
+            <field name="email_to">${''} </field>
+            <field name="lang">${user.partner_id.lang}</field>
+            <field name="model_id" ref="spa_customizations.model_sale_order"/>
+            <field name="auto_delete" eval="False"/>
+            <field name="body_html">
+               <![CDATA[
+        <p>Dear Sir,<br/><br/>
+        Following booking is created by <b>${user.name}</b> and currently in <b>${object.get_state_values(object.is_buy_state)}</b> status.<br/><br/>
+<div style="display:table; border-collapse: collapse; width:100%; line-height: 2; text-align: center;">
+    <div style="display:table-header-group;">
+        <div style="display:table-row; border: 1px solid #000;border-bottom: none;">
+            <div style="display:table-cell; border: 1px solid #000; font-weight:bold;border-bottom: none; text-align: center;" >PROPERTY DETAILS</div>
+        </div>
+    </div>
+</div>
+<div style="display:table; border-collapse: collapse; width:100%; line-height: 2; text-align: center;">
+
+    <div style="display:table-row-group;">
+        <div style="display:table-row; border: 1px solid #000;width:100%; text-align: left;">
+            <div style="display:table-cell; border: 1px solid #000;width:50%;">Unit No.</div>
+            <div style="display:table-cell; border: 1px solid #000;width:50%;">${object.property_id.name if object.property_id else ''}</div>
+        </div>
+        <div style="display:table-row; border: 1px solid #000; text-align: left;">
+            <div style="display:table-cell; border: 1px solid #000;">Project</div>
+            <div style="display:table-cell; border: 1px solid #000;">${object.asset_project_id.name if object.asset_project_id else ''}</div>
+        </div>
+        <div style="display:table-row; border: 1px solid #000; text-align: left;">
+            <div style="display:table-cell; border: 1px solid #000;">Type</div>
+            <div style="display:table-cell; border: 1px solid #000;">${object.unit_type_id.name if object.unit_type_id else ''}</div>
+        </div>
+        <div style="display:table-row; border: 1px solid #000; text-align: left;">
+            <div style="display:table-cell; border: 1px solid #000;">View</div>
+            <div style="display:table-cell; border: 1px solid #000;">${object.property_id.facing_id.name if object.property_id.facing_id else ''}</div>
+        </div>
+        <div style="display:table-row; border: 1px solid #000; text-align: left;">
+            <div style="display:table-cell; border: 1px solid #000;">Customer Name</div>
+            <div style="display:table-cell; border: 1px solid #000;">${object.partner_id.name if object.partner_id else ''}</div>
+        </div>
+        <div style="display:table-row; border: 1px solid #000; text-align: left;">
+            <div style="display:table-cell; border: 1px solid #000;">Agent Name</div>
+            <div style="display:table-cell; border: 1px solid #000;">${object.agent_id.name if object.agent_id else ''}</div>
+        </div>
+        <div style="display:table-row; border: 1px solid #000; text-align: left;">
+            <div style="display:table-cell; border: 1px solid #000;">Creation Date</div>
+            <div style="display:table-cell; border: 1px solid #000;">${object.create_date.strftime('%d/%m/%Y')}</div>
+        </div>
+        <div style="display:table-row; border: 1px solid #000; text-align: left;">
+            <div style="display:table-cell; border: 1px solid #000;">Booking Date</div>
+            <div style="display:table-cell; border: 1px solid #000;">${object.booking_date.strftime('%d/%m/%Y')}</div>
+        </div>
+    </div>
+</div>
+<br/>
+<div style="display:table; border-collapse: collapse; width:100%; line-height: 2; text-align: center;">
+    <div style="display:table-header-group;">
+        <div style="display:table-row; border: 1px solid #000;border-bottom: none;">
+            <div style="display:table-cell; border: 1px solid #000; font-weight:bold;border-bottom: none; text-align: center;">PRICE AND DISCOUNT DETAILS</div>
+        </div>
+    </div>
+</div>
+<div style="display:table; border-collapse: collapse; width:100%; line-height: 2; text-align: center;">
+
+    <div style="display:table-row-group;">
+        <div style="display:table-row; border: 1px solid #000; width:100%; text-align: left;">
+            <div style="display:table-cell; border: 1px solid #000;width:50%;">List Price</div>
+            <div style="display:table-cell; border: 1px solid #000;width:50%;">AED ${'{:,.2f}'.format(object.property_price)}</div>
+        </div>
+        <div style="display:table-row; border: 1px solid #000; text-align: left;">
+            <div style="display:table-cell; border: 1px solid #000;">Agent Discount (%)</div>
+            <div style="display:table-cell; border: 1px solid #000;">${'{:,.2f}'.format(object.agent_discount_perc) if object.agent_discount_perc else '-'}</div>
+        </div>
+        <div style="display:table-row; border: 1px solid #000; text-align: left;">
+            <div style="display:table-cell; border: 1px solid #000;">Booking Discount (%)</div>
+            <div style="display:table-cell; border: 1px solid #000;">${'{:,.2f}'.format(object.manual_discount_perc) if object.manual_discount_perc else '-'}</div>
+        </div>
+        <div style="display:table-row; border: 1px solid #000; text-align: left;">
+            <div style="display:table-cell; border: 1px solid #000;">Total Discount (%)</div>
+            <div style="display:table-cell; border: 1px solid #000;">${"%.2f" % (object.manual_discount_perc + object.agent_discount_perc)}</div>
+        </div>
+        <div style="display:table-row; border: 1px solid #000; text-align: left;">
+            <div style="display:table-cell; border: 1px solid #000;">Total Discount Amount</div>
+            <div style="display:table-cell; border: 1px solid #000;">AED ${'{:,.2f}'.format((object.property_price - object.price))}</div>
+        </div>
+        <div style="display:table-row; border: 1px solid #000; text-align: left;">
+            <div style="display:table-cell; border: 1px solid #000;">Selling Price</div>
+            <div style="display:table-cell; border: 1px solid #000; color: #8B0000; font-weight:bold;">AED ${'{:,.2f}'.format(object.price)}</div>
+        </div>
+        <div style="display:table-row; border: 1px solid #000; text-align: left;">
+            <div style="display:table-cell; border: 1px solid #000;">Oqood Fee Charged</div>
+            <div style="display:table-cell; border: 1px solid #000;">AED ${'{:,.2f}'.format(object.oqood_fee if object.oqood_fee else 0)}</div>
+        </div>
+        <div style="display:table-row; border: 1px solid #000; text-align: left;">
+            <div style="display:table-cell; border: 1px solid #000;">Admin Fee Charged</div>
+            <div style="display:table-cell; border: 1px solid #000;">AED ${'{:,.2f}'.format(object.admin_fee if object.admin_fee else 0)}</div>
+        </div>
+        <div style="display:table-row; border: 1px solid #000; text-align: left;">
+            <div style="display:table-cell; border: 1px solid #000;">Selling Price Incl. Oqood & Admin</div>
+            <div style="display:table-cell; border: 1px solid #000; font-weight:bold;">AED ${'{:,.2f}'.format(object.price + (object.admin_fee if object.admin_fee else 0) + (object.oqood_fee if object.oqood_fee else 0))}</div>
+        </div>
+    </div>
+</div>
+<br/>
+<div style="display:table; border-collapse: collapse; width:100%; line-height: 2; text-align: center;">
+    <div style="display:table-header-group;">
+        <div style="display:table-row; border: 1px solid #000;border-bottom: none;">
+            <div style="display:table-cell; border: 1px solid #000; font-weight:bold; border-bottom: none; text-align: center;" >PAYMENT PLAN DETAILS</div>
+        </div>
+    </div>
+</div>
+<div style="display:table; border-collapse: collapse; width:100%; line-height: 2; text-align: center;">
+    <div style="display:table-header-group;">
+        <div style="display:table-row; border: 1px solid #000;width:100%;border-bottom: none;">
+            <div style="display:table-cell; border: 1px solid #000; width:34%;border-bottom: none; text-align: left; color: #8B0000; font-weight:bold;">PAYMENT PLAN SELECTED</div>
+            <div style="display:table-cell; border: 1px solid #000; border-bottom: none; text-align: left; color: #8B0000; font-weight:bold;">${object.payment_plan_creation}</div>
+        </div>
+    </div>
+</div>
+<div style="display:table; border-collapse: collapse; width:100%; line-height: 2; text-align: center;">
+    <div style="display:table-row-group;">
+        <div style="display:table-row; border: 1px solid #000; width:100%; text-align: center;">
+            <div style="display:table-cell; border: 1px solid #000; width:34%; font-weight:bold; text-align: left;">DESCRIPTION</div>
+            <div style="display:table-cell; border: 1px solid #000; width:33%; font-weight:bold;">PERCENTAGE (%)</div>
+            <div style="display:table-cell; border: 1px solid #000; width:33%; font-weight:bold;">AMOUNT (AED)</div>
+        </div>
+        <div style="display:table-row; border: 1px solid #000; text-align: left;">
+            <div style="display:table-cell; border: 1px solid #000; width:34%;">Down Payment</div>
+            <div style="display:table-cell; border: 1px solid #000; text-align: center; width:33%;">${'{:,.2f}'.format(object.down_payment_perc) if object.down_payment_perc else '-'}</div>
+            <div style="display:table-cell; border: 1px solid #000; text-align: center; width:33%;">${'{:,.2f}'.format(object.down_payment) if object.down_payment else '-'}</div>
+        </div>
+        <div style="display:table-row; border: 1px solid #000; text-align: left;">
+            <div style="display:table-cell; border: 1px solid #000;">PPre-Handover Incl. Down Payment</div>
+            <div style="display:table-cell; border: 1px solid #000; text-align: center;">${'{:,.2f}'.format(object.get_pp_vals(object)['pre_perc'])}</div>
+            <div style="display:table-cell; border: 1px solid #000; text-align: center;">${'{:,.2f}'.format(object.get_pp_vals(object)['pre_handover'])}</div>
+        </div>
+        <div style="display:table-row; border: 1px solid #000; text-align: left;">
+            <div style="display:table-cell; border: 1px solid #000;">Handover</div>
+            <div style="display:table-cell; border: 1px solid #000; text-align: center;">${'{:,.2f}'.format(object.get_pp_vals(object)['handover_perc'])}</div>
+            <div style="display:table-cell; border: 1px solid #000; text-align: center;">${'{:,.2f}'.format(object.get_pp_vals(object)['handover'])}</div>
+        </div>
+        <div style="display:table-row; border: 1px solid #000; text-align: left;">
+            <div style="display:table-cell; border: 1px solid #000;">Post-Handover</div>
+            <div style="display:table-cell; border: 1px solid #000; text-align: center;">${'{:,.2f}'.format(object.get_pp_vals(object)['post_perc'])}</div>
+            <div style="display:table-cell; border: 1px solid #000; text-align: center;">${'{:,.2f}'.format(object.get_pp_vals(object)['post_handover'])}</div>
+        </div>
+    </div>
+</div>
+<br/>
+<div style="display:table; border-collapse: collapse; width:100%; line-height: 2; text-align: center;">
+    <div style="display:table-header-group;">
+    <div style="display:table-row; border: 1px solid #000;border-bottom: none;">
+            <div style="display:table-cell; border: 1px solid #000; border-bottom: none; font-weight:bold; text-align: center;" >PAYMENT PLAN (YEARWISE SUMMARY)</div>
+        </div>
+    </div>
+</div>
+<div style="display:table; border-collapse: collapse; width:100%; line-height: 2; text-align: center;">
+    <div style="display:table-header-group;">
+        <div style="display:table-row; border: 1px solid #000; width:100%; text-align: center;">
+            <div style="display:table-cell; border: 1px solid #000; width:34%; font-weight:bold; text-align: left;">YEAR</div>
+            <div style="display:table-cell; border: 1px solid #000; width:33%; font-weight:bold;">PERCENTAGE (%)</div>
+            <div style="display:table-cell; border: 1px solid #000; width:33%; font-weight:bold;">AMOUNT (AED)</div>
+        </div>
+    </div>
+    <div style="display:table-row-group;">
+        % for line in object.get_years(object):
+        <div style="display:table-row; border: 1px solid #000; text-align: left;">
+            <div style="display:table-cell; border: 1px solid #000;">${line}</div>
+            <div style="display:table-cell; border: 1px solid #000; text-align: center;">${'{:,.2f}'.format(object.get_yearly_pp_vals(object)[str(line)+'perc'])}</div>
+            <div style="display:table-cell; border: 1px solid #000; text-align: center;">${'{:,.2f}'.format(object.get_yearly_pp_vals(object)[line])}</div>
+        </div>
+        % endfor
+    </div>
+</div>
+<br/>
+<br/>
+
+<p>Regards,</p>
+<p style="color: #8B0000;">Samana International Real Estate Development</p><br/>
+
+        </p>
+        ]]>
+            </field>
+        </record>
+
+        <record id="tentative_booking_email" model="mail.template">
+            <field name="name">Tentative Booking</field>
+            <field name="email_from">${object.company_id and object.company_id.email or ''}</field>
+            <field name="subject">Tentative Booking</field>
+            <field name="email_to">${''}</field>
+            <field name="lang">${user.partner_id.lang}</field>
+            <field name="model_id" ref="spa_customizations.model_sale_order"/>
+            <field name="auto_delete" eval="False"/>
+            <!--<field name="attachment_ids" eval="[(6, 0, [ref(${object.success_mail.lang})])]"/>-->
+            <field name="body_html">
+                <![CDATA[
+<p>Dear All,<br/><br/>
+This is tentative booking
+<br/><br/>
+Regards,<br/>
+Samana Developers ERP<br/></p>
+            ]]>
+            </field>
+        </record>
+
+        <record id="deal_closed_email_template" model="mail.template">
+            <field name="name">Deal Closure Alert</field>
+            <field name="email_from">${object.company_id and object.company_id.email or ''}</field>
+            <field name="subject">Deal Closure ${object.property_id.name if object.property_id else ''}
+                ${object.asset_project_id.name if object.asset_project_id else ''}
+            </field>
+            <field name="email_to">${''}</field>
+            <field name="lang">${user.partner_id.lang}</field>
+            <field name="model_id" ref="sale.model_sale_order"/>
+            <field name="auto_delete" eval="False"/>
+            <field name="body_html">
+                <![CDATA[
+                <p>Dear Sir,<br/><br/>
+                The deal has been closed against the below mentioned property. The initial sales agreement alongwith the closure form is attached herewith.
+                <br/><br/>
+                <b>Booking Date:</b> ${object.booking_date.strftime('%Y/%m/%d')}<br/>
+                <b>Project:</b> ${object.asset_project_id.name}<br/>
+                <b>Property:</b> ${object.property_id.name}<br/>
+                <b>Property Sale Value:</b> AED ${'{:,.2f}'.format(object.amount_total)}<br/>
+                <b>Oqood Charged:</b> AED ${'{:,.2f}'.format(object.oqood_fee)}<br/>
+                <b>Admin Fee Charged:</b> AED ${'{:,.2f}'.format(object.admin_fee)}<br/>
+                <b>Total Sale Value:</b> AED ${'{:,.2f}'.format(object.total_spa_value)}<br/>
+                <b>Approved by:</b> ${object.user_id.name}<br/>
+                <br/><br/>
+                Regards,<br/>
+                Samana International Real Estate Development<br/></p>
+                            ]]>
+            </field>
+        </record>
+
+        <record id="receipt_bounce_email" model="mail.template">
+            <field name="name">Cheque Bounced Email</field>
+            <field name="email_from">${object.company_id and object.company_id.email or ''}</field>
+            <field name="subject">Cheque Bounced Email</field>
+            <field name="email_to">${object.partner_id and object.partner_id.email or ''}</field>
+            <field name="lang">${user.partner_id.lang}</field>
+            <field name="model_id" ref="account_pdc.model_account_payment"/>
+            <field name="auto_delete" eval="False"/>
+            <field name="body_html">
+                <![CDATA[<p>Dear ${object.partner_id.name or 'Customer'},</p>
+                <p>The cheque #  <b>${object.name}</b> amounting AED <b>${object.amount}</b> which was collected against
+                 your unit # <b>${object.property_id.name}</b> of <b>${object.asset_project_id.name}</b> dated
+                 <b>${object.payment_date.strftime('%d/%m/%Y')}</b> is bounced.</p>
+                <p>You are requested to submit your dues to avoid any inconvenience.</p><br/>
+                <p>Regards,</p>
+                <p>Samana International Real Estate Development</P>
+                <br/>
+                <p style="color: #8b0000;">*This is a system generated email, pls.do not reply.</P>
+             ]]>
+            </field>
+            <field name="report_template" ref="sd_receipts_report.action_report_payment_receipt_customer_copy"/>
+            <field name="report_name">receipt_customer_copy</field>
+        </record>
+
+
+        <record id="ir_cron_fgr_payment_due_alerts" model="ir.cron">
+            <field name="name">Email for FGR Payment Due</field>
+            <field name="user_id" ref="base.user_root"/>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="numbercall">-1</field>
+            <field name="doall" eval="False"/>
+            <field name="model_id" ref="fgr_payment_request.model_fgr_details"/>
+            <field name="code">model.send_fgr_payment_due_email()</field>
+            <field name="state">code</field>
+        </record>
+
+        <record id="fgr_payment_due_email" model="mail.template">
+            <field name="name">Email FGR Payments Due</field>
+            <field name="email_from">${object.company_id and object.company_id.email or ''}</field>
+            <field name="subject">(${object.fgr_payment_request_id.property_id.name or ''}) FGR Payment Due</field>
+            <field name="email_to">${''} </field>
+            <field name="lang">${user.partner_id.lang}</field>
+            <field name="model_id" ref="fgr_payment_request.model_fgr_details"/>
+            <field name="auto_delete" eval="False"/>
+            <!--<field name="attachment_ids" eval="[(6, 0, [ref(${object.success_mail.lang})])]"/>-->
+            <field name="body_html">
+                <![CDATA[
+              <p>Dear Concerned,<br/><br/>
+
+              The FGR payment for <b>${object.fgr_payment_request_id.property_id.name}</b> <b>${object.fgr_payment_request_id.asset_project_id.name}</b> is due on <b>${object.Due_date.strftime('%d/%m/%Y')}</b>. You are requested to please prepare the payment accordingly.
+<br/><br/>
+Following are the details:
+<br/><br/>
+<b>SPA:</b> ${object.fgr_payment_request_id.spa_id.name}<br/>
+<b>SPA Status:</b> ${object.get_state_spa(object.fgr_payment_request_id.spa_id.state)}<br/>
+<b>Booking:</b> ${object.fgr_payment_request_id.related_booking_id.booking_number}<br/>
+<b>Customer Name:</b> ${object.fgr_payment_request_id.partner_id.name}<br/>
+<b>Payment Amount:</b> ${object.amount} AED
+
+<br/><br/>
+Regards,<br/>
+Samana International Real Estate Development
+              </p>
+            ]]>
+            </field>
+        </record>
+
+
+        <record id="spa_creation_email_template" model="mail.template">
+            <field name="name">SPA Creation</field>
+            <field name="email_from">${object.company_id and object.company_id.email or ''}</field>
+            <field name="subject">SPA CREATION ${object.property_id.name if object.property_id else ''} ${object.asset_project_id.name if object.asset_project_id else ''}</field>
+            <field name="email_to">${''}</field>
+            <field name="lang">${user.partner_id.lang}</field>
+            <field name="model_id" ref="sale.model_sale_order"/>
+            <field name="auto_delete" eval="False"/>
+            <!--<field name="attachment_ids" eval="[(6, 0, [ref(${object.success_mail.lang})])]"/>-->
+            <field name="body_html">
+                <![CDATA[
+<p>Dear All,<br/><br/>
+The SPA against unit # ${object.property_id.name if object.property_id else ''} of Project ${object.asset_project_id.name if object.asset_project_id else ''} is created by ${object.user_id.name if object.user_id else ''} on ${object.create_date.strftime('%d/%m/%Y')}. You are requested to please review, if required.
+<br/><br/>
+Regards,<br/>
+Samana International Real Estate Development<br/></p>
+            ]]>
+            </field>
+        </record>
+
+        <record id="spa_payment_perc_id" model="mail.template">
+        <field name="name">SPA Email</field>
+        <field name="email_from">${object.company_id and object.company_id.email or ''}</field>
+        <field name="subject">${object.property_id.name if object.asset_project_id else ''}
+            ${object.asset_project_id.name if object.asset_project_id else ''} SPA Under Termination-Auto Alert
+        </field>
+        <field name="email_to">${''}</field>
+        <field name="lang">${user.partner_id.lang}</field>
+        <field name="model_id" ref="sale.model_sale_order"/>
+        <field name="auto_delete" eval="False"/>
+        <field name="body_html">
+            <![CDATA[
+                        <p>Dear Sir,<br/><br/>  The SPA against Unit ${object.property_id.name if object.asset_project_id else ''} of
+                         Project ${object.asset_project_id.name if object.asset_project_id else ''}
+                        is under your approval for
+                        termination as the amount received against the unit is less than 10%. You are requested to please Approve/ Roll Back accordingly.<br/><br/>
+                         Regards,<br/><br/>
+                         <span style="color: #c40c0c;"> Samana International Real Estate Development </span><br/><br/>
+                          <span style="color: #c40c0c;">**System generated email, please do not reply**</span>
+                        </p>
+                                    ]]>
+        </field>
+    </record>
+
+        <record id="crm_under_cancellation_id" model="mail.template">
+        <field name="name">CRM Email</field>
+        <field name="email_from">${object.company_id and object.company_id.email or ''}</field>
+        <field name="subject">${object.property_id.name if object.asset_project_id else ''}
+            ${object.asset_project_id.name if object.asset_project_id else ''} Booking Under Cancellation-Auto Alert</field>
+        <field name="email_to">${''}</field>
+        <field name="lang">${user.partner_id.lang}</field>
+        <field name="model_id" ref="spa_customizations.model_sale_order"/>
+        <field name="auto_delete" eval="False"/>
+        <field name="body_html">
+            <![CDATA[
+                            <p>Dear Sir,<br/><br/>The booking against Unit ${object.property_id.name if object.asset_project_id else ''} of
+                            Project ${object.asset_project_id.name if object.asset_project_id else ''}
+                            is under your approval for cancellation
+                            as the booking days are more than 30. You are requested to please Approve/ Roll Back accordingly.<br/><br/>
+                            Regards,<br/><br/>
+                            <span style="color: #c40c0c;"> Samana International Real Estate Development </span><br/><br/>
+                            <span style="color: #c40c0c;">**System generated email, please do not reply**</span>
+                            </p>
+                                    ]]>
+        </field>
+    </record>
+
+
+        <template id="booking_approved">
+            <h1 style="width:98%; text-align: center;"><span t-esc="name"/></h1>
+        </template>
+
+        <template id="booking_rejected">
+            <h1 style="width:98%; text-align: center;"><span t-esc="name"/></h1>
+        </template>
+
+
+
+    </data>
+</odoo>

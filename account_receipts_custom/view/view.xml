@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+
+        <record id="unallocated_and_draft_receipts_email" model="mail.template">
+            <field name="name">Unallocated and Draft Email-Template</field>
+            <field name="email_from">${object.company_id and object.company_id.email or ''}</field>
+            <field name="subject">SD Unallocated &amp; Draft Receipts</field>
+            <field name="email_to">${''} </field>
+            <field name="lang">${user.partner_id.lang}</field>
+            <field name="model_id" ref="account_receipts_custom.model_mail_recipients"/>
+            <field name="auto_delete" eval="False"/>
+            <!--<field name="attachment_ids" eval="[(6, 0, [ref(${object.success_mail.lang})])]"/>-->
+            <field name="body_html">
+                <![CDATA[
+              <p>Dear Concerned,<br/><br/>
+Attached is the list of unallocated and Draft receipts. You are requested to clear the subject receipts at earliest to get the accurate reports.
+<br/><br/>
+Thanks,<br/>
+Administrator
+              </p>
+            ]]>
+            </field>
+        </record>
+
+
+        <record model="ir.ui.view" id="mail_recipients_tree_view">
+            <field name="name">mail.recipients.tree</field>
+            <field name="model">mail.recipients</field>
+            <field name="arch" type="xml">
+                <tree string="Mail Recipients">
+                    <field name="name"/>
+                    <!--<field name="user_ids"/>-->
+                </tree>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="mail_recipients_form_view">
+            <field name="name">mail.recipients.form</field>
+            <field name="model">mail.recipients</field>
+            <field name="arch" type="xml">
+                <form string="Mail Recipients">
+                    <group>
+                        <group>
+                            <field name="from_data" invisible="1"/>
+                            <field name="name" attrs="{'readonly': [('from_data','=',True)]}"/>
+                        </group>
+                    </group>
+                    <separator string="Recipients"/>
+                    <field name="user_ids"/>
+                </form>
+            </field>
+        </record>
+
+
+        <act_window id="mail_recipients_action"
+                    name="E-Mail Recipients"
+                    res_model="mail.recipients"
+                    view_mode="tree,form"
+        />
+
+        <menuitem action="mail_recipients_action" id="menu_mail_recipients"
+                  parent="account.account_account_menu" sequence="8" name="Recipients"/>
+
+
+
+    </data>
+</odoo>

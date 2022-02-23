@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_commission_type,commission.type,model_commission_type,,1,1,1,1
+access_mile_stone,mile.stone,model_mile_stone,,1,1,1,1
+access_account_payment_criteria,account.payment.criteria,model_account_payment_criteria,,1,1,1,1
+access_create_commission_wizard,create.commission.wiz,model_create_commission_wiz,,1,1,1,1

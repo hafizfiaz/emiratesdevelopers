@@ -1,0 +1,733 @@
+<?xml version="1.0"?>
+<odoo>
+
+         <record id="paperformat_customer_penalty" model="report.paperformat">
+            <field name="name">FGR Statement</field>
+            <field name="default" eval="True"/>
+            <field name="format">custom</field>
+            <field name="page_height">350</field>
+            <field name="page_width">0</field>
+            <field name="orientation">Portrait</field>
+            <field name="margin_top">30</field>
+            <field name="margin_bottom">15</field>
+            <field name="header_line" eval="False"/>
+            <field name="header_spacing">30</field>
+        </record>
+        <record id="report_fgr_customer_penalty" model="ir.actions.report">
+            <field name="paperformat_id" ref="sd_fgr_payment_report.paperformat_customer_penalty"/>
+        </record>
+
+        <template id="fgr_customer_penalty">
+            <t t-if="not o" t-set="o" t-value="doc"/>
+
+            <t t-if="not company">
+                <t t-if="company_id">
+                    <t t-set="company" t-value="company_id"/>
+                </t>
+                <t t-elif="o and 'company_id' in o">
+                    <t t-set="company" t-value="o.company_id.sudo()"/>
+                </t>
+                <t t-else="else">
+                    <t t-set="company" t-value="res_company"/>
+                </t>
+            </t>
+
+            <t t-call="sd_fgr_payment_report.external_layout_header_penalty"/>
+            <t t-call="sd_fgr_payment_report.external_layout_footer_penalty"/>
+            <t t-if="company.external_report_layout_id" t-call="{{company.external_report_layout_id.key}}">
+                <t t-raw="0"/>
+            </t>
+            <t t-else="else" t-call="web.external_layout_standard">
+                <t t-raw="0"/>
+            </t>
+
+        </template>
+
+        <template id="external_layout_header_penalty">
+            <div class="header">
+                <div style='width:100%;'>
+                    <br></br>
+                    <div class="row">
+                        <div class="col-7">
+                            <span style='font-size: 24px; color:#286A9D;'>
+                                <b>SAMANA INTERNATIONAL</b>
+                            </span>
+                        </div>
+                        <div class="col-5" style='font-size: 12px;'>
+                            <p>4th Floor , Building 7-Bay Square Business Bay,
+                                <br/>
+                                Dubai - United Arab Emirates
+                            </p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-7">
+                            <span style='font-size: 16px;'>REAL ESTATE DEVELOPMENT</span>
+                        </div>
+                        <div class="col-5" style='font-size: 12px;'>
+                            <p>Email:
+                                <span t-field="company.email"/>
+                                Website:
+                                <span t-field="company.website"/>
+                                Phone:
+                                <span t-field="company.phone"/>
+                            </p>
+                        </div>
+                    </div>
+
+<!--                    <div class="row">-->
+<!--                        <div class="col-12" style='font-size: 16px;'>-->
+<!--                            <strong>Date:</strong>-->
+<!--                            <span t-esc="time.strftime('%d-%b-%Y')"></span>-->
+<!--                        </div>-->
+<!--                    </div>-->
+                </div>
+            </div>
+
+        </template>
+
+        <template id="external_layout_footer_penalty">
+            <div class="footer">
+                <div class="row text-left" style="border-top: 1px solid black;">
+                    <div class="col-12">
+                        <span class="page"/>
+                        <span>|</span>
+                        <span>SAMANA INTERNATIONAL</span>
+                    </div>
+                </div>
+            </div>
+        </template>
+
+        <template id="report_fgr_penalty_template">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-call="sd_fgr_payment_report.fgr_customer_penalty">
+                        <t t-set="o" t-value="o.with_context({'lang': lang})"/>
+                        <div class="page" style='font-size: 12px;'>
+                            <style>
+                                .table-bordered {
+                                border: 1px solid black;
+                                margin: 6px;
+                                }
+
+                                .table-bordered th,
+                                .table-bordered tr,
+                                .table-bordered td {
+                                border: 1px solid black;
+
+                                }
+
+                                .table-bordered thead th,
+                                .table-bordered thead tr,
+                                .table-bordered thead td {
+                                border-bottom-width: 1px;
+                                }
+
+                                .table {
+                                width: 100%;
+                                margin-bottom: 1rem;
+                                background-color: transparent;
+                                }
+
+                                .table th,
+                                .table td {
+                                padding: 0.75rem;
+                                vertical-align: top;
+                                border-top: 1px solid balck;
+                                }
+
+                                .table thead th {
+                                vertical-align: bottom;
+                                border-bottom: 1px solid black;
+                                }
+
+                                .table tbody + tbody {
+                                border-top: 1px solid black;
+                                }
+
+                            </style>
+                            <br/>
+
+                            <div class='page' style="line-height:13px;font-size:13px;">
+                                <div class="row text-center">
+                                    <div class="col-8">
+                                        <h4 class="text-right">
+                                            <strong>FGR STATEMENT</strong>
+                                        </h4>
+                                    </div>
+                                    <div class="col-4 text-right">
+<!--                                        <img t-if="o.name"-->
+<!--                                             t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s' %('Code128',o.name,220,30)"/>-->
+                                        <!--</t>-->
+                                    </div>
+                                </div>
+                            </div>
+                            <br/>
+
+                            <table class="table" style="padding:none;margin:none; line-height: 2pt">
+
+                                <tr style="padding:none;margin:none; line-height: 9pt;">
+                                    <td style="border:none" width="20%">
+                                        <strong>Customer Name:</strong>
+                                    </td>
+                                    <td style="border:none" width="30%">
+                                        <span t-esc="o.partner_id.name"/>
+                                    </td>
+                                    <td style="border:none" width="20%">
+                                        <strong>Project:</strong>
+                                    </td>
+                                    <td style="border:none" width="30%">
+                                        <span t-esc="o.asset_project_id.name"/>
+                                    </td>
+                                </tr>
+                                <tr style="padding:none;margin:none">
+                                    <td style="border:none">
+                                        <strong>Mobile:</strong>
+                                    </td>
+                                    <td style="border:none">
+                                        <span t-esc="o.partner_id.mobile"/>
+                                    </td>
+                                    <td style="border:none">
+                                        <strong>Property:</strong>
+                                    </td>
+                                    <td style="border:none">
+                                        <span t-esc="o.property_id.name"/>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td style="border:none">
+                                        <strong>Email:</strong>
+                                    </td>
+                                    <td style="border:none">
+                                        <span t-esc="o.partner_id.email"/>
+                                    </td>
+                                    <td style="border:none">
+                                        <strong>Booking No:</strong>
+                                    </td>
+                                    <td style="border:none">
+                                        <span t-esc="o.related_booking_id.name"/>
+                                    </td>
+                                </tr>
+
+                                <tr height="20px">
+                                    <td style="border:none">
+                                        <strong>Statement Date:</strong>
+                                    </td>
+                                    <td style="border:none">
+                                        <span t-esc="time.strftime('%d/%m/%Y')"/>
+                                    </td>
+                                    <td style="border:none">
+                                        <strong>SPA:</strong>
+                                    </td>
+                                    <td style="border:none">
+                                        <span t-esc="o.spa_id.name"/>
+
+
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="border:none">
+                                        <strong></strong>
+                                    </td>
+                                    <td style="border:none"></td>
+                                    <td style="border:none">
+                                        <strong>Sale Date:</strong>
+                                    </td>
+                                    <td style="border:none">
+                                        <span t-field="o.spa_id.date_order" t-options='{"format": "dd/MM/yyyy"}'/>
+                                    </td>
+                                </tr>
+
+                            </table>
+
+
+                            <table class="table" style="border:none;margin:none; line-height: 2pt;">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center" colspan="2">
+                                            <strong>DETAILS</strong>
+                                        </th>
+                                        <th class="text-center" colspan="2">
+                                            <strong>COLLECTIONS DETAILS</strong>
+                                        </th>
+                                        <!--<th></th>-->
+                                        <!--<th><strong><u>AED</u></strong></th>-->
+                                    </tr>
+                                </thead>
+                                <!--<tr style="border:none">-->
+                                <!--<td style="border:none" width="25%">Property Price:</td>-->
+                                <!--<td style="border:none" width="25%"><span t-esc="'{:,.2f}'.format(o.booking_id.property_price)"/></td>-->
+                                <!--<td style="border:none" width="25%">Amount Received (Realized Collections):</td>-->
+                                <!--<td style="border:none" width="25%">-->
+                                <!--<span t-if="o.matured_pdcs" t-esc="'{:,.2f}'.format(o.matured_pdcs)"/>-->
+                                <!--<span t-if="not o.matured_pdcs">-</span>-->
+                                <!--</td>-->
+                                <!--</tr>-->
+                                <tr style="border:none; line-height: 10pt;">
+                                    <td style="border:none" width="25%">Property Price:</td>
+                                    <td style="border:none" width="25%">
+                                        <span t-esc="'{:,.2f}'.format(o.related_booking_id.price)"/>
+                                    </td>
+                                    <td style="border:none" width="30%">
+                                        <strong>Amount Received (Realized Collections)</strong>
+                                    </td>
+                                    <td style="border:none" width="20%">
+                                        <strong>
+                                            <span t-if="o.spa_id.matured_pdcs"
+                                                  t-esc="'{:,.2f}'.format(o.spa_id.matured_pdcs)"/>
+                                        </strong>
+                                        <strong>
+                                            <span t-if="not o.spa_id.matured_pdcs">-</span>
+                                        </strong>
+                                    </td>
+                                </tr>
+                                <tr style="border:none">
+                                    <td style="border:none" width="25%">VAT</td>
+                                    <td style="border:none" width="25%">
+                                        <span t-esc="'{:,.2f}'.format(o.related_booking_id.vat_amount)"/>
+                                    </td>
+                                    <td style="border:none"></td>
+                                    <td style="border:none">
+                                        <!--<span t-if="o.un_matured_pdcs" t-esc="'{:,.2f}'.format(o.un_matured_pdcs)"/>-->
+                                        <!--<span t-if="not o.un_matured_pdcs">-</span>-->
+                                    </td>
+                                </tr>
+                                <tr style="border:none">
+                                    <td style="border:none" width="25%">
+                                        <strong>Property Price Incl. VAT:</strong>
+                                    </td>
+                                    <td style="border:none" width="25%">
+                                        <strong>
+                                            <span t-esc="'{:,.2f}'.format(o.related_booking_id.property_inc_vat_amount)"/>
+                                        </strong>
+                                    </td>
+                                    <td style="border:none; color: #8b0000;">
+                                        <strong>Balance Due Collection</strong>
+                                    </td>
+                                    <td style="border:none; color: #8b0000;">
+                                        <t t-set="total_due_collection"
+                                           t-value="o.spa_id.amount_till_date + o.spa_id.oqood_fee + o.spa_id.admin_fee + o.spa_id.other_charges - o.spa_id.matured_pdcs"/>
+                                        <strong>
+                                            <span t-if="total_due_collection &gt; 0"
+                                                  t-esc="'{:,.2f}'.format(total_due_collection)"/>
+                                        </strong>
+                                        <strong><span t-if="total_due_collection &lt;= 0"/>0
+                                        </strong>
+                                        <strong>
+                                            <span t-if="not total_due_collection">-</span>
+                                        </strong>
+                                    </td>
+                                </tr>
+                                <tr style="border:none">
+                                    <td style="border:none">Oqood Fee Charged:</td>
+                                    <td style="border:none">
+                                        <span t-if="o.spa_id.oqood_fee" t-esc="'{:,.2f}'.format(o.spa_id.oqood_fee)"/>
+                                        <span t-if="not o.spa_id.oqood_fee">-</span>
+                                    </td>
+                                    <td style="border:none"></td>
+                                    <td style="border:none">
+                                    </td>
+                                </tr>
+                                <tr style="border:none">
+                                    <td style="border:none">Admin Fee Charged:</td>
+                                    <td style="border:none">
+                                        <span t-if="o.spa_id.admin_fee" t-esc="'{:,.2f}'.format(o.spa_id.admin_fee)"/>
+                                        <span t-if="not o.spa_id.admin_fee">-</span>
+                                    </td>
+                                    <td class="test-left" colspan="2" style="border:none">
+                                        <strong>Un-realized Collections</strong>
+                                    </td>
+                                </tr>
+                                <tr style="border:none">
+                                    <td style="border:none">Other Charges:</td>
+                                    <td style="border:none">
+                                        <span t-if="o.spa_id.other_charges"
+                                              t-esc="'{:,.2f}'.format(o.spa_id.other_charges)"/>
+                                        <span t-if="not o.spa_id.other_charges">-</span>
+                                    </td>
+                                    <td style="border:none"></td>
+                                    <td style="border:none">
+                                        <!--<span t-if="o.withdraw_pdcs" t-esc="'{:,.2f}'.format(o.withdraw_pdcs)"/>-->
+                                        <!--<span t-if="not o.withdraw_pdcs">-</span>-->
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="border:none"></td>
+                                    <td style="border:none">
+                                        <!--<t t-set="spa_value" t-value="o.booking_id.property_inc_vat_amount + o.oqood_fee + o.admin_fee + o.other_charges"/>-->
+                                        <!--<span t-if="spa_value" t-esc="'{:,.2f}'.format(spa_value)"/>-->
+                                        <!--<span t-if="not spa_value">-</span>-->
+                                    </td>
+                                    <td style="border:none">Non-Matured Collections</td>
+                                    <td style="border:none">
+                                        <span t-if="o.spa_id.un_matured_pdcs"
+                                              t-esc="'{:,.2f}'.format(o.spa_id.un_matured_pdcs)"/>
+                                        <span t-if="not o.spa_id.un_matured_pdcs">-</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="border:none">
+                                        <strong>Total Collectable Amount</strong>
+                                    </td>
+                                    <td style="border:none">
+                                        <t t-set="total_collectable"
+                                           t-value="o.related_booking_id.property_inc_vat_amount + o.spa_id.oqood_fee + o.spa_id.admin_fee + o.spa_id.other_charges"/>
+                                        <strong>
+                                            <span t-if="total_collectable" t-esc="'{:,.2f}'.format(total_collectable)"/>
+                                        </strong>
+                                        <strong>
+                                            <span t-if="not total_collectable">-</span>
+                                        </strong>
+                                    </td>
+                                    <td style="border:none">Cheques Held</td>
+                                    <td style="border:none">
+                                        <span t-if="o.spa_id.hold_pdcs" t-esc="'{:,.2f}'.format(o.spa_id.hold_pdcs)"/>
+                                        <span t-if="not o.spa_id.hold_pdcs">-</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="border:none"></td>
+                                    <td style="border:none">
+                                    </td>
+                                    <td style="border:none">Un Cleared Cheques</td>
+                                    <td style="border:none">
+                                        <span t-if="o.spa_id.deposited_pdcs"
+                                              t-esc="'{:,.2f}'.format(o.spa_id.deposited_pdcs)"/>
+                                        <span t-if="not o.spa_id.deposited_pdcs">-</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="border:none">Total Installments Due</td>
+                                    <td style="border:none">
+                                        <span t-if="o.spa_id.amount_till_date"
+                                              t-esc="'{:,.2f}'.format(o.spa_id.amount_till_date)"/>
+                                        <span t-if="not o.spa_id.amount_till_date">-</span>
+                                    </td>
+                                    <td style="border:none;">Bounced Cheques</td>
+                                    <td style="border:none;">
+                                        <span t-if="o.spa_id.bounced_pdcs"
+                                              t-esc="'{:,.2f}'.format(o.spa_id.bounced_pdcs)"/>
+                                        <span t-if="not o.spa_id.bounced_pdcs">-</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="border:none">Admin fee</td>
+                                    <td style="border:none">
+                                        <span t-if="o.spa_id.admin_fee" t-esc="'{:,.2f}'.format(o.spa_id.admin_fee)"/>
+                                        <span t-if="not o.spa_id.admin_fee">-</span>
+                                    </td>
+                                    <td style="border:none;">Total Unsecured Collections</td>
+                                    <td style="border:none;">
+                                        <t t-set="total_unsecured_collection"
+                                           t-value="o.spa_id.un_matured_pdcs + o.spa_id.hold_pdcs + o.spa_id.deposited_pdcs + o.spa_id.bounced_pdcs"/>
+                                        <span t-if="total_unsecured_collection"
+                                              t-esc="'{:,.2f}'.format(total_unsecured_collection)"/>
+                                        <span t-if="not total_unsecured_collection">-</span>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td style="border:none">Oqood Fee</td>
+                                    <td style="border:none">
+                                        <span t-if="o.spa_id.oqood_fee" t-esc="'{:,.2f}'.format(o.spa_id.oqood_fee)"/>
+                                        <span t-if="not o.spa_id.oqood_fee">-</span>
+                                    </td>
+                                    <td style="border:none;"></td>
+                                    <td style="border:none;">
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td style="border:none">Other Charges</td>
+                                    <td style="border:none">
+                                        <span t-if="o.spa_id.other_charges"
+                                              t-esc="'{:,.2f}'.format(o.spa_id.other_charges)"/>
+                                        <span t-if="not o.spa_id.other_charges">-</span>
+                                    </td>
+                                    <td style="border:none;">
+                                        <strong>Total Collections</strong>
+                                    </td>
+                                    <td style="border:none;">
+                                        <t t-set="total_collection"
+                                           t-value="o.spa_id.un_matured_pdcs + o.spa_id.hold_pdcs + o.spa_id.deposited_pdcs + o.spa_id.bounced_pdcs + o.spa_id.matured_pdcs"/>
+                                        <strong>
+                                            <span t-if="total_collection" t-esc="'{:,.2f}'.format(total_collection)"/>
+                                        </strong>
+                                        <strong>
+                                            <span t-if="not total_collection">-</span>
+                                        </strong>
+                                    </td>
+                                </tr>
+
+
+                                <tr style="border:none">
+                                    <td style="border:none" width="25%"></td>
+                                    <td style="border:none" width="25%"></td>
+                                    <td style="border:none" width="25%"></td>
+                                    <td style="border:none" width="25%">
+                                    </td>
+                                </tr>
+                                <tr style="border:none">
+                                    <td style="border:none" width="25%">
+                                        <strong>Total Due Amount</strong>
+                                    </td>
+                                    <td style="border:none" width="25%">
+                                        <t t-set="total_due"
+                                           t-value="o.spa_id.amount_till_date + o.spa_id.oqood_fee + o.spa_id.admin_fee + o.spa_id.other_charges"/>
+                                        <strong>
+                                            <span t-if="total_due" t-esc="'{:,.2f}'.format(total_due)"/>
+                                        </strong>
+                                        <strong>
+                                            <span t-if="not total_due">-</span>
+                                        </strong>
+                                    </td>
+                                    <td style="border:none; color: #000066;">
+                                        <strong>Pending Collections</strong>
+                                    </td>
+                                    <td style="border:none; color: #000066;">
+                                        <t t-set="pending_collection" t-value="total_collectable - total_collection"/>
+                                        <strong>
+                                            <span t-if="pending_collection"
+                                                  t-esc="'{:,.2f}'.format(pending_collection)"/>
+                                        </strong>
+                                        <strong>
+                                            <span t-if="not pending_collection">-</span>
+                                        </strong>
+                                    </td>
+                                </tr>
+                            </table>
+                            <br/>
+                            <br/>
+                            <br/>
+
+                            <strong style="margin-top:40px; font-size:18px;">FGR AGREEMENT SUMMARY
+                            </strong>
+                            <div style="margin-top:20px;"></div>
+                            <table class="table" style="border:none;margin:none; line-height: 2pt;">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center" colspan="2">
+                                            <strong>DESCRIPTION</strong>
+                                        </th>
+                                        <th class="text-center" colspan="2">
+                                            <strong>FGR SUMMARY</strong>
+                                        </th>
+                                    </tr>
+                                    <tr style="border:none">
+                                        <td style="border:none" width="25%">
+                                            <span>Agreement Start Date</span>
+                                        </td>
+
+                                        <td style="border:none;">
+                                            <span t-field="o.agreement_start_date"
+                                                  t-options='{"format": "dd/MM/yyyy"}'/>
+                                        </td>
+                                        <td style="border:none" width="25%">
+                                            <span>FGR Invoiced</span>
+                                        </td>
+
+                                        <td style="border:none;">
+                                            <span t-esc="'{:,.2f}'.format(o.total_fgr_invoiced)"/>
+                                        </td>
+                                    </tr>
+                                    <tr style="border:none">
+                                        <td style="border:none" width="25%">
+                                            <span>Agreement End Date</span>
+                                        </td>
+
+                                        <td style="border:none;">
+                                            <span t-field="o.agreement_end_date" t-options='{"format": "dd/MM/yyyy"}'/>
+                                        </td>
+                                        <td style="border:none" width="25%">
+                                            <span>FGR Paid</span>
+                                        </td>
+
+                                        <td style="border:none;">
+                                            <span t-esc="'{:,.2f}'.format(o.total_fgr_paid)"/>
+                                        </td>
+                                    </tr>
+
+                                    <tr style="border:none">
+                                        <td style="border:none" width="25%">
+                                            <span>Duration</span>
+                                        </td>
+
+                                        <td style="border:none;">
+                                            <span t-field="o.difference"/>
+                                        </td>
+                                        <td style="border:none" width="25%">
+                                            <span>Total FGR Due</span>
+                                        </td>
+
+                                        <td style="border:none;">
+                                            <span t-esc="'{:,.2f}'.format(o.total_fgr_requested)"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="border:none" width="25%"></td>
+                                        <td style="border:none" width="25%"></td>
+                                        <td style="border:none" width="25%">
+                                            <span>Total Pending</span>
+                                        </td>
+
+                                        <td style="border:none;">
+                                            <span t-esc="'{:,.2f}'.format(o.total_fgr_pending)"/>
+                                        </td>
+                                    </tr>
+                                </thead>
+                            </table>
+                            <br/>
+                            <br/>
+
+                            <table class="table" style="border:none;margin:none; line-height: 2pt;">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center" colspan="2">
+                                            <strong>PAYMENT PATTERN</strong>
+                                        </th>
+                                        <th class="text-center" colspan="2">
+                                            <strong></strong>
+                                        </th>
+                                    </tr>
+                                    <tr style="border:none">
+                                        <td style="border:none" width="25%">
+                                            <span>Annual Rent</span>
+                                        </td>
+
+                                        <td style="border:none;">
+                                            <span t-esc="'{:,.2f}'.format(o.annual_rent)"/>
+                                        </td>
+                                        <tr>
+                                            <td style="border:none" width="25%">
+                                                <span>No. of years</span>
+                                            </td>
+
+                                            <td style="border:none;">
+                                                <span t-esc="'{:,.2f}'.format(o.total_years)"/>
+                                            </td>
+                                        </tr>
+
+                                    </tr>
+                                    <tr style="border:none">
+                                        <td style="border:none" width="25%">
+                                            <span>Total Rent</span>
+                                        </td>
+
+                                        <td style="border:none;">
+                                            <span t-esc="'{:,.2f}'.format(o.fgr_total_payment)"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="border:none" width="25%">
+                                            <span>No. of Installments</span>
+                                        </td>
+
+                                        <td style="border:none;">
+                                            <span t-esc="o.no_of_installment"/>
+                                        </td>
+                                    </tr>
+
+                                    <tr style="border:none">
+                                        <td style="border:none" width="25%">
+                                            <span>Interval</span>
+                                        </td>
+                                        <td style="border:none;">
+                                            <t t-if="o.interval == 'monthly'">
+                                                Monthly
+                                            </t>
+                                            <t t-if="o.interval == 'quarterly'">
+                                                Quarterly
+                                            </t>
+                                            <t t-if="o.interval == 'biannually'">
+                                                Biannually
+                                            </t>
+                                            <t t-if="o.interval == 'yearly'">
+                                                Yearly
+                                            </t>
+                                        </td>
+                                        <td style="border:none" width="25%">
+
+                                        </td>
+
+                                        <td style="border:none;">
+                                        </td>
+                                    </tr>
+                                </thead>
+                            </table>
+                            <br/>
+                            <br/>
+                            <br/>
+                            <br/>
+                            <br/>
+                            <strong style="margin-top:40px; font-size:18px;">FGR PAYMENT SCHEDULE</strong>
+                            <div style="margin-top:20px;"></div>
+                            <table class="table table-bordered text-center" style="font-size:15px;">
+                                <thead>
+                                    <tr>
+                                        <th>Sr.</th>
+                                        <!--                                        <th width="85px">FGR Details</th>-->
+                                        <th width="85px">FGR Amount</th>
+                                        <th>Due Date</th>
+<!--                                        <th>Project</th>-->
+<!--                                        <th>Property</th>-->
+                                        <th>Invoiced Amount</th>
+                                        <th>Paid Amount</th>
+                                        <th>Balance Amount</th>
+<!--                                        <th>Status</th>-->
+                                    </tr>
+                                </thead>
+                                 <tbody>
+                                    <tr t-foreach="docs.fgr_detail_ids.sorted(key=lambda x: x.Due_date, reverse=False)" t-as="fgr">
+                                        <td>
+                                            <span t-esc="fgr.sr_no"/>
+                                        </td>
+                                        <!--                                        <td>-->
+                                        <!--                                            <span t-field="fgr.fgr_details"/>-->
+                                        <!--                                        </td>-->
+                                        <td>
+                                            <span t-esc="'{:,.2f}'.format(fgr.amount)"/>
+                                        </td>
+                                        <td>
+                                            <span t-field="fgr.Due_date" t-options="{&quot;format&quot;: &quot;dd/MM/yyyy&quot;}"/>
+                                        </td>
+<!--                                        <td>-->
+<!--                                            <span t-field="fgr.asset_project_id.name"/>-->
+<!--                                        </td>-->
+<!--                                        <td>-->
+<!--                                            <span t-field="fgr.property_id.name"/>-->
+<!--                                        </td>-->
+                                        <td>
+                                            <span t-if="fgr.invc_id.amount_total"
+                                              t-esc="'{:,.2f}'.format(fgr.invc_id.amount_total)"/>
+                                        <span t-if="not fgr.invc_id.amount_total">-</span>
+                                        </td>
+                                         <td>
+                                        <t t-set="total_paid"
+                                           t-value="fgr.invc_id.amount_total - fgr.invc_id.amount_residual"/>
+                                        <span t-if="total_paid"
+                                              t-esc="'{:,.2f}'.format(total_paid)"/>
+                                        <span t-if="not total_paid">-</span>
+                                    </td>
+                                        <td>
+                                            <span t-if="fgr.invc_id.amount_residual"
+                                              t-esc="'{:,.2f}'.format(fgr.invc_id.amount_residual)"/>
+                                        <span t-if="not fgr.invc_id.amount_residual">-</span>
+                                        </td>
+
+<!--                                        <td>-->
+<!--                                            <span t-field="fgr.state"/>-->
+<!--                                        </td>-->
+                                    </tr>
+                                </tbody>
+
+
+                            </table>
+
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </template>
+
+</odoo>

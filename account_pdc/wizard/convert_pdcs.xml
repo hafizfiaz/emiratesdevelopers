@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record model="ir.ui.view" id="convert_pdcs_wizard_view">
+            <field name="name">convert.pdcs.wizard.form</field>
+            <field name="model">convert.pdcs.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Convert PDCs">
+                    <group>
+                        <field name="bank_deposit" required="1"/>
+                    </group>
+                    <footer>
+                        <button string="Apply" name="action_convert_pdcs" type="object" class="oe_highlight"/>
+                        or
+                        <button string="Cancel" class="oe_link" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+
+        <act_window id="convert_pdcs_wizard_action"
+                    name="Convert PDCs"
+                    res_model="convert.pdcs.wizard"
+                    src_model="account.payment"
+                    view_mode="form"
+                    key2="client_action_multi"
+                    target="new"
+        />
+    </data>
+</odoo>

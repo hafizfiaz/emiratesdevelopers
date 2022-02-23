@@ -1,0 +1,9 @@
+<odoo>
+
+
+
+    <report file="property_commission.commission_invoice_owner" id="commission_owner_invoice_report" model="commission.invoice.owner" name="property_commission.commission_invoice_owner" report_type="qweb-pdf" string="Commission Invoice Owner" />
+
+    <report attachment_use="False" file="property_commission.commission_report_template2" id="commission_for_invoice_report" menu="False" model="commission.invoice" name="property_commission.commission_report_template2" report_type="qweb-pdf" string="Commission Report" />
+
+</odoo>

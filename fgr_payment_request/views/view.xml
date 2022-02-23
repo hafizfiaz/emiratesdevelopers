@@ -1,0 +1,398 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+        <record id="fgr_payment_due_template" model="mail.template">
+            <field name="name">FGR Payment Due Alert</field>
+            <field name="email_from">${object.company_id and object.company_id.email or ''}</field>
+            <field name="subject">FGR Payment Alert</field>
+            <field name="email_to">${''}</field>
+            <field name="lang">${user.partner_id.lang}</field>
+            <field name="model_id" ref="fgr_payment_request.model_fgr_details"/>
+            <field name="auto_delete" eval="False"/>
+            <field name="body_html">
+                <![CDATA[
+                <p>Dear Team,<br/><br/>
+                The FGR payment against the following customer is getting due on ${object.Due_date.strftime('%d-%m-%Y')}, you are requested to plan accordingly:
+                <br/><br/>
+                <b>Project:</b> ${object.asset_project_id.name}<br/>
+                <b>Property:</b> ${object.property_id.name}<br/>
+                <b>Customer:</b> ${object.fgr_payment_request_id.partner_id.name}<br/>
+                <b>FGR Due Amount:</b> AED ${'{:,.2f}'.format(object.amount)}<br/>
+                <br/><br/>
+                Regards,<br/>
+                Samana International Real Estate Development<br/></p>
+                            ]]>
+            </field>
+        </record>
+
+        <record id="view_account_asset_asset_inherit_fgr" model="ir.ui.view">
+            <field name="name">account.asset.asset.fgr</field>
+            <field name="model">account.asset.asset</field>
+            <field name="inherit_id" ref="ow_account_asset.view_account_asset_asset_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//notebook" position="inside">
+                    <page name="fgr_agreement" string="FGR Agreement">
+                        <field name="fgr_agreement" widget="html"/>
+                    </page>
+                    <!--<span style="border:none;margin-left:10px;" t-if="bls_perctg and bls_perctg  &gt; 0" t-esc="'{:,.2f}'.format(bls_perctg)"/>-->
+                </xpath>
+            </field>
+        </record>
+
+
+<!--        <record id="view_booking_discount_form_po" model="ir.ui.view">-->
+<!--            <field name="name">booking.discount.form.po</field>-->
+<!--            <field name="model">booking.discount</field>-->
+<!--            <field name="inherit_id" ref="spa_customizations.view_booking_discount_form"/>-->
+<!--            <field name="arch" type="xml">-->
+<!--                <xpath expr="//notebook" position="inside">-->
+<!--                    <page name="payment_options" string="Related Payment Options">-->
+<!--                        <field name="related_payment_ids" domain="[('asset_project_id','=',asset_project_id)]"/>-->
+<!--                    </page>-->
+<!--                </xpath>-->
+<!--            </field>-->
+<!--        </record>-->
+
+
+        <record id="view_fgr_payment_request_tree" model="ir.ui.view">
+            <field name="name">fgr.payment.request.tree</field>
+            <field name="model">fgr.payment.request</field>
+            <field name="arch" type="xml">
+                <tree string="FGR Payment Request" default_order="create_date desc">
+                    <field name="spa_id"/>
+                    <field name="related_booking_id" invisible="1"/>
+                    <field name="partner_id"/>
+                    <field name="discount_value"/>
+                    <field name="price"/>
+                    <field name="total_spa_value"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_fgr_payment_request_form" model="ir.ui.view">
+            <field name="name">fgr.payment.request.form</field>
+            <field name="model">fgr.payment.request</field>
+            <field name="arch" type="xml">
+                <form string="FGR Payment Request">
+                    <header>
+                        <button name="action_draft" type="object" string="Back To Draft" states="cancel"
+                                class="oe_highlight"/>
+
+                        <button name="action_submit_review" type="object" string="Submit for Review" states="draft"
+                                class="oe_highlight" groups="sales_team.group_sale_salesman_all_leads"/>
+                        <button name="action_cancel" type="object" string="Cancel" states="draft"
+                                class="oe_highlight" groups="sales_team.group_sale_salesman_all_leads"/>
+
+                        <button name="action_under_accounts" type="object" string="Review" states="under_review"
+                                class="oe_highlight" groups="sales_team.group_sale_manager"/>
+                        <button name="action_reject" type="object" string="Reject" states="under_review"
+                                class="oe_highlight" groups="sales_team.group_sale_manager"/>
+
+                        <button name="action_review" type="object" string="Review" states="under_accounts_verification"
+                                class="oe_highlight" groups="account.group_account_user"/>
+                        <button name="action_reject" type="object" string="Reject" states="under_accounts_verification"
+                                class="oe_highlight" groups="account.group_account_user"/>
+
+                        <button name="action_approved" type="object" string="Approve" states="under_approval"
+                                class="oe_highlight" />
+<!--                                class="oe_highlight" groups="account_voucher_collection.group_ceo"/>-->
+                        <button name="action_reject" type="object" string="Reject" states="under_approval"
+                                class="oe_highlight" />
+<!--                                class="oe_highlight" groups="account_voucher_collection.group_ceo"/>-->
+                        <button name="action_rollback" type="object" string="Roll Back" states="under_approval"
+                                class="oe_highlight" />
+<!--                                class="oe_highlight" groups="account_voucher_collection.group_ceo"/>-->
+
+
+                        <button name="action_cancel" type="object" string="Cancel" states="rejected"
+                                class="oe_highlight"/>
+                        <field name="state" widget="statusbar"
+                               statusbar_visible="draft,approved,done,cancel"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button class="oe_stat_button" name="get_related_attachments"
+                                    string="Related Attachments" type="object"
+                                    icon="fa-paperclip"/>
+                        </div>
+                        <group>
+                            <group string="PROPERTY DETAILS">
+                                <field name="spa_id"/>
+                                <field name="related_booking_id" invisible="1"/>
+                                <field name="partner_id"/>
+                                <field name="mobile" invisible="1"/>
+                                <field name="email" invisible="1"/>
+                                <field name="joined_partner_id" widget="many2many_tags" invisible="1"/>
+                                <field name="asset_project_id"/>
+                                <field name="property_id"/>
+                                <field name="sale_date" invisible="1"/>
+                                <field name="booking_date" invisible="1"/>
+                                <field name="agent_ref"/>
+                                <field name="agent_id" domain="[('agent', '=', True)]"
+                                       attrs="{'invisible': [('agent_ref', '=', False)]}"/>
+                             <separator string="FGR AGREEMENT DETAILS"/>
+                                <field name="agreement_start_date"/>
+                                <field name="agreement_end_date"/>
+                                <field name="difference"/>
+                                <separator string="PAYMENT PATTERN"/>
+                                <newline/>
+                                <label for="annual_rent" />
+                            <div class="address_format">
+                                <field name="annual_rent_perc" style="width:40%;" nolabel="1"/><span style="color:black;">%%</span>
+                                <span style="width:10%;margin-left:10px;">
+                                    |
+                                </span>
+                                <field name="annual_rent" nolabel="1"
+                                       style="width:20%; color:black;margin-left:20px;"/>
+                            </div>
+                                <field name="total_years"/>
+                                <label for="fgr_total_payment" style="font-weight: bold"/>
+                            <div class="address_format">
+                                <field name="fgr_total_payment_perc" style="width:40%;font-weight: bold" nolabel="1"/><span style="color:black;">%%</span>
+                                <span style="width:10%;margin-left:10px;font-weight: bold">
+                                    |
+                                </span>
+                                <field name="fgr_total_payment" nolabel="1"
+                                       style="width:20%; color:black;margin-left:20px;font-weight: bold"/>
+                            </div>
+                                <field name="installment_date"/>
+                                  <label for="no_of_installment"
+                                       attrs="{'invisible': [('custom_plan', '=', True)]}"/>
+                                <div class="address_format">
+                                    <field name="no_of_installment" style="width:40%;" nolabel="1" attrs="{'invisible': [('custom_plan', '=', True)]}"/>
+                                        <span style="width:10%;margin-left:10px;" attrs="{'invisible': [('custom_plan', '=', True)]}">
+                                        |
+                                    </span>
+                                    <field name="installment_amount" nolabel="1"
+                                           style="width:20%;margin-left:20px;" attrs="{'invisible': [('custom_plan', '=', True)]}"/>
+                                </div>
+                                <field name="interval"/>
+                                <field name="custom_plan"/>
+                            </group>
+                            <group string="SALE DETAILS">
+                                <field name="property_price"/>
+                                <field name="booking_discount"/>
+                                <field name="agent_discount"/>
+                                <field name="discount_value"/>
+                                <field name="discount_value_perc"/>
+                                <field name="price"/>
+                                <field name="oqood_fee"/>
+                                <field name="admin_fee"/>
+                                <field name="total_spa_value"/>
+                                <field name="total_due"/>
+                                <field name="matured_pdcs"/>
+                                <field name="balance_due_collection"/>
+                                <field name="remarks"/>
+                                <separator string="Summary"/>
+                                <field name="total_fgr_requested"/>
+                                <field name="total_fgr_invoiced"/>
+                                <field name="total_fgr_paid"/>
+                                <field name="total_fgr_pending"/>
+                                <field name="receipt_total" invisible="1"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="FGR Payments">
+
+                                <button name="create_agreement_schedule"
+                                        attrs="{'invisible': ['|',('state', '!=', 'draft'),('custom_plan', '=', True)]}"
+                                        string="Create FGR Schedule" class="oe_highlight" type="object"/>
+
+                                <field name="fgr_detail_ids">
+                                    <tree string="FGR Details" name="fgr_details" editable="bottom">
+                                        <field name="sr_no"/>
+                                        <field name="fgr_details"/>
+                                        <field name="amount" sum="FGR Amount"/>
+                                        <field name="Due_date"/>
+                                        <field name="inv" invisible="0" readonly="1"/>
+                                        <field name="paid_check"/>
+                                        <field name="state"/>
+                                        <field name="fgr_payment_request_id" invisible="1"/>
+                                        <field name="invc_id" invisible="1"/>
+                                        <button name="create_invoice"
+                                                attrs="{'invisible':['|',('inv','=',True),('state','!=', 'confirm')]}"
+                                                class="fa fa-check" type="object"/>
+                                        <button name="open_invoice" attrs="{'invisible':[('inv','=',False)]}"
+                                                class="fa fa-arrow-circle-o-right" type="object"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="FGR Invoices">
+                                <field name="invoice_ids"/>
+                            </page>
+                            <page string="Payments">
+                                <field name="payment_ids"/>
+                            </page>
+                            <page string="Receipts">
+                                <field name="receipt_ids"/>
+                            </page>
+                            <page string="FGR Agreement">
+                                <field name="fgr_agreement" widget="html"/>
+                            </page>
+                        </notebook>
+
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+
+                </form>
+            </field>
+        </record>
+
+        <record id="fgr_search_view" model="ir.ui.view">
+            <field name="name">FGR Payment Request</field>
+            <field name="model">fgr.payment.request</field>
+            <field name="arch" type="xml">
+                <search string="FGR Payment Request">
+<!--                    <field name="name" filter_domain="[('name','ilike',self)]" string="SPA"/>-->
+                    <field name="spa_id" filter_domain="[('spa_id','ilike',self)]" string="SPA"/>
+                    <field name="asset_project_id" filter_domain="[('asset_project_id','ilike',self)]"
+                           string="Project"/>
+                    <field name="property_id" filter_domain="[('property_id','ilike',self)]" string="Property"/>
+                    <field name="partner_id" filter_domain="[('partner_id','child_of',self)]" string="Customer Name"/>
+                </search>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_fgr_payment_request">
+            <field name="name">FGR Payment Request</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">fgr.payment.request</field>
+            <field name="view_mode">tree,form,pivot</field>
+        </record>
+
+
+        <record id="view_fgr_details_tree" model="ir.ui.view">
+            <field name="name">fgr.details.tree</field>
+            <field name="model">fgr.details</field>
+            <field name="arch" type="xml">
+                <tree string="FGR Details" name="fgr_details">
+                    <field name="sr_no"/>
+                    <field name="fgr_details"/>
+                    <field name="amount"/>
+                    <field name="Due_date"/>
+                    <field name="inv" invisible="0"/>
+                    <field name="paid_check"/>
+                    <field name="state"/>
+                    <field name="fgr_payment_request_id" invisible="1"/>
+                    <field name="invc_id" invisible="1"/>
+                    <button name="create_invoice" attrs="{'invisible':[('inv','=',True)]}"
+                            class="fa fa-check" type="object"/>
+                    <button name="open_invoice" attrs="{'invisible':[('inv','=',False)]}"
+                            class="fa fa-arrow-circle-o-right" type="object"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_fgr_details_form" model="ir.ui.view">
+            <field name="name">fgr.details.form</field>
+            <field name="model">fgr.details</field>
+            <field name="arch" type="xml">
+                <form string="FGR Details">
+                    <header>
+                        <button name="create_invoice"
+                                attrs="{'invisible':['|',('inv','=',True),('state','!=','confirm')]}" type="object"/>
+                        <button name="open_invoice" attrs="{'invisible':[('inv','=',False)]}" type="object"/>
+                        <field name="state" widget="statusbar" statusbar_visible="draft,confirm,cancel"/>
+                    </header>
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="sr_no"/>
+                                <field name="fgr_details"/>
+                                <field name="amount"/>
+                            </group>
+                            <group>
+                                <field name="Due_date"/>
+                                <field name="invc_id" invisible="0"/>
+                                <field name="inv" invisible="0" readonly="0"/>
+                                <field name="paid_check"/>
+                                <field name="fgr_payment_request_id" invisible="1"/>
+
+                            </group>
+                        </group>
+                        <notebook>
+                            <page name="invoices" string="Invoices">
+                                <field name="invc_ids" widget="many2many" domain="[('move_type', '=', 'in_invoice')]" context="{'default_move_type': 'in_invoice','tree_view_ref': 'account.view_in_invoice_tree'}"/>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+<!--        <record model="ir.ui.view" id="view_account_payment_form_fgr_details">-->
+<!--            <field name="name">account.payment.fgr.form</field>-->
+<!--            <field name="model">account.payment</field>-->
+<!--            <field name="inherit_id" ref="account.view_account_payment_form"/>-->
+<!--            <field name="arch" type="xml">-->
+<!--                <xpath expr="//sheet[last()]" position="inside">-->
+<!--                    <page string="FGR Installments" name="fgr_installment" attrs="{'invisible': [('payment_type','!=','inbound')]}">-->
+<!--                        <field name="fgr_details_ids">-->
+<!--                            <tree string="FGR Details">-->
+<!--                                <field name="sr_no"/>-->
+<!--                                <field name="fgr_details"/>-->
+<!--                                <field name="amount"/>-->
+<!--                                <field name="Due_date"/>-->
+<!--                                <field name="state"/>-->
+<!--                                <field name="fgr_payment_request_id" invisible="1"/>-->
+<!--                                <field name="inv" invisible="1"/>-->
+<!--                                <field name="invc_id" invisible="1"/>-->
+<!--                            </tree>-->
+<!--                        </field>-->
+<!--                    </page>-->
+<!--                </xpath>-->
+<!--            </field>-->
+<!--        </record>-->
+
+        <record id="fgr_details_search" model="ir.ui.view">
+            <field name="name">FGR Payment Schedule</field>
+            <field name="model">fgr.details</field>
+            <field name="arch" type="xml">
+                <search string="FGR Payment Request">
+                    <!--<field name="" filter_domain="[('name','ilike',self)]" string="All Search"/>-->
+                    <field name="fgr_payment_request_id" filter_domain="[('fgr_payment_request_id.partner_id.name','ilike',self)]" string="Customer Name"/>
+                    <field name="fgr_payment_request_id" filter_domain="[('fgr_payment_request_id.asset_project_id.name','ilike',self)]" string="Project"/>
+                    <field name="fgr_payment_request_id" filter_domain="[('fgr_payment_request_id.property_id.name','ilike',self)]" string="Property"/>
+                    <filter name="confirmed" string="Confirmed" domain="[('state','=','confirm')]"/>
+                </search>
+            </field>
+        </record>
+
+
+        <record model="ir.actions.act_window" id="action_fgr_details">
+            <field name="name">FGR Payment Schedule</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">fgr.details</field>
+            <field name="view_mode">tree,form</field>
+            <field name="context">{"search_default_confirmed":1}</field>
+        </record>
+
+        <menuitem sequence="6" id="menu_root_fgr_payment_req_crm" parent="crm.crm_menu_root"
+                  name="FGR Payment Request"/>
+        <menuitem action="action_fgr_payment_request"
+                  name="FGR Payment Request"
+                  id="menu_fgr_payment_request_action"
+                  parent="menu_root_fgr_payment_req_crm"
+                  sequence="1"/>
+        <menuitem action="action_fgr_details"
+                  name="FGR Payment Schedule"
+                  id="menu_fgr_details_action"
+                  parent="menu_root_fgr_payment_req_crm"
+                  sequence="1"/>
+
+    <record id="account_move_inherit_fgr" model="ir.ui.view">
+        <field name="name">account.move.inherit.fgr</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_move_form"/>
+        <field name="arch" type="xml">
+            <field name="ref" position="after">
+                <field name="fgr_payment_req_id" attrs="{'readonly': True, 'invisible': [('fgr_payment_req_id', '=', False)]}"/>
+            </field>
+        </field>
+    </record>
+
+</odoo>

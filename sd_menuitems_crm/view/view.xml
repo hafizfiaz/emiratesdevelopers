@@ -1,0 +1,845 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <record id="inherited_fgr_tree" model="ir.ui.view">
+            <field name="name">fgr.payment.request.inherit.tree</field>
+            <field name="model">fgr.payment.request</field>
+            <field name="arch" type="xml">
+                <tree string="FGR Payment Request" default_order="create_date desc">
+                    <field name="spa_id"/>
+                    <field name="related_booking_id"/>
+                    <field name="partner_id"/>
+                    <field name="discount_value"/>
+                    <field name="price"/>
+                    <field name="total_spa_value"/>
+                    <field name="state" widget="badge"
+                           decoration-danger="state in ('under_review','under_approval')"
+                           decoration-info="state == 'draft'"
+                           decoration-warning="state in ('cancel', 'rejected')"
+                           decoration-success="state in ('approved','done')"/>
+                </tree>
+            </field>
+        </record>
+
+
+        <record id="inherited_approval_tree" model="ir.ui.view">
+            <field name="name">approval.approval.inherit.tree</field>
+            <field name="model">approval.approval</field>
+            <field name="arch" type="xml">
+                <tree string="Approval">
+                    <field name="create_date"/>
+                    <field name="create_uid"/>
+                    <field name="name"/>
+                    <field name="amount"/>
+                    <field name="remarks"/>
+                    <field name="state" widget="badge"
+                           decoration-danger="state in ('under_gm_review','under_ceo_review')"
+                           decoration-info="state == 'draft'"
+                           decoration-warning="state in ('cancelled', 'rejected')"
+                           decoration-success="state == 'approve'"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="account.view_account_payment_tree" model="ir.ui.view">
+            <field name="name">account.payment.tree</field>
+            <field name="model">account.payment</field>
+            <field name="arch" type="xml">
+                <tree edit="false" sample="1" default_order="create_date desc">
+                    <header>
+                        <button name="action_post" type="object" string="Confirm"/>
+                    </header>
+                    <field name="create_date" optional="show"/>
+                    <field name="date" string="Payment Date" optional="show"/>
+                    <field name="old_payment_date" string="Payment Date" optional="hide"/>
+                    <field name="id" optional="show"/>
+                    <field name="name" optional="show"/>
+                    <field name="old_name" string="Seq Number" optional="show"/>
+                    <field name="journal_id" optional="show"/>
+                    <field name="asset_project_id" optional="show"/>
+                    <field name="property_id" optional="show"/>
+                    <field name="spa_id" optional="show"/>
+                    <field name="reference" optional="show"/>
+                    <field name="partner_id" string="Customer" optional="show"/>
+                    <field name="company_id" groups="base.group_multi_company" optional="show"/>
+                    <field name="amount" sum="Amount" optional="show"/>
+                    <field name="check_number" optional="show"/>
+                    <field name="maturity_date" optional="show"/>
+                    <field name="bank_deposit" optional="show"/>
+                    <field name="write_uid" optional="show"/>
+                    <field name="write_date" optional="show"/>
+                    <field name="state" widget="badge" decoration-info="state == 'draft'" decoration-success="state == 'posted'" optional="show"/>
+                    <field name="currency_id" groups="base.group_multi_currency"/>
+                </tree>
+            </field>
+        </record>
+
+
+        <record id="inherited_payment_tree" model="ir.ui.view">
+            <field name="name">account.payment.inherit.tree</field>
+            <field name="model">account.payment</field>
+            <field name="arch" type="xml">
+                <tree string="Payments">
+                    <field name="create_date" optional="show"/>
+                    <field name="date" string="Payment Date" optional="show"/>
+                    <field name="old_payment_date" string="Payment Date" optional="hide"/>
+                    <field name="name" optional="show"/>
+                    <field name="journal_id" optional="show"/>
+                    <field name="write_date"/>
+                    <field name="check_number" optional="show"/>
+                    <field name="maturity_date" optional="show"/>
+                    <field name="partner_id" string="Vendor"/>
+                    <field name="asset_project_id" optional="show"/>
+                    <field name="property_id" optional="show"/>
+                    <field name="collection_type_id" optional="show"/>
+                    <field name="amount" sum="Amount" optional="show"/>
+                    <field name="bank_deposit" optional="show"/>
+                    <field name="reference" optional="show"/>
+                    <field name="state" widget="badge"
+                           decoration-danger="state in ('under_approval','under_review')"
+                           decoration-info="state == 'draft'"
+                           decoration-warning="state in ('cancelled', 'refused')"
+                           decoration-success="state in ('settle','posted','collected')" optional="show"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="inherited_comm_tree" model="ir.ui.view">
+            <field name="name">commission.invoice.inherit.tree</field>
+            <field name="model">commission.invoice</field>
+            <field name="arch" type="xml">
+                <tree string="Commissions Invoice" default_order="create_date desc">
+                    <field name="create_date"/>
+                    <field name="number"/>
+                    <field name="partner_id"/>
+                    <field name="total_price"/>
+                    <field name="total_commission_amount"/>
+                    <field name="invoiced_amount" sum="Commission Invoiced"/>
+                    <field name="total_commission_paid"/>
+                    <field name="balance_commission"/>
+                    <field name="agent"/>
+                    <field name="asset_project_id"/>
+                    <field name="property_id"/>
+                    <field name="create_uid"/>
+                    <field name="state" widget="badge"
+                           decoration-danger="state in ('under_legal_review','under_manager_review')"
+                           decoration-info="state == 'draft'"
+                           decoration-warning="state in ('cancel', 'rejected')"
+                           decoration-success="state in ('paid','approved')"/>
+                    <field name="amount_total"/>
+                    <field name="write_date" string="Last Updated On"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="inherited_spa_tree" model="ir.ui.view">
+            <field name="name">sale.order.spa.tree</field>
+            <field name="model">sale.order</field>
+            <field name="arch" type="xml">
+                <tree string="SPA">
+                    <field name="message_needaction" invisible="1"/>
+                    <field name="name" string="SPA Number"/>
+                    <!--                    <field name="booking_id"/>-->
+                    <field name="date_order" string="SPA Date" optional="show"/>
+                    <!--                    <field name="commitment_date" groups="sale.group_sale_order_dates"/>-->
+                    <!--                    <field name="expected_date" groups="sale.group_sale_order_dates"/>-->
+                    <field name="partner_id"/>
+                    <!--                    <field name="partner_address_email" string="Email"/>-->
+                    <!--                    <field name="nationality_id"/>-->
+                    <field name="user_id" optional="hide"/>
+                    <field name="salesperson_ids" widget="many2many_tags" optional="show"/>
+                    <field name="asset_project_id"/>
+                    <field name="property_id"/>
+                    <field name="tag_ids" widget="many2many_tags" optional="show"/>
+                    <field name="amount_total" sum="Total Tax Included" widget="monetary" optional="show"/>
+                    <field name="oqood_fee" sum="Oqood Fee Charged" widget="monetary" optional="show"/>
+                    <field name="admin_fee" sum="Admin Fee Charged" widget="monetary" optional="show"/>
+                    <!--                    <field name="others" sum="Others" widget="monetary" invisible="1"/>-->
+                    <field name="total_spa_value" sum="Total SPA Value" widget="monetary" optional="show"/>
+                    <field name="instalmnt_bls_pend_plus_admin_oqood" sum="Total Due Amount" widget="monetary" optional="show"/>
+                    <field name="matured_pdcs" sum="Amount Received (Realized Collections)" optional="show"/>
+                    <field name="balance_due_collection" sum="Balance Due Collection" optional="show"/>
+                    <field name="total_receipts" sum="Total Receipts" widget="monetary" optional="show"/>
+                    <field name="receipts_perc" sum="Collection Percentage" optional="show"/>
+                    <!--<field name="net_receipts" sum="Net Receipts" widget="monetary"/>-->
+                    <field name="pending_balance" sum="Pending Receivables" widget="monetary" optional="show"/>
+                    <field name="currency_id" invisible="1"/>
+                    <field name="pending_balance_perc" optional="show"/>
+                    <field name="state" widget="badge"
+                           decoration-info="state == 'spa_draft'"
+                           decoration-warning="state in ('under_sd_admin_review', 'rejected')"
+                           decoration-success="state in ('sale', 'paid')"/>
+                    <field name="receivable_status_id" optional="show"/>
+                    <!--                    <field name="recent_installment_due_date"/>-->
+                    <!--                    <field name="recent_collection_date"/>-->
+                </tree>
+            </field>
+        </record>
+
+        <record id="inherited_booking_tree" model="ir.ui.view">
+            <field name="name">sale.order.booking.tree</field>
+            <field name="model">sale.order</field>
+            <field name="arch" type="xml">
+                <tree string="booking">
+                    <field name="create_date"/>
+                    <field name="booking_date"/>
+                    <field name="partner_id" string="Contact" optional="show"/>
+                    <!--                <field name="mobile"/>-->
+                    <field name="property_id" string="Unit" optional="show"/>
+                    <!--                <field name="unit_type_id" string="Unit Type"/>-->
+                    <field name="user_id" optional="hide"/>
+                    <field name="salesperson_ids" widget="many2many_tags" optional="show"/>
+                    <field name="asset_project_id" string="Project" optional="show"/>
+                    <field name="property_inc_vat_amount" optional="show"/>
+                    <field name="schedule_total" optional="show"/>
+                    <field name="oqood_fee" sum="Oqood Fee Charged" widget="monetary" optional="show"/>
+                    <field name="admin_fee" sum="Admin Fee Charged" widget="monetary" optional="show"/>
+                    <!--                    <field name="others" sum="Others" widget="monetary" invisible="1"/>-->
+                    <field name="net_receipts" sum="Total Booking Value" widget="monetary" optional="show"/>
+                    <field name="total_receipts" sum="Total Receipts" widget="monetary" optional="show"/>
+                    <field name="matured_pdcs" string="Amount Received (Realized Collections)"
+                           sum="Amount Received (Realized Collections)" widget="monetary" optional="show"/>
+                    <field name="matured_pdcs_perc" string="Amount Received (Realized Collections) %"
+                           widget="monetary" optional="show"/>
+                    <field name="pending_balance" sum="Pending Receivables" widget="monetary" optional="show"/>
+                    <field name="user_id" invisible="1"/>
+                    <field name="state" widget="badge"
+                           decoration-danger="state == 'review'"
+                           decoration-info="state == 'draft'"
+                           decoration-warning="state in ('under_cancellation', 'booking_rejected')"
+                           decoration-success="state == 'confirm_spa'"/>
+                    <field name="booking_days" optional="show"/>
+                    <field name="agent_id" optional="show"/>
+                    <field name="net_commission_sp" optional="show"/>
+                    <!--                <field name="total_comm_paid_ext"/>-->
+                    <!--                <field name="bls_comm_ext"/>-->
+                </tree>
+            </field>
+        </record>
+
+        <menuitem
+                id="sale_order_menu_sale_spa_crm"
+                name="Sales SPA"
+                groups="sales_team.group_sale_salesman"
+                parent="crm.crm_menu_root"
+                sequence="8"/>
+
+        <record id="sale_spa_all_menu" model="ir.actions.act_window">
+            <field name="name">All SPAs</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">sale.order</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('internal_type', '=', 'spa') ,
+                ('state','not in',('booking_cancel','cancel','refund_cancellation'))]
+            </field>
+            <field name="view_id" ref="inherited_spa_tree"/>
+            <field name="context"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    All SPAs !
+                </p>
+            </field>
+        </record>
+
+        <menuitem
+                id="all_sales_spa_menu"
+                name="All SPAs"
+                groups="sales_team.group_sale_salesman"
+                parent="sale_order_menu_sale_spa_crm"
+                action="sale_spa_all_menu"
+                sequence="1"/>
+
+        <record id="all_sales" model="ir.actions.act_window">
+            <field name="name">All Sales Bookings</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">sale.order</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('internal_type','in',['booking','spa']),
+                ('state','not in',('booking_cancel','cancel','refund_cancellation'))]
+            </field>
+            <field name="view_id" ref="inherited_booking_tree"/>
+            <field name="context"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    All Sale Bookings !
+                </p>
+            </field>
+        </record>
+
+        <record id="greens_sales" model="ir.actions.act_window">
+            <field name="name">Samana Greens Bookings</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">sale.order</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('asset_project_id.name', '=', 'Samana Greens'),('internal_type','in',['booking','spa']),
+                ('state','not in',('booking_cancel','cancel','refund_cancellation'))]
+            </field>
+            <field name="view_id" ref="inherited_booking_tree"/>
+            <field name="context"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Samana Green Bookings !
+                </p>
+            </field>
+        </record>
+
+        <record id="hills_sales" model="ir.actions.act_window">
+            <field name="name">Samana Hills Bookings</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">sale.order</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('asset_project_id.name', '=', 'Samana Hills'),('internal_type','in',['booking','spa']),
+                ('state','not in',('booking_cancel','cancel','refund_cancellation'))]
+            </field>
+            <field name="view_id" ref="inherited_booking_tree"/>
+            <field name="context"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Samana Hills Bookings !
+                </p>
+            </field>
+        </record>
+
+        <record id="golf_sales" model="ir.actions.act_window">
+            <field name="name">Samana Golf Avenue Bookings</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">sale.order</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('asset_project_id.name', '=', 'Samana Golf Avenue'),
+                ('internal_type','in',['booking','spa']),
+                ('state','not in',('booking_cancel','cancel','refund_cancellation'))]
+            </field>
+            <field name="view_id" ref="inherited_booking_tree"/>
+            <field name="context"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Samana Golf Avenue Bookings !
+                </p>
+            </field>
+        </record>
+
+        <record id="park_sales" model="ir.actions.act_window">
+            <field name="name">Samana Park View Bookings</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">sale.order</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('asset_project_id.name', '=', 'Samana Park Views'),
+                ('internal_type', 'in',['booking','spa']),
+                ('state','not in',('booking_cancel','cancel','refund_cancellation'))]
+            </field>
+            <field name="view_id" ref="inherited_booking_tree"/>
+            <field name="context"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Samana Park View Bookings !
+                </p>
+            </field>
+        </record>
+
+        <record id="booking_under_dalya_approval" model="ir.actions.act_window">
+            <field name="name">Bookings (Confirmation for SPA)</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">sale.order</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('state','=',('confirm_spa'))]</field>
+            <field name="view_id" ref="inherited_booking_tree"/>
+            <field name="context"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Click to create Bookings record.
+                </p>
+            </field>
+        </record>
+        <record id="commissions_under_dalya_approval" model="ir.actions.act_window">
+            <field name="name">Commissions (Under SD HOD Approval)</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">commission.invoice</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('state','=',('under_sales_hod_review'))]</field>
+            <field name="view_id" ref="inherited_comm_tree"/>
+            <field name="context"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Click to create commission record.
+                </p>
+            </field>
+        </record>
+        <record id="booking_under_director_approval" model="ir.actions.act_window">
+            <field name="name">Bookings (Under Approval)</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">sale.order</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('state','=',('under_discount_approval'))]</field>
+            <field name="view_id" ref="inherited_booking_tree"/>
+            <field name="context"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create an opportunity in your pipeline
+                    or email sales@samanadevelopers.com
+                </p>
+            </field>
+        </record>
+        <record id="spas_under_director_approval" model="ir.actions.act_window">
+            <field name="name">SPAs (Under Confirmation For Print)</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">sale.order</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('state','=',('under_confirmation_print'))]</field>
+            <field name="context"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create a new quotation, the first step of a new sale!
+                    Once the quotation is confirmed by the customer, it becomes a sales order.
+                    You will be able to create an invoice and collect the payment..
+                </p>
+            </field>
+        </record>
+        <record id="spas_under_director_final_approval" model="ir.actions.act_window">
+            <field name="name">SPAs (Under Final Approval)</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">sale.order</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('state','=',('under_approval'))]</field>
+            <field name="view_id" ref="inherited_booking_tree"/>
+            <field name="context"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create a new quotation, the first step of a new sale!
+                    Once the quotation is confirmed by the customer, it becomes a sales order.
+                    You will be able to create an invoice and collect the payment.
+                </p>
+            </field>
+        </record>
+
+        <record id="commissions_under_director_approval" model="ir.actions.act_window">
+            <field name="name">Commissions (Under Approval)</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">commission.invoice</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('state','=',('under_approval'))]</field>
+            <field name="view_id" ref="inherited_comm_tree"/>
+            <field name="context"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Click to create commission record.
+                </p>
+            </field>
+        </record>
+
+        <record id="payment_under_director_approval" model="ir.actions.act_window">
+            <field name="name">Payments (Under Approval)</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">account.payment</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('payment_type','=','outbound'),
+                ('state','=','under_approval'),
+                ('approval_from_ids', 'ilike', 'kamran')]
+            </field>
+            <field name="view_id" ref="inherited_payment_tree"/>
+            <field name="context"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Register a payment
+                    Payments are used to register liquidity movements. You can process those payments by your own means
+                    or by using installed facilities.
+                </p>
+            </field>
+        </record>
+
+        <record id="expense_under_kamran_approval" model="ir.actions.act_window">
+            <field name="name">Expense Approval- Mr Kamran</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">approval.approval</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('state','=','under_ceo_review'),
+                ('approval_type_id','=','Expense Approval- Mr Kamran')]
+            </field>
+            <field name="view_id" ref="inherited_approval_tree"/>
+            <field name="context"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create a new document.
+                </p>
+            </field>
+        </record>
+        <record id="fgr_under_kamran_approval" model="ir.actions.act_window">
+            <field name="name">FGR Payment Request (Under Approval)</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">fgr.payment.request</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('state','=','under_approval')]</field>
+            <field name="view_id" ref="inherited_fgr_tree"/>
+            <field name="context"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create a new document.
+                </p>
+            </field>
+        </record>
+
+        <menuitem id="sale_bookings"
+                  name="Sale Bookings"
+                  parent="crm.crm_menu_root"
+                  sequence="2"/>
+
+        <menuitem id="all_booking_sale" name="All Sale Bookings" parent="sale_bookings" sequence="1"
+                  action="all_sales"/>
+        <menuitem id="green_booking_sale" name="Samana Greens Bookings" parent="sale_bookings" sequence="2"
+                  action="greens_sales"/>
+        <menuitem id="hills_booking_sale" name="Samana Hills Bookings" parent="sale_bookings" sequence="3"
+                  action="hills_sales"/>
+        <menuitem id="golf_booking_sale" name="Samana Golf Avenue Bookings" parent="sale_bookings" sequence="4"
+                  action="golf_sales"/>
+        <menuitem id="park_booking_sale" name="Samana Park View Bookings" parent="sale_bookings" sequence="5"
+                  action="park_sales"/>
+        <menuitem id="menu_dalya_approval"
+                  name="Dalya's Approvals"
+                  sequence="9" groups="security_groups.dalya_approval"/>
+        <menuitem id="booking_under_dalya_approval_menu" name="Bookings (Under Approval)" parent="menu_dalya_approval"
+                  sequence="1"
+                  action="booking_under_dalya_approval" groups="security_groups.dalya_approval"/>
+        <menuitem id="commission_under_dalya_approval_menu" name="Commissions (Under Approval)"
+                  parent="menu_dalya_approval"
+                  sequence="2"
+                  action="commissions_under_dalya_approval" groups="security_groups.dalya_approval"/>
+        <menuitem id="menu_director_approval"
+                  name="Director Approvals"
+                  sequence="10" groups="base.group_erp_manager,security_groups.group_property_website_backend"/>
+        <menuitem id="booking_under_director_approval_menu" name="Bookings (Under Approval)"
+                  parent="menu_director_approval"
+                  sequence="1"
+                  action="booking_under_director_approval"/>
+        <menuitem id="spas_under_director_approval_menu" name="SPAs (Under Confirmation For Print)"
+                  parent="menu_director_approval"
+                  sequence="2"
+                  action="spas_under_director_approval"/>
+
+        <menuitem id="spas_under_director_final_approval_menu" name="SPAs (Under Final Approval)"
+                  parent="menu_director_approval"
+                  sequence="3"
+                  action="spas_under_director_final_approval"/>
+        <menuitem id="commissions_under_director_approval_menu" name="Commissions (Under Approval)"
+                  parent="menu_director_approval"
+                  sequence="4"
+                  action="commissions_under_director_approval"/>
+        <menuitem id="payment_under_director_approval_menu" name="Payments (Under Approval)"
+                  parent="menu_director_approval"
+                  sequence="5"
+                  action="payment_under_director_approval"/>
+        <menuitem id="expense_under_kamran_approval_menu" name="Expense Approval- Mr Kamran"
+                  parent="menu_director_approval"
+                  sequence="6"
+                  action="expense_under_kamran_approval"/>
+        <menuitem id="fgr_under_kamran_approval_menu" name="FGR Payment Request (Under Approval)"
+                  parent="menu_director_approval"
+                  sequence="7"
+                  action="fgr_under_kamran_approval"/>
+
+
+        <record id="client_signature_pending" model="ir.actions.act_window">
+            <field name="name">Client Signature Pending</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">sale.order</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('inventory_status.name', '=', 'Client Signature Pending'),
+                ('internal_type', '=', 'spa'),
+                ('state','not in',('booking_cancel','cancel','refund_cancellation'))]
+            </field>
+            <field name="view_id" ref="inherited_spa_tree"/>
+            <field name="context"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Client Signature Pending !
+                </p>
+            </field>
+        </record>
+
+        <record id="client_signature_sd_pending" model="ir.actions.act_window">
+            <field name="name">Client Signature Done- SD Pending</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">sale.order</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('inventory_status.name', '=', 'Client Signature Done- SD Pending'),
+                ('internal_type','=', 'spa'),
+                ('state','not in',('booking_cancel','cancel','refund_cancellation'))]
+            </field>
+            <field name="view_id" ref="inherited_spa_tree"/>
+            <field name="context"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Client Signature Done- SD Pending !
+                </p>
+            </field>
+        </record>
+
+        <record id="spa_incomplete" model="ir.actions.act_window">
+            <field name="name">SPA Incomplete</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">sale.order</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('inventory_status.name', '=', 'SPA Incomplete'),('internal_type', '=','spa')
+                ,('state','not in',('booking_cancel','cancel','refund_cancellation'))]
+            </field>
+            <field name="view_id" ref="inherited_spa_tree"/>
+            <field name="context"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    SPA Incomplete !
+                </p>
+            </field>
+        </record>
+
+        <record id="partially_pending" model="ir.actions.act_window">
+            <field name="name">Client Signature Partially Pending</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">sale.order</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('inventory_status.name', '=', 'Client Signature Partially Pending'),
+                ('internal_type','=', 'spa'),
+                ('state','not in',('booking_cancel','cancel','refund_cancellation'))]
+            </field>
+            <field name="view_id" ref="inherited_spa_tree"/>
+            <field name="context"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Client Signature Partially Pending !
+                </p>
+            </field>
+        </record>
+
+        <record id="signature_completed" model="ir.actions.act_window">
+            <field name="name">SPA Signature Completed</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">sale.order</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('inventory_status.name', '=', 'SPA Signature Completed'),
+                ('internal_type', '=','spa'),
+                ('state','not in',('booking_cancel','cancel','refund_cancellation'))]
+            </field>
+            <field name="view_id" ref="inherited_spa_tree"/>
+            <field name="context"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    SPA Signature Completed !
+                </p>
+            </field>
+        </record>
+
+        <menuitem id="spa_inventory_status_menu"
+                  name="SPA Inventory Status"
+                  parent="crm.crm_menu_root"
+                  sequence="3"/>
+        <menuitem id="client_signature_pending_menu" name="Client Signature Pending" parent="spa_inventory_status_menu"
+                  sequence="1"
+                  action="client_signature_pending"/>
+        <menuitem id="client_signature_sd_pending_menu" name="Client Signature Done- SD Pending"
+                  parent="spa_inventory_status_menu" sequence="2"
+                  action="client_signature_sd_pending"/>
+        <menuitem id="spa_incomplete_menu" name="SPA Incomplete" parent="spa_inventory_status_menu" sequence="3"
+                  action="spa_incomplete"/>
+        <menuitem id="partially_pending_menu" name="Client Signature Partially Pending"
+                  parent="spa_inventory_status_menu" sequence="4"
+                  action="partially_pending"/>
+        <menuitem id="signature_completed_menu" name="SPA Signature Completed" parent="spa_inventory_status_menu"
+                  sequence="5"
+                  action="signature_completed"/>
+
+        <record id="greens_spa" model="ir.actions.act_window">
+            <field name="name">Samana Greens</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">sale.order</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('asset_project_id.name', '=', 'Samana Greens'),
+                ('internal_type', '=','spa'),
+                ('state','not in',('booking_cancel','cancel','refund_cancellation'))]
+            </field>
+            <field name="view_id" ref="inherited_spa_tree"/>
+            <field name="context"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Samana Greens !
+                </p>
+            </field>
+        </record>
+
+        <record id="hills_spa" model="ir.actions.act_window">
+            <field name="name">Samana Hills</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">sale.order</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('asset_project_id.name', '=', 'Samana Hills'),
+                ('internal_type', '=','spa'),
+                ('state','not in',('booking_cancel','cancel','refund_cancellation'))]
+            </field>
+            <field name="view_id" ref="inherited_spa_tree"/>
+            <field name="context"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Samana Hills !
+                </p>
+            </field>
+        </record>
+
+        <record id="golf_spa" model="ir.actions.act_window">
+            <field name="name">Samana Golf Avenue</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">sale.order</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('asset_project_id.name', '=', 'Samana Golf Avenue'),
+                ('internal_type', '=','spa'),
+                ('state','not in',('booking_cancel','cancel','refund_cancellation'))]
+            </field>
+            <field name="view_id" ref="inherited_spa_tree"/>
+            <field name="context"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Samana Golf Avenue !
+                </p>
+            </field>
+        </record>
+
+        <record id="park_spa" model="ir.actions.act_window">
+            <field name="name">Samana Park View</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">sale.order</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('asset_project_id.name', '=', 'Samana Park Views'),
+                ('internal_type', '=','spa'),
+                ('state','not in',('booking_cancel','cancel','refund_cancellation'))]
+            </field>
+            <field name="view_id" ref="inherited_spa_tree"/>
+            <field name="context"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Samana Park View !
+                </p>
+            </field>
+        </record>
+
+        <record id="unreconciled_spa" model="ir.actions.act_window">
+            <field name="name">Unreconciled SPAs</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">sale.order</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('unpaid_open_invoices','>',500),('posted_receipts_unreconciled','>',500),
+                ('internal_type', '=','spa'),
+                ('state','not in',('booking_cancel','cancel','refund_cancellation'))]
+            </field>
+            <field name="view_id" ref="inherited_spa_tree"/>
+            <field name="context"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Unreconciled SPAs !
+                </p>
+            </field>
+        </record>
+
+        <record id="spa_cancel_refund_state" model="ir.actions.act_window">
+            <field name="name">Cancelled &amp; Refund for Cancellation</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">sale.order</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('state','in',('cancel', 'refund_cancellation'))]</field>
+            <field name="context"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Cancelled and Refund for Cancellation !
+                </p>
+            </field>
+        </record>
+
+        <menuitem id="unreconciled_spa_menu" name="Unreconciled SPAs" parent="sale_order_menu_sale_spa_crm" sequence="2"
+                  action="unreconciled_spa" groups="base.group_erp_manager"/>
+        <menuitem id="green_spa_menu" name="Samana Greens" parent="sale_order_menu_sale_spa_crm" sequence="2"
+                  action="greens_spa"/>
+        <menuitem id="hills_spa_menu" name="Samana Hills" parent="sale_order_menu_sale_spa_crm" sequence="3"
+                  action="hills_spa"/>
+        <menuitem id="golf_spa_menu" name="Samana Golf Avenue" parent="sale_order_menu_sale_spa_crm" sequence="4"
+                  action="golf_spa"/>
+        <menuitem id="park_spa_menu" name="Samana Park View" parent="sale_order_menu_sale_spa_crm" sequence="5"
+                  action="park_spa"/>
+        <menuitem id="cancel_refund_state_menu" name="Cancelled &amp; Refund for Cancellation"
+                  parent="sale_order_menu_sale_spa_crm" sequence="6"
+                  action="spa_cancel_refund_state"/>
+
+         <record id="bills_under_ceo_approval" model="ir.actions.act_window">
+            <field name="name">Bills Request Under CEO Approval</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">approval.approval</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[("state","=","under_ceo_review"),("approval_type_id","=","Expense Approval From CEO")]</field>
+            <field name="view_id" ref="inherited_approval_tree"/>
+            <field name="context"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create a new document !
+                </p>
+            </field>
+        </record>
+        <record id="cheque_under_ceo_approval" model="ir.actions.act_window">
+            <field name="name">Cheque Hold/ Withdrawal Request Under CEO</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">account.voucher.replacement</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[("state","=","under_ceo_approval")]</field>
+            <field name="context"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Click to register a new Cheque Hold/ Withdrawal Request.
+                </p>
+            </field>
+        </record>
+        <record id="booking_under_ceo_approvals" model="ir.actions.act_window">
+            <field name="name">Booking Under CEO Approval</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">sale.order</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('state','=',('under_discount_approval'))]</field>
+            <field name="view_id" ref="inherited_booking_tree"/>
+            <field name="context"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create an opportunity in your pipeline
+                    or send an email to sales@samanadevelopers.com
+                </p>
+            </field>
+        </record>
+
+         <menuitem id="menu_ceo_approval"
+                  name="CEO Approvals"
+                  sequence="3"/>
+        <menuitem id="bills_under_ceo_approval_menu" name="Bills Request Under CEO Approval"
+                  parent="menu_ceo_approval"
+                  sequence="1"
+                  action="bills_under_ceo_approval"/>
+        <menuitem id="cheque_under_ceo_approval_menu" name="Cheque Hold/ Withdrawal Request Under CEO"
+                  parent="menu_ceo_approval"
+                  sequence="2"
+                  action="cheque_under_ceo_approval"/>
+        <menuitem id="booking_under_ceo_approvals_menu" name="Booking Under CEO Approval"
+                  parent="menu_ceo_approval"
+                  sequence="3"
+                  action="booking_under_ceo_approvals"/>
+
+
+
+
+         <record id="staff_internal" model="ir.actions.act_window">
+            <field name="name">Staff</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">res.partner</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('internal_user','=',True)]</field>
+             <field name="context"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Staff !
+                </p>
+            </field>
+        </record>
+
+         <menuitem id="staff_internal_menu" name="Staff"
+                  parent="account.menu_finance_entries" sequence="103"
+                  action="staff_internal"/>
+            </data>
+</odoo>

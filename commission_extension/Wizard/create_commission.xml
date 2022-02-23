@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record model="ir.ui.view" id="view_create_commission_wizard">
+            <field name="name">Create Commission</field>
+            <field name="model">create.commission.wiz</field>
+            <field name="arch" type="xml">
+                <form string="any string">
+                    <group>
+                        <group attrs="{'invisible': [('is_agent_com', '=', True)]}">
+                            <field name="agent_ref" readonly="1" />
+                            <field name="agent_id" readonly="1" />
+                            <field name="agent_commission_type_id" readonly="1"/>
+                        </group>
+                        <group attrs="{'invisible': [('is_com1', '=', True)]}">
+                            <field name="commission" readonly="1"/>
+                            <field name="agent" readonly="1"/>
+                            <field name="commission_type_id" readonly="1"/>
+                            <field name="team_up"/>
+                            <field name="team_up_agents" widget="many2many_tags" attrs="{'invisible': [('team_up', '=',False)]}"/>
+                            <label for="commission_share_perc" style="color: #8B0000;"
+                                       attrs="{'invisible': [('team_up', '=',False)]}"/>
+                                <div class="address_format">
+                                    <field name="commission_share_perc" style="width:20%;color: #8B0000;" nolabel="1"
+                                           attrs="{'invisible': [('team_up', '=',False)]}"/>
+                                    <span style="width:10%;font-weight: bold; color:black;margin-left:10px;"
+                                          attrs="{'invisible': [('team_up', '=',False)]}">
+                                        |
+                                    </span>
+                                    <field name="commission_share_amount" nolabel="1"
+                                           style="width:20%;font-weight: bold; color:black;margin-left:20px;"
+                                           attrs="{'invisible': [('team_up', '=',False)]}"/>
+                                </div>
+                            <field name="booking_id" invisible="1"/>
+                        </group>
+                        <group attrs="{'invisible': [('is_com2', '=', True)]}">
+                            <field name="commission2" readonly="1"/>
+                            <field name="agent2" readonly="1"/>
+                            <field name="commission_type_id2" readonly="1" />
+
+                        </group>
+                        <group attrs="{'invisible': [('is_com3', '=', True)]}">
+                            <field name="is_agent_com" invisible="1"/>
+                            <field name="is_com1" invisible="1"/>
+                            <field name="is_com2" invisible="1"/>
+                            <field name="is_com3" invisible="1"/>
+                            <field name="commission3" readonly="1" />
+                            <field name="agent3" readonly="1"/>
+                            <field name="commission_type_id3" readonly="1"/>
+                        </group>
+                    </group>
+                    <footer>
+                        <button string="Apply" name="create_commission" type="object" class="oe_highlight"/>
+                        or
+                        <button string="Cancel" class="oe_link" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+    </data>
+</odoo>

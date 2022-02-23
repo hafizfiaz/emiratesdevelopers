@@ -1,0 +1,53 @@
+<odoo>
+    <template id="allsavedsales_onload" name="Assets Saved Sales">
+    <t t-call="website.layout">
+        <t t-call="property_website.allasset_saved_sale_content" />
+    </t>
+</template>
+
+    <template name="All Aseets Saved Sale" id="allasset_saved_sale_content">
+        <section class="welcome-area">
+            <div class="welcome-slides owl-carousel">
+                <div class="col-md-12 asset-save-sale rent-single-welcome-slide bg-img bg-overlay">
+                    <div class='text-center inner-content'>
+                        <h3><strong>Saved </strong>Property</h3>
+                        <ul>
+                            <li>
+                                <a href="/">Home</a>
+                            </li>
+                            <li>Saved Property</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+            <div class="rest feature-properties mt32 mb32">
+            <section class="recent-viewed-section section" id="allassetsavedproperty_section">
+                <div class="container">
+                    <div class="row">
+                        <div id="display_saved_properties">
+                            <ul class="nav navbar-nav" style="width: 100%;">
+                                <input type="hidden" id="property_type" name="property_type" t-att-value="property_type" />
+                                <!-- <li style="cursor:pointer">
+                                    <a class="sales_type">Sales</a>
+                                </li> -->
+                                <li style="cursor:pointer">
+                                    <a id="view_all_asset_sale_saved" class="active"></a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="row recent-viewed-content">
+                        <t t-if="account_asset_all_sale_cookie_obj">
+                            <t t-foreach="account_asset_all_sale_cookie_obj" t-as="account_asset_one_lease">
+                                <t t-call="property_website.dosplay_properties" />
+                            </t>
+                        </t>
+                    </div>
+                </div>
+            </section>
+            <!-- <t t-call="property_management_website.custom_footer" /> -->
+        </div>
+    </template>
+</odoo>

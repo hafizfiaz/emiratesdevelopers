@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="prop_sale_ext_view12_pp" model="ir.ui.view">
+            <field name="name">account.asset.asset.form_pp</field>
+            <field name="model">account.asset.asset</field>
+            <field name="inherit_id" ref="ow_account_asset.view_account_asset_asset_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//notebook" position="inside">
+                    <page string="DLD Schedule" name="pp_tab">
+                        <field name="payment_plan_ids" context="{'default_asset_project_id':id}">
+                            <tree name="payment_plan" editable="bottom">
+                                <field name="name"/>
+                                <field name="percentage"/>
+                                <field name="payment_date_disc"/>
+                                <field name="asset_project_id" invisible="1"/>
+                                <field name="amount"/>
+                            </tree>
+                        </field>
+                    </page>
+                </xpath>
+            </field>
+        </record>
+
+
+        <record id="view_crm_sale_spa_form_pp" model="ir.ui.view">
+            <field name="name">sale.order.inherit.pp</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//notebook" position="inside">
+                    <page string="DLD Schedule" name="pp_tab">
+                        <field name="payment_plan_ids" context="{'default_sale_id':id}" attrs="{'readonly': [('state', '!=', 'draft')]}">
+                            <tree name="payment_plan" editable="bottom">
+                                <field name="name"/>
+                                <field name="percentage"/>
+                                <field name="payment_date_disc"/>
+                                <field name="amount"/>
+                                <field name="sale_id" invisible="1"/>
+                            </tree>
+                        </field>
+                    </page>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</odoo>

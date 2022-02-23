@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_fgr_payment_request,fgr.payment.request,model_fgr_payment_request,,1,1,1,1
+access_fgr_details,fgr.details,model_fgr_details,,1,1,1,1

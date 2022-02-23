@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<!--    <data>-->
+<!--        <record id="prop_sale_ext_view12_value_readonly" model="ir.ui.view">-->
+<!--            <field name="name">account.asset.asset.readonly_value</field>-->
+<!--            <field name="model">account.asset.asset</field>-->
+<!--            <field name="inherit_id" ref="ow_account_asset.view_account_asset_asset_form"/>-->
+<!--            <field name="arch" type="xml">-->
+<!--                <field name="value" position="after">-->
+<!--                    <field name="min_value" groups="base.user_admin" widget="monetary" options="{'currency_field': 'currency_id'}"/>-->
+<!--                </field>-->
+<!--            </field>-->
+<!--        </record>-->
+<!--    </data>-->
+</odoo>

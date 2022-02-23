@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (c) 2016-Present Webkul Software Pvt. Ltd. (<https://webkul.com/>) -->
+<!-- See LICENSE file for full copyright and licensing details. -->
+<!-- License URL : https://store.webkul.com/license.html/ -->
+<odoo>
+    <data>
+        <record model="ir.ui.view" id="sms_template_preview_form">
+            <field name="name">sms.template.preview.form</field>
+            <field name="model">sms.template.preview</field>
+            <field name="arch" type="xml">
+                <form string="SMS Preview">
+                    <h3>Preview of <field name="name" readonly="1" nolabel="1" class="oe_inline"/></h3>
+                    Choose an example <field name="model_id" class="oe_inline" readonly="1"/> record:
+                    <field name="res_id" class="oe_inline"
+                        style="margin-left: 8px;"/>
+                    <br/>
+                    <label for="sms_body_html" string="Message:"/>
+                    <field name="sms_body_html" class="oe_fade" widget="html" readonly="1"
+                            nolabel="1" options='{"safe": True}'/>
+                </form>
+            </field>
+        </record>
+
+        <record id="wizard_sms_template_preview" model="ir.actions.act_window">
+            <field name="name">Template Preview</field>
+            <field name="res_model">sms.template.preview</field>
+<!--            <field name="src_model">sms.template</field>-->
+            <field name="type">ir.actions.act_window</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="sms_template_preview_form"/>
+            <field name="target">new</field>
+            <field name="context">{'sms_template_id':active_id}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                  Create a new sellable product
+                </p>
+            </field>
+        </record>
+<!--
+        <record id="product_product_action_sellable" model="ir.actions.act_window">
+            <field name="name">Products</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">product.template</field>
+            <field name="view_mode">kanban,tree,form,activity</field>
+            <field name="context">{'search_default_filter_to_sell': 1}</field>
+            <field name="view_id" ref="product_template_view_tree"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                  Create a new sellable product
+                </p>
+            </field>
+        </record>
+-->
+
+    </data>
+</odoo>

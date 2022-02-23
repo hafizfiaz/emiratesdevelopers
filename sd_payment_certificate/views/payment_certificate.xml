@@ -1,0 +1,335 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <record id="payment_costing_tab" model="ir.ui.view">
+        <field name="name">project.costing.inherit</field>
+        <field name="model">project.costing</field>
+        <field name="inherit_id" ref="sd_project_costing.project_costing_view"/>
+        <field name="arch" type="xml">
+            <field name="total_project_cost" position="after">
+                <field name="total_pc_value"/>
+            </field>
+            <page name="other_bills" position="after">
+                <page name="pc_tab" string="Payment Certificate">
+                    <field name="pc_ids" domain="[('contractor','in',all_contractors),('project_costing','=',name)]"
+                           widget="many2many"/>
+                </page>
+            </page>
+        </field>
+    </record>
+
+    <record id="payment_certificate_tab" model="ir.ui.view">
+        <field name="name">costing.contractor.inherit</field>
+        <field name="model">costing.contractor</field>
+        <field name="inherit_id" ref="sd_costing_contractor.costing_contractor_view"/>
+        <field name="arch" type="xml">
+            <field name="retention_amount_perc" position="after">
+                <field name="total_pc_value"/>
+            </field>
+        </field>
+    </record>
+
+
+    <record id="payment_certificate_tree" model="ir.ui.view">
+        <field name="name">payment.certificate.tree</field>
+        <field name="model">payment.certificate</field>
+        <field name="arch" type="xml">
+            <tree string="Payment Certificate">
+                <field name="name" optional="show"/>
+                <field name="contractor" optional="show"/>
+                <field name="pc_date" optional="show"/>
+                <field name="reference" optional="show"/>
+                <field name="project_costing" optional="show"/>
+                <field name="pc_amount" optional="show"/>
+                <field name="state" optional="show"/>
+                <field name="remarks" optional="show"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="consume_material_line_tree" model="ir.ui.view">
+        <field name="name">consume.material.line.tree</field>
+        <field name="model">consume.material.line</field>
+        <field name="arch" type="xml">
+            <tree string="Consumed Material Line">
+                <field name="project_costing" optional="show"/>
+                <field name="related_planned_boq" optional="show"/>
+                <field name="planned_qty" optional="show"/>
+                <field name="unit" optional="show"/>
+                <field name="planned_per_unit_price" optional="show"/>
+                <field name="consumed_qty" optional="show"/>
+                <field name="actual_price" optional="show"/>
+                <field name="total_price" optional="show"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="consume_material_line_view" model="ir.ui.view">
+        <field name="name">consume.material.line.form</field>
+        <field name="model">consume.material.line</field>
+        <field name="arch" type="xml">
+            <form string="Consume Material Line">
+                <header>
+                    <field name="state" widget="statusbar"/>
+                    <button name="action_confirm" type="object" string="Confirm"
+                            attrs="{'invisible':[('state','!=','draft')]}" class="oe_highlight"/>
+                    <button name="action_cancel" type="object" string="Cancel" states="draft,confirm"
+                            class="oe_highlight"/>
+                    <button name="back_to_draft" type="object" string="Back To Draft" states="cancel"
+                            class="oe_highlight"/>
+
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <!--                            <field name="sequence"/>-->
+                            <field name="project_costing"/>
+                            <field name="related_planned_boq"/>
+                            <field name="planned_qty"/>
+                            <field name="unit"/>
+                            <field name="planned_per_unit_price"/>
+                            <field name="consumed_qty"/>
+                            <field name="actual_price"/>
+                            <field name="total_price"/>
+                        </group>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+
+    <record id="payment_certificate_view" model="ir.ui.view">
+        <field name="name">Payment Certificate</field>
+        <field name="model">payment.certificate</field>
+        <field name="arch" type="xml">
+
+            <form string="Payment Certificate">
+
+                <header>
+                    <field name="state" widget="statusbar"/>
+                    <button name="action_confirm" type="object" string="Confirm"
+                            attrs="{'invisible':[('state','!=','draft')]}" class="oe_highlight"/>
+                    <button name="action_cancel" type="object" string="Cancel" states="draft,confirm"
+                            class="oe_highlight"/>
+                    <button name="back_to_draft" type="object" string="Back To Draft" states="cancel"
+                            class="oe_highlight"/>
+
+                </header>
+                <sheet>
+                    <!--                     <div class="oe_button_box" name="button_box">-->
+                    <!--                    <button name="action_view_spa_invoices"-->
+                    <!--                            string="Due Invoices/Installments" class="oe_stat_button" icon="fa-list icon" type="object"/>-->
+                    <!--                </div>-->
+
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="contractor"/>
+                            <separator string="PC Details"/>
+                            <field name="pc_date"/>
+                            <field name="reference"/>
+                            <label for="project_costing" style="font-weight: bold; color: black;"/>
+                            <div class="address_format">
+                                <field name="project_costing" style="font-weight: bold; color: black;" nolabel="1"/>
+                            </div>
+                            <!--                            <field name="project"/>-->
+                            <field name="pc_amount"/>
+                            <field name="remarks"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Consumed Material" name="consumed_material">
+                            <field name="payment_certificate_line">
+                                <tree string="Consumed Material">
+                                    <!--                                    <field name="sequence"/>-->
+                                    <field name="project_costing"/>
+                                    <field name="related_planned_boq"/>
+                                    <field name="planned_qty"/>
+                                    <field name="unit"/>
+                                    <field name="planned_per_unit_price"/>
+                                    <field name="consumed_qty"/>
+                                    <field name="actual_price"/>
+                                    <field name="total_price"/>
+                                    <field name="state"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Related Payments" name="related_payments">
+                            <field name="payment_ids" widget="many2many" domain="[('partner_id','=',contractor)]"/>
+                        </page>
+                        <page string="Related Bills" name="related_bills">
+                            <field name="move_ids" widget="many2many" domain="[('partner_id','=',contractor)]"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+    <record id="planned_boq_tree" model="ir.ui.view">
+        <field name="name">planned.boq.tree</field>
+        <field name="model">planned.boq</field>
+        <field name="arch" type="xml">
+            <tree string="Planned BOQ">
+                <field name="sequence" optional="show"/>
+                <field name="name" optional="show"/>
+                <field name="start_date" optional="show"/>
+                <field name="end_date" optional="show"/>
+                <field name="duration" optional="show"/>
+                <field name="main_activity" optional="show"/>
+                <field name="project_costing" optional="show"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="planned_boq_view" model="ir.ui.view">
+        <field name="name">Planned BOQ</field>
+        <field name="model">planned.boq</field>
+        <field name="arch" type="xml">
+
+            <form string="Planned BOQ">
+
+                <header>
+                    <field name="state" widget="statusbar"/>
+                    <button name="action_confirm" type="object" string="Confirm"
+                            attrs="{'invisible':[('state','!=','draft')]}" class="oe_highlight"/>
+                    <button name="action_cancel" type="object" string="Cancel" states="draft,confirm"
+                            class="oe_highlight"/>
+                    <button name="back_to_draft" type="object" string="Back To Draft" states="cancel"
+                            class="oe_highlight"/>
+
+                </header>
+                <sheet>
+                    <!--                     <div class="oe_button_box" name="button_box">-->
+                    <!--                    <button name="action_view_spa_invoices"-->
+                    <!--                            string="Due Invoices/Installments" class="oe_stat_button" icon="fa-list icon" type="object"/>-->
+                    <!--                </div>-->
+                    <div class="oe_title">
+                        <h3>
+                            <field name="sequence" nolabel="1"/>
+                        </h3>
+                    </div>
+
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="start_date"/>
+                            <field name="end_date"/>
+                            <field name="duration"/>
+                            <field name="main_activity"/>
+                            <field name="project_costing"/>
+                        </group>
+                        <group>
+                            <field name="activity_quantity"/>
+                            <field name="unit"/>
+                            <field name="unit_price"/>
+                            <field name="activity_price"/>
+                            <field name="sub_activity_total"/>
+                            <field name="total"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Sub Activities" name="sub_activities">
+                            <field name="main_activity_tab" domain="[('main_activity','=',name)]"/>
+                        </page>
+                        <page string="Consumed BOQ" name="consumed_boq">
+                            <field name="boq_planned_lines" domain="[('related_planned_boq','=',name)]"
+                                   widget="many2many">
+                                <tree string="Consumed Material">
+                                    <field name="project_costing"/>
+                                    <field name="related_planned_boq"/>
+                                    <field name="planned_qty"/>
+                                    <field name="unit"/>
+                                    <field name="planned_per_unit_price"/>
+                                    <field name="consumed_qty"/>
+                                    <field name="actual_price"/>
+                                    <field name="total_price"/>
+                                    <field name="state"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+
+    <record id="payment_certificate_action" model="ir.actions.act_window">
+        <field name="name">Payment Certificate</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">payment.certificate</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Payment Certificate Request!
+            </p>
+        </field>
+    </record>
+    <record id="consume_material_line_action" model="ir.actions.act_window">
+        <field name="name">Consumed BOQ</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">consume.material.line</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Consumed BOQ !
+            </p>
+        </field>
+    </record>
+    <record id="planned_boq_action" model="ir.actions.act_window">
+        <field name="name">Planned BOQ</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">planned.boq</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Planned BOQ Request!
+            </p>
+        </field>
+    </record>
+
+
+    <menuitem id="menu_contractor_main"
+              name="Contractor"
+              sequence="2" groups="base.group_erp_manager"/>
+    <menuitem id="payment_certificate_menu" name="Payment Certificate"
+              parent="menu_contractor_main"
+              sequence="1"
+              action="payment_certificate_action"/>
+    <menuitem id="consume_material_line_menu" name="Consumed BOQ"
+              parent="menu_contractor_main"
+              sequence="2"
+              action="consume_material_line_action"/>
+    <menuitem id="project_costing_menu" name="Project Costing"
+              parent="menu_contractor_main"
+              sequence="3"
+              action="sd_project_costing.project_costing_action"/>
+    <menuitem id="planned_boq_menu" name="Planned BOQ"
+              parent="menu_contractor_main"
+              sequence="4"
+              action="planned_boq_action"/>
+    <menuitem id="all_contractor_menu" name="All Contractors"
+              parent="menu_contractor_main"
+              action="sd_costing_contractor.costing_contractor_action"
+              sequence="5"/>
+    <menuitem id="configuration_contractor_main" name="Configuration"
+              parent="menu_contractor_main"
+              sequence="6"/>
+
+</odoo>

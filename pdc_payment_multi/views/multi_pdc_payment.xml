@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+
+        <!-- PDC Payment Multi-->
+        <record id="multi_pdc_payment_search_view" model="ir.ui.view">
+            <field name="name">multi.pdc.payment.select</field>
+            <field name="model">multi.pdc.payment</field>
+            <field name="arch" type="xml">
+                <search string="Search Multi PDC Payment">
+                    <field name="name" string="Search All"
+                           filter_domain="['|','|','|','|',('name','ilike',self),('partner_id','ilike',self)
+                                            ,('partner_id.name','ilike',self),('partner_id.email','ilike',self),
+                                           ('partner_id.mobile','ilike',self)]"/>
+                    <field name="property_id" filter_domain="[('property_id','ilike',self)]" string="Property"/>
+                </search>
+            </field>
+        </record>
+        
+        <record model="ir.ui.view" id="multi_pdc_payment_tree_view">
+            <field name="name">multi.pdc.payment.tree</field>
+            <field name="model">multi.pdc.payment</field>
+            <field name="arch" type="xml">
+                <tree string="PDC Payment Multi">
+                    <field name="date"/>
+                    <field name="name"/>
+                    <field name="partner_id"/>
+                    <field name="mobile"/>
+                    <field name="user_id"/>
+                    <!--<field name="shop_id" />-->
+                    <field name="amount_total" widget='monetary' options="{'currency_field': 'currency_id'}"/>
+                    <field name="currency_id" invisible="1"/>
+               	</tree>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="multi_pdc_payment_form_view">
+            <field name="name">multi.pdc.payment.form</field>
+            <field name="model">multi.pdc.payment</field>
+            <field name="arch" type="xml">
+                <form string="PDC Payment Multi">
+
+    				<header>
+                        <button name="action_pending_collect" string="Pending Collection/Validate" type="object" states="draft,gm_approved" class="oe_highlight"/>
+                        <button name="action_collect" string="Collected" type="object" states="pend_collection" class="oe_highlight"/>
+    					<button name="action_under_gm_review" string="Submit To GM" type="object" states="draft,gm_rejected" groups="base.group_user"/>
+		            	<button name="action_gm_approved" string="GM Approve" states="under_gm_review" type="object" groups="account_voucher_collection.group_general_manager"/>
+	            		<button name="action_gm_rejected" string="GM Reject" states="under_gm_review" type="object" groups="account_voucher_collection.group_general_manager"/>
+	            		<button name="action_cancel_draft" string="Cancel" states="draft" type="object"/>
+	            		<button name="action_cancel" string="Cancel" states="under_gm_review,pend_collection,collected,gm_approved,gm_rejected" type="object" groups="account.group_account_manager"/>
+	            		<button name="action_draft" string="Set To Draft" type="object" states="cancelled"/>
+
+    					<field name="state" widget="statusbar" statusbar_visible="draft,pend_collection,collected"/>
+    				</header>
+                <sheet>
+                    <h1 attrs="{'invisible': [('name','=',False)]}"><field name="name"/></h1>
+                    <group>
+                        <group>
+                            <field name="partner_id"
+                                   attrs="{'readonly': [('state','in',('pend_collection','collected'))]}"
+                                    required="1" string="Customer"/>
+                            <field name="mobile"/>
+                            <field name="journal_id" invisible="1"/>
+                            <field name="payment_term" attrs="{'readonly': [('state','in',('pend_collection','collected'))]}"/>
+                            <field name="officer_id" attrs="{'readonly': [('state','in',('pend_collection','collected'))]}"/>
+                            <field name="currency_id" invisible="1"/>
+                        </group>
+                        <group>
+                            <field name="date" attrs="{'readonly': [('state','in',('pend_collection','collected'))]}"/>
+                            <field name="reference" string="Payment Ref" placeholder="e.g. 003/10"
+                                   attrs="{'readonly': [('state','in',('pend_collection','collected'))]}"/>
+                            <field name="memo"
+                                   attrs="{'readonly': [('state','in',('pend_collection','collected'))]}"
+                                   colspan="2" placeholder="e.g. Invoice SAJ/0042"/>
+                            <field name="company_id"
+                                   attrs="{'readonly': [('state','in',('pend_collection','collected'))]}"
+                                   widget="selection" groups="base.group_multi_company"/>
+                            <field name="asset_project_id" attrs="{'readonly': [('state','in',('pend_collection','collected'))]}"/>
+                            <field name="property_id" attrs="{'readonly': [('state','in',('pend_collection','collected'))]}"/>
+                            <!--<field name="booking_id" options="{'no_create':True, 'no_create_edit':True}"
+                                   attrs="{'readonly': [('state','in',('pend_collection','collected'))]}"/>-->
+                            <field name="sale_id" options="{'no_create':True, 'no_create_edit':True}"/>
+
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Multi PDC Payment">
+                            <field name="collection_line" attrs="{'readonly': [('state','in',('pend_collection','collected'))]}"
+                                   context="{'default_date':date, 'default_partner_id':partner_id,
+                                            'default_asset_project_id':asset_project_id, 'default_property_id':property_id,
+                                            'default_payment_type':'outbound', 'default_partner_type':'supplier',
+                                            'default_reference': reference, 'default_communication': memo, 'default_journal_id': journal_id,
+                                            'default_payment_method_id':1}">
+                                <tree string="Collections" editable="bottom" colors="gray:amount==0">
+                                    <field name="journal_id" domain="[('type','in',['bank', 'cash', 'pdc'])]"
+		                                options="{'no_create': True, 'no_create_edit':True, 'no_open': True,}"
+		                                string="Payment Method"/>
+		                            <field name="bank_issued_check" readonly="0"/>
+		                            <field name="account_holder_name" readonly="0"/>
+		                            <field name="check_number" readonly="0"/>
+		                            <field name="maturity_date" readonly="0"/>
+		                            <field name="remarks" />
+                                    <field name="date" invisible="1"/>
+                                    <field name="reference" invisible="1"/>
+                                    <field name="name" invisible="1"/>
+                                    <field name="partner_id" invisible="1" />
+<!--                                    <field name="booking_id" invisible="1" />-->
+
+                                    <field name="bank_deposit" attrs="{'readonly':[('chk','=',False)]}" invisible="1"/>
+                                    <field name="amount" string="Amount"/>
+                                    <field name="currency_id" invisible="1"/>
+                                    <field name="destination_account_id" invisible="1"/>
+                                    <field name="partner_type" invisible="1"/>
+                                    <field name="payment_type" invisible="1"/>
+<!--                                    <field name="payment_method_id" invisible="1"/>-->
+                                    <field name="company_id" invisible="1"/>
+                                    <field name="chk"  invisible="1"/>
+                                    <field name="other_payment" invisible="1"/>
+                                    <field name="state"/>
+                                   <!-- <field name="payment_difference" invisible="1"/>
+                                    <field name="writeoff_account_id" invisible="1"/>-->
+                                </tree>
+                            </field>
+                            <group class="oe_subtotal_footer oe_right" colspan="2" name="multi_payment_total">
+                                <field name="amount_total" widget='monetary' options="{'currency_field': 'currency_id'}"/>
+                            </group>
+
+                        </page>
+                        <page name="info" string="Other Info">
+                        	<group>
+                        		<field name="user_id" attrs="{'readonly': [('state','in',('pend_collection','collected'))]}"/>
+                        	</group>
+                            <separator string="Multi PDC Payment-Terms &amp; Conditions"/>
+                            <field name="note" attrs="{'readonly': [('state','in',('pend_collection','collected'))]}"
+                                   placeholder="Terms and conditions..."/>
+                        </page>
+                            
+                    </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+	                    <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+	                    <field name="message_ids" widget="mail_thread"/>
+	                </div>
+                    
+                </form>
+            </field>
+        </record>
+
+        <record id="action_multi_pdc_payment" model="ir.actions.act_window">
+            <field name="name">Multi PDC Payment</field>
+            <field name="res_model">multi.pdc.payment</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" eval="False"/>
+            <field name="target">current</field>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Click to register a new Multi PDC payment.
+              </p>
+            </field>
+        </record>
+        <!--<record id="action_account_voucher_collection_tree" model="ir.actions.act_window.view">-->
+            <!--<field eval="1" name="sequence"/>-->
+            <!--<field name="view_mode">tree</field>-->
+            <!--<field name="view_id" ref="account_voucher_collection_tree_view"/>-->
+            <!--<field name="act_window_id" ref="action_account_voucher_collection"/>-->
+        <!--</record>-->
+        <!--<record id="action_account_voucher_collection_form" model="ir.actions.act_window.view">-->
+            <!--<field eval="2" name="sequence"/>-->
+            <!--<field name="view_mode">form</field>-->
+            <!--<field name="view_id" ref="account_voucher_collection_form_view"/>-->
+            <!--<field name="act_window_id" ref="action_account_voucher_collection"/>-->
+        <!--</record>-->
+
+        <menuitem action="action_multi_pdc_payment" sequence="4"
+            id="menu_action_multi_pdc_payment"  parent="account_voucher_collection.menu_receipts_and_payments" name="Multi PDC Payment"/>
+
+    </data>
+</odoo>

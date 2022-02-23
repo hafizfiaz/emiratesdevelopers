@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <report
+            id="report_handover"
+            string="Handover Statement Print"
+            model="sale.order"
+            report_type="qweb-pdf"
+            file="sd_handover_report.handover_report"
+            name="sd_handover_report.handover_report" />
+</odoo>

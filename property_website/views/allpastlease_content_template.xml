@@ -1,0 +1,61 @@
+<odoo>
+    <template id="allpastlease_onload" name="Past Lease">
+        <t t-call="website.layout">
+            <t t-call="property_website.allpastlease_content" />
+        </t>
+    </template>
+
+    <template id="featured_past_lease_content" name="Featured Past Lease Content">
+        <div class="row recent-viewed-content">
+        <t t-foreach="all_property_objs" t-as="account_asset_one_lease">
+            <t t-if="(account_asset_one_lease.state == 'book' or account_asset_one_lease.state == 'normal')">
+                <t t-call="property_website.dosplay_properties" />
+            </t>
+        </t>
+    </div>
+    </template>
+
+    <template id="allpastlease_content" name='All Past Lease Content'>
+        <section class="welcome-area">
+            <div class="welcome-slides owl-carousel">
+                <div class="col-md-12 asset-past-lease rent-single-welcome-slide bg-img bg-overlay">
+                    <div class='text-center inner-content'>
+                        <h3><strong>Past</strong> Lease Property</h3>
+                        <ul>
+                            <li>
+                                <a href="/">Home</a>
+                            </li>
+                            <li>Past Lease Property</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <div class="rest feature-properties">
+            <section class="recent-viewed-section section" id="allassetlease_section">
+                <div class="container">
+                    <div class="row mb32 mt32">
+                       <div class="col-md-3" id="display_saved_properties">
+                           <input type="hidden" id="property_type" name="property_type" t-att-value="property_type" />
+                           <ul class="nav navbar-nav" style="width: 100%;">
+                               <!-- <li style="cursor:pointer">
+                                   <a id="view_all_past_sales" class="active">Sales</a>
+                               </li> -->
+                               <li style="cursor:pointer">
+                                   <a  class="active" id="view_all_asset_sale_saved"></a>
+                               </li>
+                           </ul>
+                       </div>
+                   </div>
+                    <t t-call="property_website.featured_past_lease_content"/>
+                    <t t-if="pager">
+                        <div class="mt16 row">
+                            <t t-call="property_website.view_pagination" />
+                        </div>
+                    </t>
+                </div>
+            </section>
+            <!-- <t t-call="property_management_website.custom_footer"/> -->
+        </div>
+    </template>
+</odoo>
