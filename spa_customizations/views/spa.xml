@@ -723,18 +723,18 @@
             </field>
         </record>
 
-        <record id="crm_case_form_view_oppor_rent" model="ir.ui.view">
-            <field name="name">crm.lead.oppor.renting.crm</field>
-            <field name="model">crm.lead</field>
-            <field name="priority">20</field>
-            <field name="inherit_id" ref="sale_renting_crm.crm_case_form_view_oppor"/>
-            <field name="arch" type="xml">
-                <xpath expr="//button[@name='action_rental_quotations_new']" position="attributes">
-                    <attribute name="attrs">{}</attribute>
-                    <attribute name="invisible">1</attribute>
-                </xpath>
-            </field>
-        </record>
+<!--        <record id="crm_case_form_view_oppor_rent" model="ir.ui.view">-->
+<!--            <field name="name">crm.lead.oppor.renting.crm</field>-->
+<!--            <field name="model">crm.lead</field>-->
+<!--            <field name="priority">20</field>-->
+<!--            <field name="inherit_id" ref="sale_renting_crm.crm_case_form_view_oppor"/>-->
+<!--            <field name="arch" type="xml">-->
+<!--                <xpath expr="//button[@name='action_rental_quotations_new']" position="attributes">-->
+<!--                    <attribute name="attrs">{}</attribute>-->
+<!--                    <attribute name="invisible">1</attribute>-->
+<!--                </xpath>-->
+<!--            </field>-->
+<!--        </record>-->
 
         <record id="crm_case_form_view_oppor_quot" model="ir.ui.view">
             <field name="name">crm.lead.oppor.quot.crm</field>
